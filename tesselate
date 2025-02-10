@@ -1,0 +1,660 @@
+// Tile Patterns
+
+//hunt PROPANE
+
+
+const shadowBox  = {
+  tilePattern: "tileHexatiles",
+  tileDesign: "triangleHexatile",
+  tileRows:8,
+  tileColumns:4,
+  tileMultiplier: 1.5,
+  tiles: [
+    ["medium"],
+    ["medium", "medium", "medium"],
+    ["light", "medium", "medium", "medium", "dark"],
+    ["light", "light", "light", "medium", "dark", "dark", "dark"],
+    ["light", "light", "light", "dark", "medium", "medium", "medium"],
+    ["light", "dark", "dark", "dark", "medium"],
+    ["dark", "dark", "dark"],
+    ["dark"]
+  ]
+};
+
+const persianKnots = {
+  tilePattern: "tileDiamonds",
+  tileDesign: "drawDiamondTriangleTile",
+  tileRows:5,
+  tileColumns:6,
+  tileMultiplier: 2.5,
+  tiles: [
+    ["dark", "dark"],
+    ["light", "light", "light", "light"],
+    ["medium", "medium", "medium", "medium", "medium", "medium"],
+    ["dark", "dark", "dark", "dark"],
+    ["light", "light"]
+  ]
+};
+
+const mosaicMitre = {
+  tilePattern: "tileHexatiles",
+  tileDesign: "triangleHexatile",
+  tileRows:6,
+  tileColumns:3,
+  tileMultiplier: .5,
+  tiles: [
+    ["light"],
+    ["light", "light", "light"],
+    ["dark", "light", "medium", "light", "dark"],
+    ["dark", "medium", "medium", "medium", "dark"],
+    ["medium", "dark", "medium"],
+    ["dark"]
+  ]
+};
+
+const egyptianHexatile  = {
+  tilePattern: "tileHexatiles",
+  tileDesign: "triangleHexatile",
+  tileRows:24,
+  tileColumns:12,
+  tiles: [
+    ["medium"], //1
+    ["light", "medium", "medium"], //3
+    ["light", "light", "light", "medium", "medium"], //5
+    ["light", "light", "dark", "light", "light", "medium", "medium"], //7
+
+
+    ["light", "light", "dark", "dark", "medium", "medium", "medium", "medium", "medium"], //9
+
+
+    ["light", "light", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark"], //11
+    ["light", "light", "light", "light", "light", "light", "light", "light", "light", "light", "dark", "dark", "dark"], //13
+    ["dark", "light", "light", "medium", "medium", "medium", "medium", "medium", "light", "light", "dark", "dark", "medium", "dark", "dark"], //15
+    ["dark", "dark", "dark", "light", "light", "medium", "medium", "dark", "dark", "light", "dark", "dark", "medium", "medium", "medium", "dark", "dark"], //17
+    ["dark", "dark", "medium", "dark", "dark", "light", "light", "medium", "medium", "dark", "dark", "dark", "medium", "medium", "light", "medium", "medium", "dark", "dark"], //19
+    ["dark", "dark", "medium", "medium", "light", "light", "light", "light", "light", "medium", "medium", "dark", "medium", "medium", "light", "light", "dark", "dark", "dark", "dark", "dark"], //21
+    ["dark", "dark", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "light", "light", "light", "light", "light", "light", "light", "light", "light"], //23
+    ["dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "light", "light"], //23
+    ["light", "light", "light", "light", "light", "dark", "dark", "medium", "medium", "light", "medium", "medium", "dark", "dark", "dark", "dark", "dark", "medium", "medium", "light", "light"], //21
+    ["light", "light", "medium", "medium", "dark", "medium", "medium", "light", "light", "light", "medium", "medium", "dark", "dark", "light", "light", "medium", "light", "light"], //19
+    
+
+    ["light", "light", "medium", "medium", "medium", "light", "light", "dark", "light", "light", "medium", "medium", "dark", "dark", "light", "light", "light"], //17
+    ["light", "light", "medium", "light", "light", "dark", "dark", "medium", "medium", "medium", "medium", "medium", "dark", "dark", "light"], //15
+    ["light", "light", "light", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark"], //13
+    ["light", "light", "light", "light", "light", "light", "light", "light", "light", "dark", "dark"], //11
+    
+    ["medium", "medium", "medium", "medium", "medium", "light", "light", "dark", "dark"], //9
+    ["medium", "medium", "dark", "dark", "light", "dark", "dark"], //7
+    ["medium", "medium", "dark", "dark", "dark"], //5
+    ["medium", "medium", "dark"], //3    
+    ["medium"] //1
+    ]
+};
+
+
+const brokeHexatile  = {
+  tilePattern: "tileHexatiles",
+  tileDesign: "triangleHexatile",
+  tileRows:24,
+  tileColumns:12,
+  tiles: [
+    ["medium"], //1
+    ["light", "medium", "medium"], //3
+    ["light", "light", "light", "medium", "medium"], //5
+    ["light", "light", "dark", "light", "light", "medium", "medium"], //7
+
+
+    ["light", "light", "dark", "dark", "medium", "medium", "medium", "medium", "medium"], //9
+
+
+    ["light", "light", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark"], //11
+    ["light", "light", "light", "light", "light", "light", "light", "light", "light", "light", "dark", "dark", "dark"], //13
+    ["dark", "light", "light", "medium", "medium", "medium", "medium", "medium", "light", "light", "dark", "dark", "medium", "dark", "dark"], //15
+    ["dark", "dark", "dark", "light", "light", "medium", "medium", "dark", "dark", "light", "dark", "dark", "medium", "medium", "medium", "dark", "dark"], //17
+    ["dark", "dark", "medium", "dark", "dark", "light", "light", "medium", "medium", "dark", "dark", "dark", "medium", "medium", "light", "medium", "medium", "dark", "dark"], //19
+    ["dark", "dark", "medium", "medium", "light", "light", "light", "light", "light", "medium", "medium", "dark", "medium", "medium", "light", "light", "dark", "dark", "dark", "dark", "dark"], //21
+    ["dark", "dark", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "light", "light", "light", "light", "light", "light", "light", "light", "light"], //23
+    ["dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "light", "light"], //23
+    ["light", "light", "light", "light", "light", "dark", "dark", "medium", "medium", "light", "medium", "medium", "dark", "dark", "dark", "dark", "dark", "medium", "medium", "light", "light"], //21
+    ["light", "light", "medium", "medium", "dark", "medium", "medium", "light", "light", "light", "medium", "medium", "dark", "dark", "light", "light", "medium", "light", "light"], //19
+    
+
+    ["light", "light", "medium", "medium", "medium", "light", "light", "dark", "light", "light", "medium", "medium", "dark", "dark", "light", "light", "light"], //17
+    ["light", "light", "medium", "light", "light", "dark", "dark", "medium", "medium", "medium", "medium", "medium", "dark", "dark", "light"], //15
+    ["light", "light", "light", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark"], //13
+    ["light", "light", "light", "light", "light", "light", "light", "light", "light", "dark", "dark"], //11
+    
+    ["medium", "medium", "medium", "medium", "medium", "light", "light", "dark", "dark"], //9
+    ["medium", "medium", "dark", "dark", "light", "dark", "dark"], //7
+    ["medium", "medium", "dark", "dark", "dark"], //5
+    ["medium", "medium", "dark"], //3    
+    ["medium"] //1
+    ]
+};
+
+const color_themes = {
+  "raspberry": {light:"", medium:"", dark:"", accent:"", bg:""},
+  "oreo": {light:"", medium:"", dark:"", accent:"", bg:""},
+  "orangejello": {light:"", medium:"", dark:"", accent:"", bg:""},
+  "gatorada": {light:"#D2A645", medium:"#A94135", dark:"#AEC057", accent:"#7654A8", bg:"#BBBDB8"},
+  "basic_b": {light:"#fffff", medium:"#cccccc", dark:"#000000", accent:"#999999", bg:"#FFCC00"},
+  "banned_in_85": {light:"#B60514", medium:"#423D3F", dark:"#211E1F", accent: "#F9F2DF", bg:"#000000"}, 
+  "End-century Modern":{}
+};
+
+const animation_themes = {};
+
+class Tesselate {
+
+  color_theme = {};
+  pattern = {};
+  tiles_wide = 1;
+  tiles_high = 1;
+  
+
+  drawPattern(pattern, colors, tile_w, tile_h) {
+
+    let doc_w = window.document.body.offsetWidth;
+    let doc_h = window.document.body.offsetHeight;
+    let x_loc = 0;
+    let y_loc = 0;
+
+    this.pattern = pattern;
+    this.color_theme = colors;
+    this.tiles_wide = Math.round(doc_w/tile_w) + 1;
+    this.tiles_high = Math.round(doc_h/tile_h) + 1;
+
+    noStroke(); //sets stroke default
+    createCanvas(doc_w, doc_h);
+    background(this.color_theme.bg);
+
+    this[pattern.tilePattern](tile_w, tile_h, x_loc, y_loc, doc_w, doc_h);
+  }
+
+  tileHexatiles(x, y, tri_h, tri_w, pattern, colors) {
+
+    //let tiles_wide = Math.round(doc_w/tri_w) + 1;
+    //let tiles_high = Math.round(doc_h/tri_h) + 1;
+
+    let tile_design = pattern.tileDesign;
+    let tile_columns = pattern.tileColumns;
+    let tile_rows = pattern.tileRows;
+    let tile = pattern.Tiles
+    let tile_w = tile_columns*tri_w; //pattern
+    let tile_h= tile_rows*tri_h; //pattern
+
+
+    this.color_theme = colors;
+
+    createCanvas(doc_w, doc_h);
+    background(this.color_theme.bg);
+
+    this[pattern.tilePattern]();
+  }
+
+
+  regularTilingHexatile() {
+    for (let j = 0; j < 1; j++) {
+      for (let i = 0; i < tiles_wide; i++) {
+        let x1 = ((tile_w * i)-offset_x);
+        let x2 = (tile_w * i-(tile_w/2)+offset_x);
+        let y1 = tile_h * j;
+        let y2 = (tile_h * j-(tile_h/2));
+        let tiles = pattern.tiles;
+
+        this[pattern.tileDesign](x1, y1, tri_h, tri_w, tiles, tile_columns);
+        this[pattern.tileDesign](x2, y2, tri_h, tri_w, tiles, tile_columns); //TODO: Add alternating Hexatiles
+      }
+    }
+  }
+
+  regularTilingGrid(x, y, tile_h, tile_w, tiles, tile_columns) {
+    for (let j = 0; j < 1; j++) {
+      for (let i = 0; i < tiles_wide; i++) {
+        let x1 = ((tile_w * i)-offset_x);
+        let x2 = (tile_w * i-(tile_w/2)+offset_x);
+        let y1 = tile_h * j;
+        let y2 = (tile_h * j-(tile_h/2));
+        let tiles = pattern.tiles;
+
+        this[pattern.tileDesign](x1, y1, tri_h, tri_w, tiles, tile_columns);
+        this[pattern.tileDesign](x2, y2, tri_h, tri_w, tiles, tile_columns); //TODO: Add alternating Hexatiles
+      }
+    }
+  }
+
+  regularTilingDiamond(tile_h, tile_w, start_x, start_y, total_w, total_h) {
+
+    let row, tri, x_offset, x_loc, y_loc, tri_style, tri_orientation;
+    let tile_rows = this.pattern.tiles.length;
+    let tile_columns = this.pattern.tileColumns;
+    let offset_x = tile_w/2;
+    let offset_y = tile_h/2;
+
+    //let x_offset = t
+
+    console.log(this.tiles_wide)
+
+    for (let j = 0; j < this.tiles_high j++) {
+      y_loc =  y + (tile_h * j) - offset_y;
+
+      for (let i = 0; i < this.tiles_wide, i++) {
+
+        //row = this.pattern.tiles[j]; //reverse can have cool effects
+        //x_offset = (tile_columns - row.length) * tile_w/2; console.log("x_offset="+x_offset);
+
+        x_loc = x + (tile_w * i) - offset_x
+
+        //console.log("y_loc="+y_loc);
+
+    
+
+        tri_style = row[i];
+        x_loc = x_loc+(tile_w*i);
+
+        //console.log("x_loc="+x_loc+" y_loc="+y_loc);
+
+        /*if(i % 2 == 0) { 
+          tri_orientation = "left";
+        } else {
+          tri_orientation = "right";
+        }*/
+
+
+        //console.log(x_loc)
+
+        this.drawHorizontalTri(x_loc-tile_h/2, y_loc, tile_h, tile_w, "left", tri_style); 
+        this.drawHorizontalTri(x_loc+tile_w, y_loc, tile_h, tile_w, "right", tri_style);
+      }
+    }
+  }
+
+
+
+  drawDiamondTriangleTile(){
+
+    for (let j = 0; j < this.tiles_wide; j++) {
+
+      row = this.pattern.tiles[j]; //reverse can have cool effects
+      console.log(row)
+      console.log(row.length);
+      x_offset = (tile_columns - row.length) * tile_w/2; console.log("x_offset="+x_offset);
+      x_loc =  x + (tile_w * j) - x_offset;
+      y_loc = y + (tile_h * j) - tile_h/2;
+
+      //console.log("y_loc="+y_loc);
+
+      for (let i = 0; i < row.length; i++) {
+
+        tri_style = row[i];
+        x_loc = x_loc+(tile_w*i);
+
+        //console.log("x_loc="+x_loc+" y_loc="+y_loc);
+
+        /*if(i % 2 == 0) { 
+          tri_orientation = "left";
+        } else {
+          tri_orientation = "right";
+        }*/
+
+        //console.log(x_loc)
+
+        this.drawHorizontalTri(x_loc, y_loc, tile_h, tile_w, "left", tri_style); 
+        this.drawHorizontalTri(x_loc+tile_w, y_loc, tile_h, tile_w, "right", tri_style);
+      }
+    }
+
+  }
+
+  drawHexatile(x, y, tri_h, tri_w, tiles, tile_columns) {
+
+    let row, tri, x_loc, y_loc, tri_style;
+    let start_upside_down = false;
+    let offset;
+    let tile_rows = tiles.length;
+    console.log(tiles)
+
+    for (let j = 0; j < tile_rows; j++) {
+      row = tiles[j]; //reverse can have cool effects
+      y_loc = y + (tri_h * j);
+      start_upside_down = false;
+      offset = ((tile_columns - Math.round(row.length/2)) * .5);
+      if (j >= tile_rows/2) {
+        start_upside_down = true;
+      }
+
+      for (let i = 0; i < row.length; i++) {
+
+        tri_style = row[i];
+        x_loc = x+(tri_w*offset);
+        //console.log("x_loc="+x_loc+" y_loc="+y_loc);
+        offset = offset +.5;
+
+        if (!start_upside_down) {
+          if(i % 2 == 0) {
+            this.drawTri(x_loc, y_loc, tri_h, tri_w, "up", tri_style);
+          } else {
+            this.drawTri(x_loc, y_loc, tri_h, tri_w, "down", tri_style);
+          }
+        } else {
+          if(i % 2 == 0) {
+            this.drawTri(x_loc, y_loc, tri_h, tri_w, "down", tri_style);
+          } else {
+            this.drawTri(x_loc, y_loc, tri_h, tri_w, "up", tri_style);
+          }
+        }
+      }
+    }
+  }
+
+  drawTri(x, y, h, w, tri_orientation, tri_style) {
+    let x1,x2, y1, y2, x3, y3;
+
+    if (tri_orientation == "down") {
+      x1 = x;
+      y1 = y+h;
+      x2 = x+(w/2);
+      y2 = y;
+      x3 = x+w;
+    } else {
+      x1 = x;
+      y1 = y; 
+      x2 = x+(w/2);
+      y2 = y+h;
+      x3 = x+w;
+    }
+
+    if(typeof tri_style === "string") {
+        fill(this.color_theme[tri_style]); 
+    } else {
+      //add forEarch
+      if(stroke) {
+        this.drawStroke(stroke, triangle_orientation);
+      }
+    }
+    triangle(x1, y1, x2, y2, x3, y1);
+  }
+
+  drawHorizontalTri(x, y, h, w, tri_orientation, tri_style) {
+
+      let x1,x2, y1, y2, x3, y3;
+
+      if (tri_orientation == "left") {
+        x1 = x;
+        y1 = y + h/2;
+        x2 = x+w;
+        y2 = y;
+        x3 = x+w
+        y3 = y+h;
+      } else {
+        x1 = x;
+        y1 = y; 
+        x2 = x+w;
+        y2 = y+(h/2);
+        x3 = x;
+        y3 = y+h;
+      }
+
+
+      if(typeof tri_style === "string"){
+        fill(this.color_theme[tri_style]); 
+      } else {
+        //add forEarch
+        if(stroke) {
+          this.drawStroke(stroke, triangle_orientation);
+       }
+      }
+      triangle(x1, y1, x2, y2, x3, y3);
+    }
+
+  drawStroke(stroke_colors, x1, y1, x2, y2, x3) {
+    if (stroke && isArray(stroke)) {
+      stroke(stroke[0]);
+      line(x1, y1, x2, y2);
+      stroke(stroke[1]);
+      line(x2, y2, x3, y3);
+      stroke(stroke[2]);
+      line(x3, y3, x1, y1);
+    } else if (isString(stroke)) {
+      console.log("s")
+      stroke(stroke);
+    } 
+    noStroke(); //always return to no stroke
+  }
+}
+
+
+
+function setup() {
+  const pattern = new Tesselate();
+  pattern.draw(persianKnots, color_themes["basic_b"], 15, 20);
+  //triangle(10, 10, 20, 5, 20, 15);
+}
+
+  
+function draw() {
+  //console.log("a")
+}
+
+
+
+
+
+
+/* to delete ====================
+
+
+function getHexatileX(w, scale, pos, offset){
+  var total_w = ((scale*2)+1) * w;
+  var offset_x = total_w/2;
+  return (pos*total_w)+(w*pos)-offset_x;
+}
+
+function getHexatileY(w, scale, pos, offset=false){
+  var total_h = scale*2*w;
+  var offset_y = (offset) ? total_h/2 : 0;
+  return (pos*total_h)+(h*pos)-offset_y;
+}
+
+
+function draw2xHexatile(x, y, h, w, color_profile) {
+  drawTri(x+(w/2), y, h, w, "#aaa");
+  drawUpsideDownTri(x+w, y, h, w, "#aaa");
+  drawTri(x+(w*1.5), y, h, w, "#ccc");
+  
+  drawTri(x, y+h, h, w, "#aaa");
+  drawUpsideDownTri(x+(w/2), y+h, h, w, "#aaa");
+  drawTri(x+w, y+h, h, w, "#ccc");
+  drawUpsideDownTri(x+(w*1.5), y+h, h, w, "#aaa");
+  drawTri(x+(w*2), y+h, h, w, "#ccc");
+
+  drawUpsideDownTri(x, y+(h*2), h, w, "#aaa");
+  drawTri(x+(w/2), y+(h*2), h, w, "#000");
+  drawUpsideDownTri(x+w, y+(h*2), h, w, "#ccc");
+  drawTri(x+(w*1.5), y+(h*2), h, w, "#000");
+  drawUpsideDownTri(x+(w*2), y+(h*2), h, w, "#ccc");
+  
+  drawUpsideDownTri(x+(w/2), y+(h*3), h, w, "#aaa");
+  drawTri(x+w, y+(h*3), h, w, "#000");
+  drawUpsideDownTri(x+(w*1.5), y+(h*3), h, w, "#ccc");
+  
+}
+
+function draw3xHexatile(x, y, h, w, color_profile) {
+  
+  drawTri(x+w, y, h, w, "#aaa");
+  drawUpsideDownTri(x+(w*1.5), y, h, w, "#aaa");
+  drawTri(x+(w*2), y, h, w, "#ccc");
+  
+  drawTri(x+(w/2), y+h, h, w, "#aaa");
+  drawUpsideDownTri(x+w, y+h, h, w, "#aaa");
+  drawTri(x+(w*1.5), y+h, h, w, "#ccc");
+  drawUpsideDownTri(x+(w*2), y+h, h, w, "#aaa");
+  drawTri(x+(w*2.5), y+h, h, w, "#ccc");
+  
+  drawTri(x, y+(h*2), h, w, "#aaa");
+  drawUpsideDownTri(x+(w/2), y+(h*2), h, w, "#aaa");
+  drawTri(x+w, y+(h*2), h, w, "#ccc");
+  drawUpsideDownTri(x+(w*1.5), y+(h*2), h, w, "#aaa");
+  drawTri(x+(w*2), y+(h*2), h, w, "#ccc");
+  drawUpsideDownTri(x+(w*2.5), y+(h*2), h, w, "#aaa");
+  drawTri(x+(w*3), y+(h*2), h, w, "#ccc");
+  
+  drawUpsideDownTri(x, y+(h*3), h, w, "#aaa");
+  drawTri(x+(w/2), y+(h*3), h, w, "#000");
+  drawUpsideDownTri(x+w, y+(h*3), h, w, "#ccc");
+  drawTri(x+(w*1.5), y+(h*3), h, w, "#000");
+  drawUpsideDownTri(x+(w*2), y+(h*3), h, w, "#ccc");
+  drawTri(x+(w*2.5), y+(h*3), h, w, "#000");
+  drawUpsideDownTri(x+(w*3), y+(h*3), h, w, "#ccc");
+  
+  drawUpsideDownTri(x+(w/2), y+(h*4), h, w, "#aaa");
+  drawTri(x+w, y+(h*4), h, w, "#000");
+  drawUpsideDownTri(x+(w*1.5), y+(h*4), h, w, "#ccc");
+  drawTri(x+(w*2), y+(h*4), h, w, "#000");
+  drawUpsideDownTri(x+(w*2.5), y+(h*4), h, w, "#ccc");
+  
+  drawUpsideDownTri(x+w, y+(h*5), h, w, "#aaa");
+  drawTri(x+(w*1.5), y+(h*5), h, w, "#000");
+  drawUpsideDownTri(x+(w*2), y+(h*5), h, w, "#ccc");
+  
+}
+
+
+
+
+function alternateTwoHexatiles (x, y, h, w, hex_a_style, hex_b_style) {
+  for (let j = 0; j < 10; j++) {
+    for (let i = 0; i < 10; i++) {
+      if (i% 2 == 0) {
+        drawHexatile((w*i*3)-(w), h*j*2, h, w, hex_a_style);
+        drawHexatile((w*i*3)+w/2,(h*j*2)-(h), h, w, hex_b_style);
+      } else {
+        drawHexatile((w*i*3)-(w), h*j*2, h, w, hex_b_style);
+        drawHexatile((w*i*3)+w/2,(h*j*2)-(h), h, w, hex_a_style);    
+      }
+    }
+  }
+}
+
+
+function alternateHexatiles(x, y, h, w) {
+  for (let j = 0; j < 10; j++) {
+    for (let i = 0; i < 10; i++) {
+      if (j % 2 == 0) {
+        drawUpsideDownTri(i*w-50, j*h, h, w);
+        drawTri(i*w, j*h, h, w);
+      }
+      else {
+        drawUpsideDownTri(i*w, j*h, h, w);
+        drawTri(i*w-50, j*h, h, w);
+      }
+    }
+  }
+}
+
+
+
+function invertTile (h,w) {
+  for (let j = 0; j < 10; j++) {
+    for (let i = 0; i < 10; i++) {
+      if (j % 2 == 0) {
+        drawUpsideDownTri(i*w-50, j*h, 100, 100);
+        drawTri(i*w, j*h, 100, 100);
+      }
+      else {
+        drawUpsideDownTri(i*w, j*h, 100, 100);
+        drawTri(i*w-50, j*h, 100, 100);
+      }
+    }
+  }
+}
+
+function shelfTile (h, w) {
+  var h = 100;
+  var w = 100;
+  for (let j = 0; j < 10; j++) {
+    for (let i = 0; i < 10; i++) {
+      drawUpsideDownTri(i*w-50, j*h, 100, 100);
+      drawTri(i*w, j*h, 100, 100);
+    }
+  }
+}
+
+
+
+
+function drawShadowBoxes(x, y, h, w, color_a, color_b, color_c) {
+  
+  //three colors
+  
+  drawTri(x+(w*1.5), y, h, w, color_b);
+  
+  drawTri(x+w, y+h, h, w, color_b);
+  drawUpsideDownTri(x+(w*1.5), y+h, h, w, color_b);
+  drawTri(x+(w*2), y+h, h, w, color_b);
+  
+  drawTri(x+(w/2), y+(h*2), h, w, color_a);
+  drawUpsideDownTri(x+w, y+(h*2), h, w, color_b);
+  drawTri(x+(w*1.5), y+(h*2), h, w, color_b);
+  drawUpsideDownTri(x+(w*2), y+(h*2), h, w, color_b);
+  drawTri(x+(w*2.5), y+(h*2), h, w, color_c);
+
+  drawTri(x, y+(h*3), h, w, color_a);
+  drawUpsideDownTri(x+(w/2), y+(h*3), h, w, color_a);
+  drawTri(x+w, y+(h*3), h, w, color_a);
+  drawUpsideDownTri(x+(w*1.5), y+(h*3), h, w, color_b);
+  drawTri(x+(w*2), y+(h*3), h, w, color_c);
+  drawUpsideDownTri(x+(w*2.5), y+(h*3), h, w, color_c);
+  drawTri(x+(w*3), y+(h*3), h, w, color_c);
+  
+  drawUpsideDownTri(x, y+(h*4), h, w, color_a);
+  drawTri(x+(w/2), y+(h*4), h, w, color_a);
+  drawUpsideDownTri(x+w, y+(h*4), h, w, color_a);
+  drawTri(x+(w*1.5), y+(h*4), h, w, color_c);
+  drawUpsideDownTri(x+(w*2), y+(h*4), h, w, color_b);
+  drawTri(x+(w*2.5), y+(h*4), h, w, color_b);
+  drawUpsideDownTri(x+(w*3), y+(h*4), h, w, color_b);
+  
+  drawUpsideDownTri(x+(w/2), y+(h*5), h, w, color_a);
+  drawTri(x+w, y+(h*5), h, w, color_c);
+  drawUpsideDownTri(x+(w*1.5), y+(h*5), h, w, color_c);
+  drawTri(x+(w*2), y+(h*5), h, w,  color_c);
+  drawUpsideDownTri(x+(w*2.5), y+(h*5), h, w, color_b);
+  
+  drawUpsideDownTri(x+w, y+(h*6), h, w, color_c);
+  drawTri(x+(w*1.5), y+(h*6), h, w, color_c);
+  drawUpsideDownTri(x+(w*2), y+(h*6), h, w, color_c);
+  
+  drawUpsideDownTri(x+(w*1.5), y+(h*7), h, w, color_c);
+}
+
+
+function invertTile (h,w) {
+  for (let j = 0; j < 10; j++) {
+    for (let i = 0; i < 10; i++) {
+      if (j % 2 == 0) {
+        drawUpsideDownTri(i*w-50, j*h, 100, 100);
+        drawTri(i*w, j*h, 100, 100);
+      }
+      else {
+        drawUpsideDownTri(i*w, j*h, 100, 100);
+        drawTri(i*w-50, j*h, 100, 100);
+      }
+    }
+  }
+}
+
+function shelfTile (h, w) {
+  var h = 100;
+  var w = 100;
+  for (let j = 0; j < 10; j++) {
+    for (let i = 0; i < 10; i++) {
+      drawUpsideDownTri(i*w-50, j*h, 100, 100);
+      drawTri(i*w, j*h, 100, 100);
+    }
+  }
+}
+
+*/
