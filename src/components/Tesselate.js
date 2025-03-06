@@ -1,16 +1,36 @@
+//const animation_themes = {};
+const Tesselate = ({ t_pattern, t_design, c_theme }) => {
 
-  const animation_themes = {};
-  
-  class Tesselate {
-  
-    color_theme = {};
-    pattern = {};
-    tile_design = {};
-    tiles_wide = 1;
-    tiles_high = 1;
+    const color_theme = {};
+    const pattern = {};
+    const tile_design = {};
+    const tiles_wide = 1;
+    const tiles_high = 1;
+
+    const setup = (p5, canvasParentRef) => {
+       // p5.createCanvas(600, 400).parent(canvasParentRef);
+    };
+
+    const draw = (p5) => {
+        //p5.background(backgroundColor);
+        
+        // Draw a moving circle
+        //p5.fill(255);
+        //p5.ellipse(x, p5.height / 2, 50, 50);
+        
+        // Update position
+        //x = (x + speed) % p5.width;
+        //if (x < 0) x = p5.width;
+      };
     
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+          <Sketch setup={setup} draw={draw} />
+        </Box>
+      );
+    }
   
-    fillWithTiles(pattern, colors, tile_w, tile_h) {
+    const fillWithTiles = ( pattern, colors, tile_w, tile_h ) => {
   
       this.pattern = pattern;
       this.color_theme = colors;
@@ -53,7 +73,7 @@
     }
   
   
-    drawCenteredTile(pattern, colors, tile_w, tile_h) {
+    const drawCenteredTile = (pattern, colors, tile_w, tile_h) => {
   
       this.pattern = pattern;
       this.color_theme = colors;
@@ -72,19 +92,19 @@
   
     }
   
-    drawRhomboidHexatile(){}
+    const drawRhomboidHexatile = () => {}
   
   
-    getTilesWide(tile_w){
+    const getTilesWide = (tile_w) => {
       return Math.round(window.document.body.offsetWidth/tile_w) + 1;
     }
   
-    getTilesHigh(tile_h, is_offset=true){
+    const getTilesHigh = (tile_h, is_offset=true) => {
       return Math.round(window.document.body.offsetHeight/ (tile_h/2) + 1);
     }
   
   
-    tileHexatiles(x, y, tri_h, tri_w, pattern, colors) {
+    const tileHexatiles = (x, y, tri_h, tri_w, pattern, colors) => {
   
       //let tiles_wide = Math.round(doc_w/tri_w) + 1;
       //let tiles_high = Math.round(doc_h/tri_h) + 1;
@@ -106,7 +126,7 @@
     };
   
   
-    regularTilingHexatile() {
+    const regularTilingHexatile = () => {
       for (let j = 0; j < 1; j++) {
         for (let i = 0; i < tiles_wide; i++) {
           let x1 = ((tile_w * i)-offset_x);
@@ -121,7 +141,7 @@
       }
     };
   
-    regularTilingGrid(x, y, tile_w, tile_h, tiles, tile_columns) {
+    const regularTilingGrid = (x, y, tile_w, tile_h, tiles, tile_columns) => {
       for (let j = 0; j < 1; j++) {
         for (let i = 0; i < tiles_wide; i++) {
           let x1 = ((tile_w * i)-offset_x);
@@ -137,7 +157,7 @@
     };
   
   
-    regularTilingDiamond(tile_w, tile_h, tile_design, tile_components, tile_columns, pos_x, pos_y) {
+    const regularTilingDiamond = (tile_w, tile_h, tile_design, tile_components, tile_columns, pos_x, pos_y) => {
   
       let row, row_x, row_y, tile_x;
       let row_offset_x = tile_w/2;
@@ -161,7 +181,7 @@
       }
     }
   
-    drawDiamondTriangleTile(tile_w, tile_h, tile_design, tile_components, tile_columns, pos_x, pos_y){
+    const drawDiamondTriangleTile = (tile_w, tile_h, tile_design, tile_components, tile_columns, pos_x, pos_y) => {
   
       let row, row_x, row_y, row_offset_x, tri_offset_x, tri_style, tri_orientation;
       let tri_w = tile_w/tile_columns;
@@ -192,7 +212,7 @@
     }
   
   
-    drawAlternatingPizzaHexatile(pos_x, pos_y, tile_w, tile_h, tile_design, tile_components) {
+    const drawAlternatingPizzaHexatile = (pos_x, pos_y, tile_w, tile_h, tile_design, tile_components) => {
   
   
       let tile_a_components = tile_components['a'];
@@ -206,7 +226,7 @@
       this.drawPizzaHexatile(tile_b_x, tile_b_y, tile_w, tile_h, tile_b_components);
     }
   
-    drawTripleHexatile(pos_x, pos_y, tile_w, tile_h, tile_design, tile_components) {
+    const drawTripleHexatile = (pos_x, pos_y, tile_w, tile_h, tile_design, tile_components) => {
   
       let tile_a_components = tile_components['a'];
       let tile_b_components = tile_components['b'];
@@ -223,7 +243,7 @@
       this.drawPizzaHexatile(tile_c_x, tile_c_y, tile_w, tile_h, tile_c_components);
     }
   
-    drawQuadHexatile(pos_x, pos_y, tile_w, tile_h, tile_design, tile_components) {
+    const drawQuadHexatile = (pos_x, pos_y, tile_w, tile_h, tile_design, tile_components) => {
   
       let tile_a_components = tile_components['a'];
       let tile_b_components = tile_components['b'];
@@ -246,7 +266,7 @@
       this.drawPizzaHexatile(tile_d_x, tile_d_y, tile_w, tile_h, tile_d_components);
     }
   
-   drawChamferedHexatile(tile_w, tile_h, tile_design, tile_components, tile_columns, pos_x, pos_y) {
+   const drawChamferedHexatile = (tile_w, tile_h, tile_design, tile_components, tile_columns, pos_x, pos_y) => {
       
       let tile_a_components = tile_components.a;
       let tile_b_components = tile_components.b;
@@ -268,7 +288,7 @@
     }
   
   
-    drawDiamondHexatile(pos_x, pos_y, tile_w, tile_h, tile_components) {
+    const drawDiamondHexatile = (pos_x, pos_y, tile_w, tile_h, tile_components) => {
   
   
   
@@ -284,7 +304,7 @@
   }
   
   
-    drawPizzaHexatile(pos_x, pos_y, tile_w, tile_h, tile_components) {
+    const drawPizzaHexatile = (pos_x, pos_y, tile_w, tile_h, tile_components) => {
   
   
   
@@ -299,7 +319,8 @@
       this.drawTri(pos_x + tri_w, pos_y+(tri_h), tri_w, tri_h, "down", tile_components[5]);
   }
   
-  drawPizzaHexatile(pos_x, pos_y, tile_w, tile_h, tile_components) {
+  /*
+  const drawVerticalTriangleHexatile = (pos_x, pos_y, tile_w, tile_h, tile_components) => {
   
   
   
@@ -312,9 +333,9 @@
       this.drawTri(pos_x, pos_y+tri_h, tri_w, tri_h, "up", tile_components[3]);
       this.drawTri(pos_x, pos_y+(tri_h), tri_w, tri_h, "up", tile_components[4]);
       this.drawTri(pos_x + tri_w, pos_y+(tri_h), tri_w, tri_h, "down", tile_components[5]);
-  }
+  } */
   
-    drawVerticalTriangleHexatile(x, y, tile_w, tile_h, tiles, tile_columns) {
+   const drawVerticalTriangleHexatile = (x, y, tile_w, tile_h, tiles, tile_columns) => {
   
       let row, tri, x_loc, y_loc, tri_style;
       let start_upside_down = false;
@@ -384,11 +405,11 @@
       triangle(x1, y1, x2, y2, x3, y1);
     }*/
   
-    drawChamferedHexagon(){
+    const drawChamferedHexagon = () => {
   
     }
   
-    drawHorizontalTri(x, y, w, h, tri_orientation, tri_style) {
+    const drawHorizontalTri = (x, y, w, h, tri_orientation, tri_style) => {
   
   
         let x1,x2, y1, y2, x3, y3;
@@ -425,7 +446,7 @@
         noStroke(); 
       }
   
-  drawTri(x, y, w, h, tri_orientation, tri_style) {
+    const drawTri = (x, y, w, h, tri_orientation, tri_style) => {
   
         let x1,x2, y1, y2, x3, y3;
   
@@ -477,7 +498,7 @@
   
     //Utility functions
   
-    drawStroke(stroke, x1, y1, x2, y2, x3) {
+    const drawStroke = (stroke, x1, y1, x2, y2, x3) => {
       if (stroke && Array.isArray(stroke)) {
    
   
@@ -501,23 +522,8 @@
       } 
       noStroke(); //always return to no stroke
     }
-  }
   
-  
-  
-  function setup() {
-    const pattern = new Tesselate();
-    //pattern.fillWithTiles(tripleHex, color_themes["gender_biased"], 60, 90);
-    pattern.drawCenteredTile(tripleHex, color_themes["gender_biased"], 60, 90);
-  
-    //triangle(10, 10, 20, 5, 20, 15);
-  }
-  
-    
-  function draw() {
-    //console.log("a")
-  }
-  
-  
+
+export default Tesselate;
   
   

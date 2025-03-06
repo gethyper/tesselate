@@ -19,6 +19,9 @@ import Tesselate from './components/Tesselate';
 function App() {
   const [speed, setSpeed] = useState(2);
   const [backgroundColor, setBackgroundColor] = useState('#000000');
+  const [t_pattern, setPattern] = useState('hex');
+  const [t_design, setDesign] = useState('triangle');
+  const [c_theme, setTheme] = useState('gender_biased');
 
   const handleSpeedChange = (event, newValue) => {
     setSpeed(newValue);
@@ -28,8 +31,23 @@ function App() {
     setBackgroundColor(event.target.value);
   };
 
+  const handlePatternChange = (event) => {
+    setPattern(event.target.value);
+  };
+
+  const handleDesignChange = (event) => {
+    setDesign(event.target.value);
+  };
+
+  const handleThemeChange = (event) => {
+    setTheme(event.target.value);
+  };
+  
+
   return (
+    
     <Container maxWidth="md">
+      <Tesselate t_pattern={t_pattern} t_design={t_design} c_theme={c_theme} />
       <Typography variant="h3" align="center" gutterBottom sx={{ mt: 4 }}>
         P5.js with Material-UI
       </Typography>
@@ -71,6 +89,7 @@ function App() {
         <P5Sketch backgroundColor={backgroundColor} speed={speed} />
       </Paper>
     </Container>
+    
   );
 }
 

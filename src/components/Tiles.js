@@ -1,20 +1,20 @@
-const shadowBox  = {
-    tilePattern: "tileHexatiles",
-    tileDesign: "triangleHexatile",
-    tileColumns: 4,
-    tileComponents: [
-      ["medium"],
-      ["medium", "medium", "medium"],
-      ["light", "medium", "medium", "medium", "dark"],
-      ["light", "light", "light", "medium", "dark", "dark", "dark"],
-      ["light", "light", "light", "dark", "medium", "medium", "medium"],
-      ["light", "dark", "dark", "dark", "medium"],
-      ["dark", "dark", "dark"],
-      ["dark"]
-    ]
-  };
-  
-  const persianKnots = {
+const TileDesigns = {
+  shadowBox:  {
+        tilePattern: "tileHexatiles",
+        tileDesign: "triangleHexatile",
+        tileColumns: 4,
+        tileComponents: [
+            ["medium"],
+            ["medium", "medium", "medium"],
+            ["light", "medium", "medium", "medium", "dark"],
+            ["light", "light", "light", "medium", "dark", "dark", "dark"],
+             ["light", "light", "light", "dark", "medium", "medium", "medium"],
+            ["light", "dark", "dark", "dark", "medium"],
+            ["dark", "dark", "dark"],
+            ["dark"]
+        ]
+  }, 
+  persianKnots: {
     tilePattern: "regularTilingDiamond",
     tileDesign: "drawDiamondTriangleTile",
     tileColumns:6,
@@ -26,9 +26,8 @@ const shadowBox  = {
       ["dark", "dark", "dark", "dark"],
       ["dark", "dark"]
     ]
-  };
-  
-  const mosaicMitre = {
+  }
+  mosaicMitre: {
     tilePattern: "tileHexatiles",
     tileDesign: "triangleHexatile",
     tileColumns: 3,
@@ -41,10 +40,9 @@ const shadowBox  = {
       ["medium", "dark", "medium"],
       ["dark"]
     ]
-  };
+  }, 
   
-  
-  const altHex = {
+altHex: {
     tilePattern: "tileAlternatingHexatile",
     tileDesign: "drawAlternatingPizzaHexatile",
     tileComponents: {
@@ -65,10 +63,10 @@ const shadowBox  = {
        {color:"medium", stroke:"dark"}
       ]
     }
-  };
+  },
   
   
-  const palermoMeander = {
+palermoMeander: {
     tilePattern: "tileTripleHexatile",
     tileDesign: "drawTripleHexatile",
     tileComponents: {
@@ -97,10 +95,8 @@ const shadowBox  = {
        {color:"light", stroke:"bg"}
       ]
     }
-  };
-  
-  
-  const tripleHex = {
+  },
+  tripleHex:{
     tilePattern: "tileTriplegHexatile",
     tileDesign: "drawTripleHexatile",
     tileComponents: {
@@ -129,9 +125,9 @@ const shadowBox  = {
        {color:"medium", stroke:"accent"}
       ]
     }
-  };
+  },
   
-  const quadHex = {
+  quadHex: {
     tilePattern: "tileQuadHexatile",
     tileDesign: "drawQuadHexatile",
     tileComponents: {
@@ -168,12 +164,11 @@ const shadowBox  = {
        {color:"dark", stroke:"accent"}
       ]
     }
-  };
+  }
   
   
   
-  const chamferedHex = {
-  
+ chamferedHex:{
     tilePattern: "Hexatile",
     tileDesigns: "PizzaHexatile",
     tileComponents: {
@@ -213,9 +208,9 @@ const shadowBox  = {
           {color:"medium", stroke:"dark"}
         ]
       }
-    };
+    },
   
-  const egyptianHexatile  = {
+ egyptianHexatile: {
     tilePattern: "tileHexatiles",
     tileDesign: "triangleHexatile",
     tileRows:24,
@@ -246,9 +241,9 @@ const shadowBox  = {
       ["medium", "medium", "dark"], //3    
       ["medium"] //1
       ]
-  };
+  }
   
-  const brokeHexatile  = {
+  brokeHexatile: {
     tilePattern: "tileHexatiles",
     tileDesign: "triangleHexatile",
     tileRows:24,
@@ -286,4 +281,7 @@ const shadowBox  = {
       ["medium", "medium", "dark"], //3    
       ["medium"] //1
       ]
-  };
+  }
+};
+
+export default TileDesigns; 
