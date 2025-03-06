@@ -1,18 +1,18 @@
 const TileDesigns = {
   shadowBox:  {
-        tilePattern: "tileHexatiles",
-        tileDesign: "triangleHexatile",
-        tileColumns: 4,
-        tileComponents: [
-            ["medium"],
-            ["medium", "medium", "medium"],
-            ["light", "medium", "medium", "medium", "dark"],
-            ["light", "light", "light", "medium", "dark", "dark", "dark"],
-             ["light", "light", "light", "dark", "medium", "medium", "medium"],
-            ["light", "dark", "dark", "dark", "medium"],
-            ["dark", "dark", "dark"],
-            ["dark"]
-        ]
+    tilePattern: "tileHexatiles",
+    tileDesign: "triangleHexatile",
+    tileColumns: 4,
+    tileComponents: [
+          ["medium"],
+          ["medium", "medium", "medium"],
+          ["light", "medium", "medium", "medium", "dark"],
+          ["light", "light", "light", "medium", "dark", "dark", "dark"],
+          ["light", "light", "light", "dark", "medium", "medium", "medium"],
+          ["light", "dark", "dark", "dark", "medium"],
+          ["dark", "dark", "dark"],
+          ["dark"]
+      ]
   }, 
   persianKnots: {
     tilePattern: "regularTilingDiamond",
