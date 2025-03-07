@@ -9,4 +9,4 @@ const ColorThemes = {
     "End-century Modern":{}
   };
 
-  export default ColorThemes; 
+export default ColorThemes; 

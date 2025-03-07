@@ -10,71 +10,92 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import P5Sketch from './components/P5Sketch';
 import Tesselate from './components/Tesselate';
-
-//
-
+import Tiles from './components/Tiles';
+import ColorThemes  from './components/ColorThemes';
 
 function App() {
-  const [speed, setSpeed] = useState(2);
-  const [backgroundColor, setBackgroundColor] = useState('#000000');
-  const [t_pattern, setPattern] = useState('hex');
-  const [t_design, setDesign] = useState('triangle');
-  const [c_theme, setTheme] = useState('gender_biased');
+  // Group all state in a single object
+  const [state, setState] = useState({
+    size: 20,
+    t_pattern: 'hex',
+    t_design: 'triangle',
+    c_theme: 'gender_fluent'
+  });
 
-  const handleSpeedChange = (event, newValue) => {
-    setSpeed(newValue);
-  };
+  // Group all handlers in an object
+  const handlers = {
+    handleSizeChange: (event, newValue) => {
+      setState(prev => ({ ...prev, speed: newValue }));
+    },
 
-  const handleColorChange = (event) => {
-    setBackgroundColor(event.target.value);
-  };
+    handleColorThemeChange: (event) => {
+      setState(prev => ({ ...prev, colorTheme: event.target.value }));
+    },
 
-  const handlePatternChange = (event) => {
-    setPattern(event.target.value);
-  };
+    handlePatternChange: (event) => {
+      setState(prev => ({ ...prev, t_pattern: event.target.value }));
+    },
 
-  const handleDesignChange = (event) => {
-    setDesign(event.target.value);
-  };
+    handleDesignChange: (event) => {
+      setState(prev => ({ ...prev, t_design: event.target.value }));
+    },
 
-  const handleThemeChange = (event) => {
-    setTheme(event.target.value);
+    handleThemeChange: (event) => {
+      setState(prev => ({ ...prev, c_theme: event.target.value }));
+    }
   };
-  
 
   return (
-    
-    <Container maxWidth="md">
-      <Tesselate t_pattern={t_pattern} t_design={t_design} c_theme={c_theme} />
-      <Typography variant="h3" align="center" gutterBottom sx={{ mt: 4 }}>
-        P5.js with Material-UI
-      </Typography>
+    <Box sx={{ width: '100%' }}>
+      <Tesselate 
+        pattern={{ tileDesign: 'drawPizzaHexatile', tileComponents: [] }}
+        color_theme={{ bg: '#f5f5f5', primary: '#3f51b5' }}
+        tile_width={120}
+        tile_height={120}
+        variant="full"
+      />
 
-      <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+
+      <Box sx={{ 
+        position: 'fixed', 
+        bottom: 16, 
+        left: 0, 
+        right: 0, 
+        zIndex: 10,
+        display: 'flex',
+        justifyContent: 'center'
+      }}>
+        <Paper elevation={3} sx={{ 
+          p: 3, 
+          width: { xs: '95%', sm: '80%', md: '60%' }, 
+          maxWidth: '800px'
+        }}>
+          <Typography variant="h5" align="center" gutterBottom sx={{ mt: 4 }}>
+        Tesselations
+      </Typography>
         <Box sx={{ mb: 2 }}>
-          <Typography gutterBottom>Speed Control</Typography>
+          <Typography gutterBottom>Size Control</Typography>
           <Slider
-            value={speed}
-            onChange={handleSpeedChange}
-            min={-5}
-            max={5}
-            step={0.1}
+            value={state.size}
+            onChange={handlers.Size}
+            min={10}
+            max={100}
+            step={10}
             valueLabelDisplay="auto"
             marks={[
-              { value: -5, label: '-5' },
-              { value: 0, label: '0' },
-              { value: 5, label: '5' },
+              { value: 10, label: '10' },
+              { value: 50, label: '50' },
+              { value: 100, label: '100' },
             ]}
           />
         </Box>
 
         <FormControl fullWidth>
-          <InputLabel>Background Color</InputLabel>
+          <InputLabel>Color Theme</InputLabel>
           <Select
-            value={backgroundColor}
-            onChange={handleColorChange}
+            value={state.colorTheme}
+            onChange={handlers.handleColorThemeChange}
             label="Background Color"
           >
             <MenuItem value="#000000">Black</MenuItem>
@@ -83,14 +104,17 @@ function App() {
             <MenuItem value="#d32f2f">Red</MenuItem>
           </Select>
         </FormControl>
-      </Paper>
-
-      <Paper elevation={3} sx={{ p: 3 }}>
-        <P5Sketch backgroundColor={backgroundColor} speed={speed} />
-      </Paper>
-    </Container>
-    
+        </Paper>
+      </Box>
+    </Box>
+     
   );
 }
+
+
+// Paper elevation={3} sx={{ p: 3 }}>
+      //</Container>P5Sketch backgroundColor={state.backgroundColor} speed={state.speed}  
+       //</Paper -->
+   
 
 export default App;
