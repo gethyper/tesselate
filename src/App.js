@@ -11,7 +11,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import Tesselate from './components/Tesselate';
-import Tiles from './components/Tiles';
+import TileDesigns from './components/TileDesigns';
 import ColorThemes  from './components/ColorThemes';
 
 function App() {

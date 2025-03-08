@@ -16,23 +16,27 @@ const TileDesigns= {
   'persianKnots': {
     'tileDesign': "diamond",
     'tilePattern': [
+      [
       ["light", "light"],
       ["light", "light", "light", "light"],
       ["medium", "medium", "medium", "medium", "medium", "medium"],
       ["dark", "dark", "dark", "dark"],
       ["dark", "dark"]
+      ]
     ]
   },
 
   'mosaicMitre': {
     'tileDesign': "diamond",
     'tilePattern': [
+      [
       ["light"],
       ["light", "light", "light"],
       ["dark", "light", "medium", "light", "dark"],
       ["dark", "medium", "medium", "medium", "dark"],
       ["medium", "dark", "medium"],
       ["dark"]
+    ]
     ]
   },
 
