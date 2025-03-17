@@ -1,6 +1,6 @@
 const TileDesigns= {
   'shadowBox': {
-    'tileShape': "flatTopHexagon",
+    'tileDesign': "diamond",
     'tilePattern': [
       ["medium"],
       ["medium", "medium", "medium"],
@@ -14,22 +14,19 @@ const TileDesigns= {
   },
 
   'persianKnots': {
-    'tileShape': "flatTopHexagon",
+    'tileDesign': "diamond",
     'tilePattern': [
-      [
       ["light", "light"],
       ["light", "light", "light", "light"],
       ["medium", "medium", "medium", "medium", "medium", "medium"],
       ["dark", "dark", "dark", "dark"],
       ["dark", "dark"]
-      ]
     ]
   },
 
   'mosaicMitre': {
-    'tileShape': "flatTopHexagon",
+    'tileDesign': "diamond",
     'tilePattern': [
-      [
       ["light"],
       ["light", "light", "light"],
       ["dark", "light", "medium", "light", "dark"],
@@ -37,11 +34,10 @@ const TileDesigns= {
       ["medium", "dark", "medium"],
       ["dark"]
     ]
-    ]
   },
 
   'altHex': {
-    'tileShape': "pointyTopHexagon",
+    'tileDesign': "pizza",
     'tilePattern': [
       [
         {color: "light", stroke: "dark", img: ""},
@@ -62,46 +58,8 @@ const TileDesigns= {
     ]
   },
 
-  'test': {
-    'tileShape': "pointyTopHexagon",
-    'tilePattern': [
-      [
-        {color: "light", stroke: "dark"},
-        {color: "light", stroke: "dark"},
-        {color: "light", stroke: "dark"},
-        {color: "light", stroke: "dark"},
-        {color: "light", stroke: "dark"},
-        {color: "light", stroke: "dark"}
-      ],
-      [
-        {color: "dark", stroke: "dark"},
-        {color: "dark", stroke: "dark"},
-        {color: "dark", stroke: "dark"},
-        {color: "dark", stroke: "dark"},
-        {color: "dark", stroke: "dark"},
-        {color: "dark", stroke: "dark"}
-      ],
-      [
-        {color: "medium", stroke: "dark"},
-        {color: "medium", stroke: "dark"},
-        {color: "medium", stroke: "dark"},
-        {color: "medium", stroke: "dark"},
-        {color: "medium", stroke: "dark"},
-        {color: "medium", stroke: "dark"}
-      ],
-      [
-        {color: "accent", stroke: "dark"},
-        {color: "accent", stroke: "dark"},
-        {color: "accent", stroke: "dark"},
-        {color: "accent", stroke: "dark"},
-        {color: "accent", stroke: "dark"},
-        {color: "accent", stroke: "dark"}
-      ]
-    ]
-  },
-
   'palermoMeander': {
-    'tileShape': "flatTopHexagon",
+    'tileDesign': "diamond",
     'tilePattern': [
       [
         {color: "accent", stroke: "bg"},
@@ -131,7 +89,7 @@ const TileDesigns= {
   },
 
   'tripleHex': {
-    'tileShape': "flatTopHexagon",
+    'tileDesign': "diamond",
     'tilePattern': [
       [
         {color: "light", stroke: "accent"},
@@ -161,7 +119,7 @@ const TileDesigns= {
   },
 
   'quadHex': {
-    'tileShape': "flatTopHexagon",
+    'tileDesign': "diamond",
     'tilePattern': [
       [
         {color: "light", stroke: "accent"},
@@ -199,7 +157,7 @@ const TileDesigns= {
   },
 
   'chamferedHex': {
-    'tileShape': "flatTopHexagon",
+    'tileDesign': "pizza",
     'tilePattern': [
       [
         {color: "light"},
@@ -237,7 +195,7 @@ const TileDesigns= {
   },
 
   'egyptianHexatile': {
-    'tileShape': "flatTopHexagon",
+    'tileDesign': "diamond",
     'tilePattern': [
       ["medium"],
       ["light", "medium", "medium"],
@@ -267,7 +225,7 @@ const TileDesigns= {
   },
 
   'brokeHexatile': {
-    "tileShape": "flatTopHexagon",
+    tileDesign: "diamond",
     'tilePattern': [
       ["medium"],
       ["light", "medium", "medium"],

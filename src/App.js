@@ -18,10 +18,12 @@ function App() {
   // Group all state in a single object
   const [state, setState] = useState({
     size: 20,
-    t_pattern: 'hex',
-    t_design: 'triangle',
-    c_theme: 'gender_fluent'
+    tile_design: 'hex',
+    tile_pattern: 'triangle',
+    color_theme: 'gender_fluent'
   });
+
+
 
   // Group all handlers in an object
   const handlers = {
@@ -30,7 +32,7 @@ function App() {
     },
 
     handleColorThemeChange: (event) => {
-      setState(prev => ({ ...prev, colorTheme: event.target.value }));
+      setState(prev => ({ ...prev, color_theme: event.target.value }));
     },
 
     handlePatternChange: (event) => {
@@ -49,11 +51,12 @@ function App() {
   return (
     <Box sx={{ width: '100%' }}>
       <Tesselate 
-        pattern={{ tileDesign: 'drawPizzaHexatile', tileComponents: [] }}
-        color_theme={{ bg: '#f5f5f5', primary: '#3f51b5' }}
-        tile_width={120}
-        tile_height={120}
-        variant="full"
+        tile_shape={TileDesigns["test"].tileShape}
+        tile_pattern={TileDesigns["test"].tilePattern}
+        color_theme={ColorThemes["basic_b"]}
+        tile_width={100}
+        tile_height={100}
+        single_tile={true}
       />
 
 
@@ -111,10 +114,6 @@ function App() {
   );
 }
 
-
-// Paper elevation={3} sx={{ p: 3 }}>
-      //</Container>P5Sketch backgroundColor={state.backgroundColor} speed={state.speed}  
-       //</Paper -->
    
 
 export default App;
