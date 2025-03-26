@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import TileDesigns from '../components/TileDesigns';
 import ColorThemes  from '../components/ColorThemes';
 // Import tile pattern functions or define your pattern mapping
@@ -253,6 +253,123 @@ export const drawTri = (p5, x, y, w, h, tri_orientation, tri_color, tri_stroke=f
     p5.noStroke(); 
 }; */
 
+export const drawHexagon = (p5, centerX, centerY, radius, numSides) => { 
+
+    // p5 already has some functionality for drawing more complex shapes
+    // beginShape tells p5 that we'll be positioning some vertices in a bit
+    p5.beginShape()
+  
+    // This is where the heavy lifting happens
+    // Make equiangular steps around the circle depending on the number of sides
+    for(let a = 0; a < p5.TAU; a+=p5.TAU/numSides){
+  
+      // calculate the cartesian coordinates for a given angle and radius
+      // and centered at the centerX and centerY coordinates
+      let x = centerX + radius * p5.cos(a)
+      let y = centerY + radius * p5.sin(a)
+  
+      // creating the vertex
+      p5.vertex(x, y)
+    }
+  
+    // telling p5 that we are done positioning our vertices
+    // and can now draw it to the canvas
+    p5.endShape(p5.CLOSE)
+};
+
+export const drawHexagon3 = (p5, cX, cY, r) => {
+    p5.beginShape()
+    for(let a = 0; a < p5.TAU; a+=p5.TAU/6){
+      p5.vertex(cX + r * p5.cos(a), cY + r * p5.sin(a))
+    }
+    p5.endShape(p5.CLOSE)
+  }
+
+  export const drawHexagon2 = (p5, cX, cY, r) => {
+    p5.beginShape()
+    for(let a = p5.TAU/12; a < p5.TAU + p5.TAU/12; a+=p5.TAU/6){
+      p5.vertex(cX + r * p5.cos(a), cY + r * p5.sin(a))
+    }
+    p5.endShape(p5.CLOSE)
+  }
+
+  export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme) => {
+
+    let vertices = [];
+    let x1, y1, x2, y2, x3, y3, tri, tri_color, tri_stroke;
+
+    for(let a = 0; a < p5.TAU; a+=p5.TAU/6){
+        //p5.vertex(cX + r * p5.cos(a), cY + r * p5.sin(a))
+        vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
+    }
+
+    //drawHexagon(p5, cX, cY, r);
+
+
+    
+    for (let i = 0; i < vertices.length-1; i++) {
+        
+        tri = tile_components[i];
+        console.log(tri);
+        tri_color = color_theme[tri['color']];  
+        tri_stroke = color_theme[tri['stroke']];
+
+        x1 = vertices[i][0];
+        y1 = vertices[i][1];
+        x2 = vertices[i+1][0];
+        y2 = vertices[i+1][1];
+        x3 = cX;
+        y3 = cY;
+        console.log(tri_color)
+        p5.fill(tri_color);
+
+        if (tri_stroke != null) {
+           p5.stroke(tri_stroke);
+        }
+        p5.triangle(x1, y1, x2, y2, x3, y3);
+        p5.noStroke(); 
+      }
+
+    }
+
+export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_theme) => {
+
+    let vertices = [];
+  
+    let x1, y1, x2, y2, x3, y3, tri, tri_color, tri_stroke;
+
+    for(let a = p5.TAU/12; a < p5.TAU + p5.TAU/12; a+=p5.TAU/6){
+        vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
+    }
+
+    drawHexagon2(p5, cX, cY, r);
+
+
+    
+    for (let i = 0; i < vertices.length-1; i++) {
+        
+        tri = tile_components[i];
+        tri_color = color_theme[tri['color']];  
+        tri_stroke = color_theme[tri['stroke']];
+
+        x1 = vertices[i][0];
+        y1 = vertices[i][1];
+        x2 = vertices[i+1][0];
+        y2 = vertices[i+1][1];
+        x3 = cX;
+        y3 = cY;
+
+        p5.fill(tri_color);
+
+        if (tri_stroke != null) {
+           p5.stroke(tri_stroke);
+        }
+        p5.triangle(x1, y1, x2, y2, x3, y3);
+        p5.noStroke(); 
+      }
+
+    }
+
 export const drawTri = (p5, x, y, w, h, tri_orientation, tri_color, tri_stroke=false) => {
 
     let x1, x2, y1, y2, x3, y3;
@@ -307,9 +424,45 @@ export const drawTri = (p5, x, y, w, h, tri_orientation, tri_color, tri_stroke=f
     p5.noStroke(); 
 }; 
 
-export const drawHexatile = (p5, pos_x, pos_y, tile_w, tile_h, tile_shape, tile_pattern, color_theme) => {
+
+
+export const drawMultHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_theme) => {
+
+    if (tile_pattern.length >= 1) {
+        let tile_a_pattern = tile_pattern[0];
+        let tile_a_x = pos_x;
+        let tile_a_y = pos_y;
+        drawHexatile(p5, tile_a_x, tile_a_y, radius, tile_a_pattern, color_theme);
+    }
+
+    if (tile_pattern.length >= 2) {
+        let tile_b_pattern = tile_pattern[1];
+        let tile_b_x = pos_x + radius*.866*2;
+        let tile_b_y = pos_y;
+        drawHexatile(p5, tile_b_x, tile_b_y, radius, tile_b_pattern, color_theme);
+    }
+
+    if (tile_pattern.length >= 3) {
+        let tile_c_pattern = tile_pattern[2];
+        let tile_c_x = pos_x + radius*.866;
+        let tile_c_y = (pos_y + radius*1.5);
+        drawHexatile(p5, tile_c_x, tile_c_y, radius, tile_c_pattern, color_theme);
+    }
+
+    if (tile_pattern.length >= 4) {
+        let tile_d_pattern = tile_pattern[3];
+        let tile_d_x = pos_x + radius*.866*3;
+        let tile_d_y = (pos_y + radius*1.5);
+        drawHexatile(p5, tile_d_x, tile_d_y, radius, tile_d_pattern, color_theme);
+    }
+
+  };
+
+export const drawHexatileOld = (p5, pos_x, pos_y, tile_w, tile_h, tile_shape, tile_pattern, color_theme) => {
 
     let tri_w, tri_h;
+
+   
 
     //let tri_h = tile_h/2;
     //let tri_w = /*tile_w/2;*/ tile_w/Math.round(tile_pattern.width/2);
@@ -350,81 +503,68 @@ export const drawHexatile = (p5, pos_x, pos_y, tile_w, tile_h, tile_shape, tile_
 
 };
 
-export const drawMultiPointyTopHexatile = (p5, pos_x, pos_y, tile_w, tile_h, tile_shape, tile_pattern, color_theme) => {
-
-    console.log(tile_pattern)
+export const drawMultiPointyTopHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_theme) => {
 
     if (tile_pattern.length >= 1) {
         let tile_a_pattern = tile_pattern[0];
         let tile_a_x = pos_x;
         let tile_a_y = pos_y;
-        drawHexatile(p5, tile_a_x, tile_a_y, tile_w, tile_h, tile_shape, tile_a_pattern, color_theme);
-        console.log("===========");
+        drawPointyTopHexatile(p5, tile_a_x, tile_a_y, radius, tile_a_pattern, color_theme);
     }
 
     if (tile_pattern.length >= 2) {
         let tile_b_pattern = tile_pattern[1];
-        let tile_b_x = pos_x + tile_w;
+        let tile_b_x = pos_x + radius*.866*2;
         let tile_b_y = pos_y;
-        drawHexatile(p5, tile_b_x, tile_b_y, tile_w, tile_h, tile_shape, tile_b_pattern, color_theme);
-        console.log("===========");
+        drawPointyTopHexatile(p5, tile_b_x, tile_b_y, radius, tile_b_pattern, color_theme);
     }
 
     if (tile_pattern.length >= 3) {
         let tile_c_pattern = tile_pattern[2];
-        let tile_c_x = pos_x + tile_w/2;
-        let tile_c_y = (pos_y + tile_h) - tile_h/4;
-        drawHexatile(p5, tile_c_x, tile_c_y, tile_w, tile_h, tile_shape, tile_c_pattern, color_theme);
-        console.log("===========");
+        let tile_c_x = pos_x + radius*.866;
+        let tile_c_y = (pos_y + radius*1.5);
+        drawPointyTopHexatile(p5, tile_c_x, tile_c_y, radius, tile_c_pattern, color_theme);
     }
 
     if (tile_pattern.length >= 4) {
         let tile_d_pattern = tile_pattern[3];
-        let tile_d_x = pos_x + tile_w * 1.5;
-        let tile_d_y = (pos_y + tile_h) - tile_h/4;
-        drawHexatile(p5, tile_d_x, tile_d_y, tile_w, tile_h, tile_shape, tile_d_pattern, color_theme);
-        console.log("===========");
+        let tile_d_x = pos_x + radius*.866*3;
+        let tile_d_y = (pos_y + radius*1.5);
+        drawPointyTopHexatile(p5, tile_d_x, tile_d_y, radius, tile_d_pattern, color_theme);
     }
 
   };
 
-export const drawMultiHexatile = (p5, pos_x, pos_y, tile_w, tile_h, tile_shape, tile_pattern, color_theme) => {
-    console.log(tile_h, tile_w)
+export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_theme) => {
+
 
     if (tile_pattern.length >= 1) {
         let tile_a_pattern = tile_pattern[0];
         let tile_a_x = pos_x;
         let tile_a_y = pos_y;
-        console.log("tile_pos_x="+tile_a_x);
-        drawHexatile(p5, tile_a_x, tile_a_y, tile_w, tile_h, tile_shape, tile_a_pattern, color_theme);
-        console.log("===========");
+        drawHexatile(p5, tile_a_x, tile_a_y, radius, tile_a_pattern, color_theme);
     }
 
     if (tile_pattern.length >= 2) {
         let tile_b_pattern = tile_pattern[1];
-        let tile_b_x = pos_x + tile_w - (tile_w/4);    
-        let tile_b_y = pos_y + tile_h/2;
-        console.log("tile_pos_x="+tile_b_x);
-        drawHexatile(p5, tile_b_x, tile_b_y, tile_w, tile_h, tile_shape, tile_b_pattern, color_theme);
-        console.log("===========");
+        let tile_b_x = pos_x + radius * 1.5;   
+        let tile_b_y = pos_y + radius * .866;
+        console.log(p5.cos(30))
+        drawHexatile(p5, tile_b_x, tile_b_y, radius, tile_b_pattern, color_theme);
     }
 
     if (tile_pattern.length >= 3) {
         let tile_c_pattern = tile_pattern[2];
         let tile_c_x = pos_x;
-        let tile_c_y = pos_y + tile_h;
-        console.log("tile_pos_x="+tile_c_x);
-        drawHexatile(p5, tile_c_x, tile_c_y, tile_w, tile_h, tile_shape, tile_c_pattern, color_theme);
-        console.log("===========");
+        let tile_c_y = pos_y + radius * 2 * .866
+        drawHexatile(p5, tile_c_x, tile_c_y, radius, tile_c_pattern, color_theme);
     }
 
     if (tile_pattern.length >= 4) {
         let tile_d_pattern = tile_pattern[3];
-        let tile_d_x = pos_x + tile_w - (tile_w/4);
-        let tile_d_y = pos_y + tile_h* 1.5;
-        console.log("tile_pos_x="+tile_d_x);
-        drawHexatile(p5, tile_d_x, tile_d_y, tile_w, tile_h, tile_shape, tile_d_pattern, color_theme);
-        console.log("===========");
+        let tile_d_x = pos_x + radius * 1.5;   
+        let tile_d_y = pos_y + radius*.866*3
+        drawHexatile(p5, tile_d_x, tile_d_y, radius, tile_d_pattern, color_theme);
     }
 
   };
@@ -437,9 +577,10 @@ export const drawMultiHexatile = (p5, pos_x, pos_y, tile_w, tile_h, tile_shape, 
     p5.noStroke(); 
     console.log(tile_shape)
     if (tile_shape === 'pointyTopHexagon') {
-        drawMultiPointyTopHexatile(p5, x_loc, y_loc, tile_w, tile_h, tile_shape, tile_pattern, color_theme);
+        console.log(tile_pattern)
+        drawMultiPointyTopHexatile(p5, x_loc, y_loc, tile_h, tile_pattern, color_theme);
     } else {
-        drawMultiHexatile(p5, x_loc, y_loc, tile_w, tile_h, tile_shape, tile_pattern, color_theme);
+        drawMultiHexatile(p5, x_loc, y_loc, tile_h, tile_pattern, color_theme);
     }
   };
 
@@ -477,14 +618,19 @@ export function useP5Tesselation({
   single_tile = true,
 }) {
 
-    
+  const p5InstanceRef = useRef(null);  
+
   const setup = useCallback((p5, canvasParentRef) => {
     // Calculate canvas size based on variant
-    let canvasWidth = window.innerWidth;
-    let canvasHeight = window.innerHeight;
-    p5.noLoop();
-    p5.noStroke(); // sets stroke default
-    p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
+    setTimeout(() => {
+        if (canvasParentRef.getElementsByTagName('canvas').length === 0) {
+            let canvasWidth = window.innerWidth;
+            let canvasHeight = window.innerHeight;
+            p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
+            p5.noStroke();
+        }
+    }, 10);
+
 
   }, [tile_size, tile_pattern, color_theme, single_tile]);
 
@@ -492,10 +638,11 @@ export function useP5Tesselation({
 
 
     let tile_width, tile_height;
+    console.log("draw")
 
     if (tile_shape == "pointyTopHexagon") {
         tile_height = (tile_size * .866);
-        tile_width = tile_size;   
+        tile_width = tile_size;  
         
         
     } else if (tile_shape == "flatTopHexagon") {
@@ -512,29 +659,42 @@ export function useP5Tesselation({
     p5.background(color_theme.bg);
 
     if (single_tile == true) {
+       
        drawCenteredHexatile(p5, tile_width, tile_height, tile_shape, tile_pattern, color_theme);
        
-       //drawTri(p5, 50, 50, 100, 100, "up", "#fff") 
 
     } else {
-        //fillWithTiles(p5, tile_width, tile_height, tile_shape, tile_pattern, color_theme);
         
     }
-
+    p5.noLoop();
+    p5.noStroke(); // sets stroke default
         //this[this.tile_shape](tile_w, tile_h, pattern.tileDesign, pattern.tileComponents, pattern.tileColumns, x_loc, y_loc);
         //this[pattern.tileDesign](tiles, x2, y2, tri_h, tri_w, tiles, tile_columns); //TODO: Add alternating Hexatil}
   }, [tile_size, tile_shape, tile_pattern, color_theme, single_tile]);
 
 
   const windowResized = useCallback((p5, canvasParentRef) => {
+    console.log("resized")
     p5.remove();
     //setup();
 
   }, [tile_size, tile_pattern, color_theme, single_tile]);
 
-  const remove = useCallback((p5) => {
-    p5.remove(); // This properly cleans up the p5 instance
+  // Add a proper cleanup function
+  const remove = useCallback(() => {
+    if (p5InstanceRef.current) {
+      p5InstanceRef.current.remove();
+      p5InstanceRef.current = null;
+    }
   }, []);
+  
+  // Cleanup on unmount or dependencies change
+  useEffect(() => {
+    return () => {
+      remove();
+    };
+  }, [remove]);
+
    return { setup, draw, remove };
   };
 

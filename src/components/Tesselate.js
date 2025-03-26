@@ -1,9 +1,9 @@
+import React, { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import Sketch from 'react-p5';
 import TileDesigns from './TileDesigns';
 import ColorThemes  from './ColorThemes';
 import { useP5Tesselation } from '../hooks/useP5Tesselation';
-import { useEffect, useRef } from 'react';
 
 // Default values (you can define these based on your needs)
 const defaultPattern = TileDesigns['doubleHexatile'];
@@ -13,18 +13,27 @@ const defaultTileSize = 20;
 const Tesselate = (props) => {
   const sketchRef = useRef(null);
   const { setup, draw, remove } = useP5Tesselation(props);
-
-    // Cleanup on unmount
-    useEffect(() => {
-      return () => {
-        if (sketchRef.current?.p5) {
-          sketchRef.current.p5.remove();
-        }
-      };
-    }, []);
-
+  
+  // Cleanup when component unmounts
+  useEffect(() => {
+    return () => {
+      if (sketchRef.current) {
+        remove();
+      }
+    };
+  }, [remove]);
+  
+  // Disable Strict Mode
+  // Either wrap your component with:
+  // <React.StrictMode> <Your App /> </React.StrictMode>
+  // in index.js, or remove StrictMode entirely for production
+  
   return (
-    <Sketch setup={setup} draw={draw} />
+    <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+      <div className="sketch-container" ref={sketchRef}>
+        <Sketch setup={setup} draw={draw} />
+      </div>
+    </Box>
   );
 };
 

@@ -62,8 +62,46 @@ const TileDesigns= {
     ]
   },
 
-  'test': {
+  'pointyTest': {
     'tileShape': "pointyTopHexagon",
+    'tilePattern': [
+      [
+        {color: "light", stroke: "dark"},
+        {color: "light", stroke: "dark"},
+        {color: "light", stroke: "dark"},
+        {color: "light", stroke: "dark"},
+        {color: "light", stroke: "dark"},
+        {color: "light", stroke: "dark"}
+      ],
+      [
+        {color: "dark", stroke: "dark"},
+        {color: "dark", stroke: "dark"},
+        {color: "dark", stroke: "dark"},
+        {color: "dark", stroke: "dark"},
+        {color: "dark", stroke: "dark"},
+        {color: "dark", stroke: "dark"}
+      ],
+      [
+        {color: "medium", stroke: "dark"},
+        {color: "medium", stroke: "dark"},
+        {color: "medium", stroke: "dark"},
+        {color: "medium", stroke: "dark"},
+        {color: "medium", stroke: "dark"},
+        {color: "medium", stroke: "dark"}
+      ],
+      [
+        {color: "accent", stroke: "dark"},
+        {color: "accent", stroke: "dark"},
+        {color: "accent", stroke: "dark"},
+        {color: "accent", stroke: "dark"},
+        {color: "accent", stroke: "dark"},
+        {color: "accent", stroke: "dark"}
+      ]
+    ]
+  },
+
+  'test': {
+    'tileShape': "flatTopHexagon",
     'tilePattern': [
       [
         {color: "light", stroke: "dark"},

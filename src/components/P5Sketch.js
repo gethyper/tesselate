@@ -6,7 +6,7 @@ const P5Sketch = ({ backgroundColor, speed }) => {
   let x = 0;
 
   const setup = (p5, canvasParentRef) => {
-    p5.createCanvas(600, 400).parent(canvasParentRef);
+    //p5.createCanvas(600, 400).parent(canvasParentRef);
   };
 
   const draw = (p5) => {

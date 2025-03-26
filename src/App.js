@@ -18,34 +18,29 @@ function App() {
   // Group all state in a single object
   const [state, setState] = useState({
     size: 20,
-    tile_design: 'hex',
-    tile_pattern: 'triangle',
-    color_theme: 'gender_fluent'
+    tile_design: TileDesigns["test"],
+    tile_shape: TileDesigns["test"].tileShape,
+    tile_pattern: TileDesigns["test"].tilePattern,
+    color_theme: 'basic_b'
   });
 
 
 
   // Group all handlers in an object
   const handlers = {
-    handleSizeChange: (event, newValue) => {
-      setState(prev => ({ ...prev, speed: newValue }));
+    handleTileSizeChange: (event, newValue) => {
+      setState(prev => ({ ...prev, size: newValue }));
     },
 
-    handleColorThemeChange: (event) => {
-      setState(prev => ({ ...prev, color_theme: event.target.value }));
+    handleColorThemeChange: (themeName) => {
+      setState(prev => ({ ...prev, color_theme: themeName }));
     },
 
-    handlePatternChange: (event) => {
-      setState(prev => ({ ...prev, t_pattern: event.target.value }));
-    },
 
-    handleDesignChange: (event) => {
+    handleTileDesignChange: (event) => {
       setState(prev => ({ ...prev, t_design: event.target.value }));
-    },
-
-    handleThemeChange: (event) => {
-      setState(prev => ({ ...prev, c_theme: event.target.value }));
     }
+
   };
 
   return (
@@ -74,10 +69,10 @@ function App() {
           width: { xs: '95%', sm: '80%', md: '60%' }, 
           maxWidth: '800px'
         }}>
-          <Typography variant="h5" align="center" gutterBottom sx={{ mt: 4 }}>
+          <Typography variant="h3" align="center" gutterBottom sx={{ mt: 4 }}>
         Tesselations
       </Typography>
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ width: 210 }}>
           <Typography gutterBottom>Size Control</Typography>
           <Slider
             value={state.size}
@@ -93,18 +88,36 @@ function App() {
             ]}
           />
         </Box>
-
-        <FormControl fullWidth>
+        <FormControl sx={{ width: 210 }}>
+          <InputLabel>Tile Designs Theme</InputLabel>
+          <Select
+            value={state.color_theme}
+            onChange={(event) => handlers.handleTileDesignChange(event.target.value)}
+            label="Color Theme"
+          >
+            {Object.keys(TileDesigns).map((designName) => (
+              <MenuItem key={designName} value={designName}>
+                {designName.split('_').map(word => 
+                  word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(' ')}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ width: 210 }}>
           <InputLabel>Color Theme</InputLabel>
           <Select
-            value={state.colorTheme}
-            onChange={handlers.handleColorThemeChange}
-            label="Background Color"
+            value={state.color_theme}
+            onChange={(event) => handlers.handleColorThemeChange(event.target.value)}
+            label="Color Theme"
           >
-            <MenuItem value="#000000">Black</MenuItem>
-            <MenuItem value="#1976d2">Blue</MenuItem>
-            <MenuItem value="#388e3c">Green</MenuItem>
-            <MenuItem value="#d32f2f">Red</MenuItem>
+            {Object.keys(ColorThemes).map((themeName) => (
+              <MenuItem key={themeName} value={themeName}>
+                {themeName.split('_').map(word => 
+                  word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(' ')}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         </Paper>
