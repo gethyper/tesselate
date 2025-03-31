@@ -46,12 +46,11 @@ function App() {
   return (
     <Box sx={{ width: '100%' }}>
       <Tesselate 
-        tile_shape={TileDesigns["test"].tileShape}
-        tile_pattern={TileDesigns["test"].tilePattern}
+        tile_shape={TileDesigns["quadHex"].tileShape}
+        tile_pattern={TileDesigns["quadHex"].tilePattern}
         color_theme={ColorThemes["basic_b"]}
-        tile_width={100}
-        tile_height={100}
-        single_tile={true}
+        r={20}
+        single_tile={false}
       />
 
 

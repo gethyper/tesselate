@@ -168,6 +168,20 @@ const TileDesigns= {
     ]
   },
 
+  'singleHex': {
+    'tileShape': "flatTopHexagon",
+    'tilePattern': [
+      [
+        {color: "light", stroke: "accent"},
+        {color: "medium", stroke: "accent"},
+        {color: "light", stroke: "accent"},
+        {color: "medium", stroke: "accent"},
+        {color: "dark", stroke: "accent"},
+        {color: "medium", stroke: "accent"}
+      ]
+    ]
+  },
+
   'tripleHex': {
     'tileShape': "flatTopHexagon",
     'tilePattern': [
