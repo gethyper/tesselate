@@ -641,57 +641,51 @@ export function useP5Tesselation({
   r = 100,
   single_tile = false,
 }) {
-
-  const p5InstanceRef = useRef(null);  
+  const p5InstanceRef = useRef(null);
+  const canvasRef = useRef(null);
 
   const setup = useCallback((p5, canvasParentRef) => {
-    // Calculate canvas size based on variant
-    setTimeout(() => {
-        if (canvasParentRef.getElementsByTagName('canvas').length === 0) {
-            let canvasWidth = window.innerWidth;
-            let canvasHeight = window.innerHeight;
-            p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
-            p5.noStroke();
-        }
-    }, 10);
+    // Store the p5 instance
+    p5InstanceRef.current = p5;
+    
+    // If we already have a canvas, don't create a new one
+    if (canvasRef.current) {
+      return;
+    }
 
-
+    // Create canvas and store reference
+    const canvas = p5.createCanvas(window.innerWidth, window.innerHeight).parent(canvasParentRef);
+    canvasRef.current = canvas;
+    p5.noStroke();
   }, [tile_pattern, color_theme, single_tile]);
 
   const draw = useCallback((p5) => {
+    // Only draw if we have a valid canvas
+    if (!canvasRef.current) return;
 
-   
     p5.background(color_theme.bg);
 
-    if (single_tile == true) {
-       drawCenteredHexatile(p5, tile_shape, r, tile_pattern, color_theme);
-
+    if (single_tile === true) {
+      drawCenteredHexatile(p5, tile_shape, r, tile_pattern, color_theme);
     } else {
-        fillWithTiles(p5, tile_shape, r, tile_pattern, color_theme);
-
+      fillWithTiles(p5, tile_shape, r, tile_pattern, color_theme);
     }
     p5.noLoop();
-    p5.noStroke(); // sets stroke default
-        //this[this.tile_shape](tile_w, tile_h, pattern.tileDesign, pattern.tileComponents, pattern.tileColumns, x_loc, y_loc);
-        //this[pattern.tileDesign](tiles, x2, y2, tri_h, tri_w, tiles, tile_columns); //TODO: Add alternating Hexatil}
+    p5.noStroke();
   }, [r, tile_shape, tile_pattern, color_theme, single_tile]);
 
-
-  const windowResized = useCallback((p5, canvasParentRef) => {
-    console.log("resized")
-    p5.remove();
-    //setup();
-
-  }, [r, tile_pattern, color_theme, single_tile]);
-
-  // Add a proper cleanup function
+  // Proper cleanup function
   const remove = useCallback(() => {
     if (p5InstanceRef.current) {
       p5InstanceRef.current.remove();
       p5InstanceRef.current = null;
     }
+    if (canvasRef.current) {
+      canvasRef.current.remove();
+      canvasRef.current = null;
+    }
   }, []);
-  
+
   // Cleanup on unmount or dependencies change
   useEffect(() => {
     return () => {
@@ -699,27 +693,27 @@ export function useP5Tesselation({
     };
   }, [remove]);
 
-   return { setup, draw, remove };
-  };
+  return { setup, draw, remove };
+}
 
-  /*
-  // Helper function to draw a single triangle
-  const drawTile = (p5, x, y, w, h) => {
-    const { tileDesign, tileComponents } = pattern;
-    
-    // Use the pattern function from our mapping
-    if (tilePatterns[tileDesign]) {
-      tilePatterns[tileDesign](p5, x, y, w, h, tileComponents);
-    } else if (typeof window[tileDesign] === 'function') {
-      // Fallback to window object if function exists globally
-      window[tileDesign](p5, x, y, w, h, tileDesign, tileComponents);
-    } else {
-      console.warn(`Pattern function ${tileDesign} not found`);
-      // Draw a placeholder tile
-      p5.fill(200, 0, 0);
-      p5.rect(x, y, w, h);
-    }
-  }*/
+/*
+// Helper function to draw a single triangle
+const drawTile = (p5, x, y, w, h) => {
+  const { tileDesign, tileComponents } = pattern;
+  
+  // Use the pattern function from our mapping
+  if (tilePatterns[tileDesign]) {
+    tilePatterns[tileDesign](p5, x, y, w, h, tileComponents);
+  } else if (typeof window[tileDesign] === 'function') {
+    // Fallback to window object if function exists globally
+    window[tileDesign](p5, x, y, w, h, tileDesign, tileComponents);
+  } else {
+    console.warn(`Pattern function ${tileDesign} not found`);
+    // Draw a placeholder tile
+    p5.fill(200, 0, 0);
+    p5.rect(x, y, w, h);
+  }
+}*/
 
 
 

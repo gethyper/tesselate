@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box } from '@mui/material';
 import Sketch from 'react-p5';
 import TileDesigns from './TileDesigns';
@@ -12,14 +12,15 @@ const defaultTileSize = 20;
 
 const Tesselate = (props) => {
   const sketchRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
   const { setup, draw, remove } = useP5Tesselation(props);
   
-  // Cleanup when component unmounts
+  // Handle mounting
   useEffect(() => {
+    setMounted(true);
     return () => {
-      if (sketchRef.current) {
-        remove();
-      }
+      setMounted(false);
+      remove();
     };
   }, [remove]);
   
@@ -31,7 +32,7 @@ const Tesselate = (props) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
       <div className="sketch-container" ref={sketchRef}>
-        <Sketch setup={setup} draw={draw} />
+        {mounted && <Sketch setup={setup} draw={draw} />}
       </div>
     </Box>
   );
