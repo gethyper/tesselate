@@ -18,9 +18,9 @@ function App() {
   // Group all state in a single object
   const [state, setState] = useState({
     size: 20,
-    tile_design: TileDesigns["test"],
-    tile_shape: TileDesigns["test"].tileShape,
-    tile_pattern: TileDesigns["test"].tilePattern,
+    tile_design: TileDesigns["quadHex"],
+    tile_shape: TileDesigns["quadHex"].tileShape,
+    tile_pattern: TileDesigns["quadHex"].tilePattern,
     color_theme: 'basic_b'
   });
 
@@ -44,7 +44,7 @@ function App() {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <>
       <Tesselate 
         tile_shape={TileDesigns["quadHex"].tileShape}
         tile_pattern={TileDesigns["quadHex"].tilePattern}
@@ -56,7 +56,7 @@ function App() {
 
       <Box sx={{ 
         position: 'fixed', 
-        bottom: 16, 
+        top: 16, 
         left: 0, 
         right: 0, 
         zIndex: 10,
@@ -121,7 +121,7 @@ function App() {
         </FormControl>
         </Paper>
       </Box>
-    </Box>
+    </>
      
   );
 }

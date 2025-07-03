@@ -15,7 +15,7 @@ const Tesselate = (props) => {
   const [mounted, setMounted] = useState(false);
   const { setup, draw, remove } = useP5Tesselation(props);
   
-  // Handle mounting
+  // Simple mount/unmount effect
   useEffect(() => {
     setMounted(true);
     return () => {
@@ -31,7 +31,11 @@ const Tesselate = (props) => {
   
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-      <div className="sketch-container" ref={sketchRef}>
+      <div 
+        className="sketch-container" 
+        ref={sketchRef}
+        style={{ position: 'relative' }}
+      >
         {mounted && <Sketch setup={setup} draw={draw} />}
       </div>
     </Box>
@@ -39,5 +43,3 @@ const Tesselate = (props) => {
 };
 
 export default Tesselate;
-  
-  
