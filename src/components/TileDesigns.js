@@ -1,42 +1,16 @@
 const TileDesigns= {
-  'shadowBoxes': {
-    'tileShape': "flatTopHexagon",
-    'tilePattern': [
-      ["medium"],
-      ["medium", "medium", "medium"],
-      ["light", "medium", "medium", "medium", "dark"],
-      ["light", "light", "light", "medium", "dark", "dark", "dark"],
-      ["light", "light", "light", "dark", "medium", "medium", "medium"],
-      ["light", "dark", "dark", "dark", "medium"],
-      ["dark", "dark", "dark"],
-      ["dark"]
-    ]
-  },
+
 
   'persianKnots': {
     'tileShape': "flatTopHexagon",
     'tilePattern': [
-      [
-      ["light", "light"],
-      ["light", "light", "light", "light"],
-      ["medium", "medium", "medium", "medium", "medium", "medium"],
-      ["dark", "dark", "dark", "dark"],
-      ["dark", "dark"]
-      ]
     ]
   },
 
   'mosaicMitre': {
     'tileShape': "flatTopHexagon",
     'tilePattern': [
-      [
-      ["light"],
-      ["light", "light", "light"],
-      ["dark", "light", "medium", "light", "dark"],
-      ["dark", "medium", "medium", "medium", "dark"],
-      ["medium", "dark", "medium"],
-      ["dark"]
-    ]
+
     ]
   },
 
@@ -209,31 +183,51 @@ const TileDesigns= {
   },
 
   'quadHex': {
-    'tileShape': "flatTopHexagon",
+    'tileShape': "pointyTopHexagon",
+    'tileOffset': 0,
     'tilePattern': [
         [
-          [{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}],
+          [{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "accent", s: "accent"}],
+          [{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "accent", s: "accent"}]
+        ],
+        [
+          [{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"}],
+          [{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"}]
+        ],
+        [
+          [{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"}],
+          [{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"}]
+        ],
+        [
+          [{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"},{c: "light", s: "accent"}],
           [{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}]
         ],
         [
-          [{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}],
-          [{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}]
+          [{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"}],
+          [{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"}]
         ],
         [
-          [{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}],
-          [{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}]
+          [{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"}],
+          [{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"},{c: "dark", s: "accent"}]
+        ]
+    ]
+  },
+
+  'shadowBoxes': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tilePattern': [
+      [
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+      ],
+      [
+        [{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"dark"}],       
+      ],
+        [
+          [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]     
         ],
         [
-          [{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}],
-          [{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}]
-        ],
-        [
-          [{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}],
-          [{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}]
-        ],
-        [
-          [{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}],
-          [{c: "light", s: "accent"},{c: "medium", s: "accent"},{c: "medium", s: "accent"},{c: "light", s: "accent"},{c: "dark", s: "accent"},{c: "medium", s: "accent"}]
+          [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],       
         ]
     ]
   },

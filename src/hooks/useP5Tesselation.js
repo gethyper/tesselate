@@ -35,16 +35,17 @@ export const drawHexagon3 = (p5, cX, cY, r) => {
     p5.endShape(p5.CLOSE)
   }
 
-  export const drawHexagon2 = (p5, cX, cY, r) => {
+  export const drawPointyTopHexagon = (p5, cX, cY, r) => {
     p5.beginShape()
     for(let a = p5.TAU/12; a < p5.TAU + p5.TAU/12; a+=p5.TAU/6){
       p5.vertex(cX + r * p5.cos(a), cY + r * p5.sin(a))
     }
+    console.log("vertices=", p5.vertex);
     p5.endShape(p5.CLOSE)
   }
 
   export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme) => {
-
+    console.log("tile_components=", tile_components);
 
     let vertices = [];
     let x1, y1, x2, y2, x3, y3, tri, tri_color, tri_stroke;
@@ -52,8 +53,9 @@ export const drawHexagon3 = (p5, cX, cY, r) => {
     for(let a = 0; a < p5.TAU; a+=p5.TAU/6){
       vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
     }
+    console.log(vertices);
+    drawHexagon3(p5, cX, cY, r);
 
-    drawHexagon(p5, cX, cY, r);
 
 
     
@@ -83,12 +85,14 @@ export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_them
 
     let vertices = [];
     let x1, y1, x2, y2, x3, y3, tri, tri_color, tri_stroke;
+    console.log("cX=", cX, "cY=", cY);
 
     for(let a = p5.TAU/12; a < p5.TAU + p5.TAU/12; a+=p5.TAU/6){
-        vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
+      vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
     }
 
-    drawHexagon2(p5, cX, cY, r);
+    console.log(vertices);
+    drawPointyTopHexagon(p5, cX, cY, r);
 
 
     
@@ -168,40 +172,32 @@ export const drawTri = (p5, x, y, w, h, tri_orientation, tri_color, tri_stroke=f
 
 export const drawMultiPointyTopHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_theme) => {
 
+  console.log("pointy top hexatile");
 
-  for (let i = 0; i < tile_pattern.length; i++) {
-    for (let j = 0; j < tile_pattern[i].length; j++) {
-      console.log(tile_pattern[i][j])
+  let tiles_high = tile_pattern.length;
+  let tiles_wide = tile_pattern[0].length;
+  console.log("tiles_high=", tiles_high, "tiles_wide=", tiles_wide);
 
+  let x_start = pos_x;
+  let y_start = pos_y;
+  let x_offset = (radius * 2 * .8666);
+  let y_offset = radius * 3;
+  let x_loc, y_loc;
+
+  for (let i = 0; i < tiles_high; i++) { // tiles high is the number of rows
+    if (i % 2 == 0) {  
+      x_loc = x_start;
+      y_loc = y_start + y_offset * i/2;
+    } else {  
+      x_loc = x_start + (x_offset/2);
+      y_loc = y_start + (y_offset * i) /2;
     }
-  }
-  
-  if (tile_pattern.length >= 1) {
-      let tile_a_pattern = tile_pattern[0];
-      let tile_a_x = pos_x;
-      let tile_a_y = pos_y;
-      drawPointyTopHexatile(p5, tile_a_x, tile_a_y, radius, tile_a_pattern, color_theme);
-  }
+    for (let j = 0; j < tiles_wide; j++) {
+      x_loc += (x_offset * j);
+      console.log("x_loc=", x_loc, "y_loc=", y_loc);
 
-  if (tile_pattern.length >= 2) {
-      let tile_b_pattern = tile_pattern[1];
-      let tile_b_x = pos_x + radius*.866*2;
-      let tile_b_y = pos_y;
-      drawPointyTopHexatile(p5, tile_b_x, tile_b_y, radius, tile_b_pattern, color_theme);
-  }
-
-  if (tile_pattern.length >= 3) {
-      let tile_c_pattern = tile_pattern[2];
-      let tile_c_x = pos_x + radius*.866;
-      let tile_c_y = (pos_y + radius*1.5);
-      drawPointyTopHexatile(p5, tile_c_x, tile_c_y, radius, tile_c_pattern, color_theme);
-  }
-
-  if (tile_pattern.length >= 4) {
-      let tile_d_pattern = tile_pattern[3];
-      let tile_d_x = pos_x + radius*.866*3;
-      let tile_d_y = (pos_y + radius*1.5);
-      drawPointyTopHexatile(p5, tile_d_x, tile_d_y, radius, tile_d_pattern, color_theme);
+      drawPointyTopHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme);
+    }
   }
 };
 
@@ -209,27 +205,27 @@ export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_
 
   let tiles_high = tile_pattern.length;
   let tiles_wide = tile_pattern[0].length;
+  console.log("tiles_high=", tiles_high, "tiles_wide=", tiles_wide);
+
   let x_start = pos_x;
   let y_start = pos_y;
-  let x_offset = radius * 3; //add stroke
+  let x_offset = radius * 3; 
   let y_offset = (radius * 2 * .8666);
   let x_loc, y_loc;
 
   for (let i = 0; i < tiles_high; i++) { // tiles high is the number of rows
-   
+    x_loc = x_start;
+    y_loc = y_start + (y_offset * i);
+    /*
     if (i % 2 == 0) {  
-      x_loc = x_start;
       y_loc = y_start + y_offset * i/2;
     } else {  
-      //x_loc = x_start - (x_offset/2);
-      x_loc = x_start + (x_offset/2);
-      y_loc = y_start + (y_offset * i) /2;
-    }
-    
-
+      y_loc = y_start + (y_offset * i);
+    }*/
+    console.log(i)
     for (let j = 0; j < tiles_wide; j++) {
       x_loc += (x_offset * j);
- 
+      console.log("x_loc=", x_loc, "y_loc=", y_loc);
       drawHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme);
     }
   }
@@ -242,7 +238,7 @@ export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_
 
     p5.noStroke(); 
     
-    if (tile_shape === 'pointyTopHexagon') {
+    if (tile_shape === 'pointyTopHexatile') {
         drawMultiPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern, color_theme);
     } else {
         drawMultiHexatile(p5, x_loc, y_loc, r, tile_pattern, color_theme);
@@ -254,46 +250,34 @@ export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_
     let multi_tiles_wide, multi_tiles_high, multi_tile_width, multi_tile_height, x_offset, y_offset;
     let x_loc = 0;
     let y_loc = 0;
-
     let draw_fn = drawMultiHexatile;
 
-    if (tile_shape === 'pointyTopHexagon') {
+    if (tile_shape === 'pointyTopHexatile') {
+      draw_fn = drawMultiPointyTopHexatile;
+      multi_tile_width = r * tile_pattern[0].length * 2 * .8666; 
+      multi_tile_height = tile_pattern[0][0].length * r * 1.5;
+      multi_tiles_wide = Math.round(p5.width/((multi_tile_width/2)*.866)) + 1;
+      multi_tiles_high = Math.round(p5.height/multi_tile_height) + 1;
 
-      draw_fn = drawMultiPointyTopHexatile;/*
-      multi_tile_width = r * tile_pattern[0][0].length * 2 * .8666;
-      multi_tile_height = r * tile_pattern[0].length/2 * 1.5;
-      sections_wide = Math.round(p5.width/((tile_width/2)*.866)) + 1;
-      sections_high = Math.round(p5.height/tile_height) + 1;
-      x_offset = tile_width/2;
-      y_offset = tile_height;*/
+      x_offset = multi_tile_width;
+      y_offset = multi_tile_height;
     } else {
-
-      /*  let x_offset = radius * 3 * .8666 + 4; //add stroke
-  let y_offset = (radius * 1.5)+ 4;*/
-
       multi_tile_width = tile_pattern[0][0].length * r;
       multi_tile_height = r * tile_pattern[0].length * 2 * .8666;
-      console.log(p5.width, p5.height)
-
       multi_tiles_wide = Math.round(p5.width/multi_tile_width) + 1;
       multi_tiles_high = Math.round(p5.height/((multi_tile_height/2)*.866)) + 1;
-      x_offset = multi_tile_width /2;
-      y_offset = multi_tile_height /2;
-
-
-
-      //x_loc = x_loc - tile_width/2;
-      //y_loc = y_loc - tile_height/2;
+      x_offset = multi_tile_width;
+      y_offset = multi_tile_height * 1.5;
     }
 
+    console.log(multi_tiles_wide, multi_tiles_high);
     
     p5.noStroke(); //sets stroke default
 
-    for (let j = 0; j < multi_tiles_wide; j++) {
-      y_loc = (y_offset * j); 
-      //console.log(y_loc);//- (r/2);
-      for (let i = 0; i < multi_tiles_high; i++) {
-        x_loc = (multi_tile_width * i); 
+    for (let i = 0; i < multi_tiles_high; i++) {
+      y_loc = (y_offset * i); 
+      for (let j = 0; j < multi_tiles_wide; j++) {
+        x_loc = (multi_tile_width * j); 
         draw_fn(p5, x_loc, y_loc, r, tile_pattern, color_theme);
       }
     }

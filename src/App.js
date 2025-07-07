@@ -46,8 +46,8 @@ function App() {
   return (
     <>
       <Tesselate 
-        tile_shape={TileDesigns["quadHex"].tileShape}
-        tile_pattern={TileDesigns["quadHex"].tilePattern}
+        tile_shape={TileDesigns["shadowBoxes"].tileShape}
+        tile_pattern={TileDesigns["shadowBoxes"].tilePattern}
         color_theme={ColorThemes["basic_b"]}
         r={20}
         single_tile={false}
@@ -56,7 +56,7 @@ function App() {
 
       <Box sx={{ 
         position: 'fixed', 
-        top: 16, 
+        bottom: 0, 
         left: 0, 
         right: 0, 
         zIndex: 10,
