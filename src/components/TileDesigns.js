@@ -7,18 +7,11 @@ const TileDesigns= {
     ]
   },
 
-  'mosaicMitre': {
-    'tileShape': "flatTopHexagon",
-    'tilePattern': [
-
-    ]
-  },
-
   'altHex': {
     'tileShape': "pointyTopHexagon",
     'tilePattern': 
     [
-      [{color: "light", stroke: "dark", img: ""},
+      [{color: "light", stroke: "dark", img: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"},
         {color: "medium", stroke: "dark"},
         {color: "light", stroke: "dark"},
         {color: "medium", stroke: "dark"},
@@ -219,16 +212,98 @@ const TileDesigns= {
     'tilePattern': [
       [
         [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],   
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
       ],
       [
-        [{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"dark"}],       
+        
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"dark"}],   
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
       ],
-        [
-          [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]     
-        ],
-        [
-          [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],       
-        ]
+      [
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}],   
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}]
+
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"dark"}]
+      ]
+    ]
+  },
+
+  'mosaicMitre': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],   
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}]
+
+      ],
+      [
+        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],        [{c:"light"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+      ]
+    ]
+  },
+
+  'monoTile': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}]         
+      ]
+    ]
+  },
+  'monoTileWithStroke': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}] 
+
+
+      ]
     ]
   },
 
@@ -273,60 +348,13 @@ const TileDesigns= {
   'egyptianHexatile': {
     'tileShape': "flatTopHexagon",
     'tilePattern': [
-      ["medium"],
-      ["light", "medium", "medium"],
-      ["light", "light", "light", "medium", "medium"],
-      ["light", "light", "dark", "light", "light", "medium", "medium"],
-      ["light", "light", "dark", "dark", "medium", "medium", "medium", "medium", "medium"],
-      ["light", "light", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark"],
-      ["light", "light", "light", "light", "light", "light", "light", "light", "light", "light", "dark", "dark", "dark"],
-      ["dark", "light", "light", "medium", "medium", "medium", "medium", "medium", "light", "light", "dark", "dark", "medium", "dark", "dark"],
-      ["dark", "dark", "dark", "light", "light", "medium", "medium", "dark", "dark", "light", "dark", "dark", "medium", "medium", "medium", "dark", "dark"],
-      ["dark", "dark", "medium", "dark", "dark", "light", "light", "medium", "medium", "dark", "dark", "dark", "medium", "medium", "light", "medium", "medium", "dark", "dark"],
-      ["dark", "dark", "medium", "medium", "light", "light", "light", "light", "light", "medium", "medium", "dark", "medium", "medium", "light", "light", "dark", "dark", "dark", "dark", "dark"],
-      ["dark", "dark", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "light", "light", "light", "light", "light", "light", "light", "light", "light"],
-      ["dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "light", "light"],
-      ["light", "light", "light", "light", "light", "dark", "dark", "medium", "medium", "light", "medium", "medium", "dark", "dark", "dark", "dark", "dark", "medium", "medium", "light", "light"],
-      ["light", "light", "medium", "medium", "dark", "medium", "medium", "light", "light", "light", "medium", "medium", "dark", "dark", "light", "light", "medium", "light", "light"],
-      ["light", "light", "medium", "medium", "medium", "light", "light", "dark", "light", "light", "medium", "medium", "dark", "dark", "light", "light", "light"],
-      ["light", "light", "medium", "light", "light", "dark", "dark", "medium", "medium", "medium", "medium", "medium", "dark", "dark", "light"],
-      ["light", "light", "light", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark"],
-      ["light", "light", "light", "light", "light", "light", "light", "light", "light", "dark", "dark"],
-      ["medium", "medium", "medium", "medium", "medium", "light", "light", "dark", "dark"],
-      ["medium", "medium", "dark", "dark", "light", "dark", "dark"],
-      ["medium", "medium", "dark", "dark", "dark"],
-      ["medium", "medium", "dark"],
-      ["medium"]
+
     ]
   },
 
   'brokeHexatile': {
     "tileShape": "flatTopHexagon",
     'tilePattern': [
-      ["medium"],
-      ["light", "medium", "medium"],
-      ["light", "light", "light", "medium", "medium"],
-      ["light", "light", "dark", "light", "light", "medium", "medium"],
-      ["light", "light", "dark", "dark", "medium", "medium", "medium", "medium", "medium"],
-      ["light", "light", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark"],
-      ["light", "light", "light", "light", "light", "light", "light", "light", "light", "light", "dark", "dark", "dark"],
-      ["dark", "light", "light", "medium", "medium", "medium", "medium", "medium", "light", "light", "dark", "dark", "medium", "dark", "dark"],
-      ["dark", "dark", "dark", "light", "light", "medium", "medium", "dark", "dark", "light", "dark", "dark", "medium", "medium", "medium", "dark", "dark"],
-      ["dark", "dark", "medium", "dark", "dark", "light", "light", "medium", "medium", "dark", "dark", "dark", "medium", "medium", "light", "medium", "medium", "dark", "dark"],
-      ["dark", "dark", "medium", "medium", "light", "light", "light", "light", "light", "medium", "medium", "dark", "medium", "medium", "light", "light", "dark", "dark", "dark", "dark", "dark"],
-      ["dark", "dark", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "light", "light", "light", "light", "light", "light", "light", "light", "light"],
-      ["dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "medium", "light", "light"],
-      ["light", "light", "light", "light", "light", "dark", "dark", "medium", "medium", "light", "medium", "medium", "dark", "dark", "dark", "dark", "dark", "medium", "medium", "light", "light"],
-      ["light", "light", "medium", "medium", "dark", "medium", "medium", "light", "light", "light", "medium", "medium", "dark", "dark", "light", "light", "medium", "light", "light"],
-      ["light", "light", "medium", "medium", "medium", "light", "light", "dark", "light", "light", "medium", "medium", "dark", "dark", "light", "light", "light"],
-      ["light", "light", "medium", "light", "light", "dark", "dark", "medium", "medium", "medium", "medium", "medium", "dark", "dark", "light"],
-      ["light", "light", "light", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark"],
-      ["light", "light", "light", "light", "light", "light", "light", "light", "light", "dark", "dark"],
-      ["medium", "medium", "medium", "medium", "medium", "light", "light", "dark", "dark"],
-      ["medium", "medium", "dark", "dark", "light", "dark", "dark"],
-      ["medium", "medium", "dark", "dark", "dark"],
-      ["medium", "medium", "dark"],
-      ["medium"]
     ]
   }
 };

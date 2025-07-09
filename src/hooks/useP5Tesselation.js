@@ -27,7 +27,7 @@ export const drawHexagon = (p5, centerX, centerY, radius, numSides) => {
     p5.endShape(p5.CLOSE)
 };
 
-export const drawHexagon3 = (p5, cX, cY, r) => {
+export const drawFlatTopHexagon = (p5, cX, cY, r) => {
     p5.beginShape()
     for(let a = 0; a < p5.TAU; a+=p5.TAU/6){
       p5.vertex(cX + r * p5.cos(a), cY + r * p5.sin(a))
@@ -40,12 +40,11 @@ export const drawHexagon3 = (p5, cX, cY, r) => {
     for(let a = p5.TAU/12; a < p5.TAU + p5.TAU/12; a+=p5.TAU/6){
       p5.vertex(cX + r * p5.cos(a), cY + r * p5.sin(a))
     }
-    console.log("vertices=", p5.vertex);
     p5.endShape(p5.CLOSE)
   }
 
   export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme) => {
-    console.log("tile_components=", tile_components);
+    //console.log("tile_components=", tile_components);
 
     let vertices = [];
     let x1, y1, x2, y2, x3, y3, tri, tri_color, tri_stroke;
@@ -53,11 +52,8 @@ export const drawHexagon3 = (p5, cX, cY, r) => {
     for(let a = 0; a < p5.TAU; a+=p5.TAU/6){
       vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
     }
-    console.log(vertices);
-    drawHexagon3(p5, cX, cY, r);
-
-
-
+    //console.log(vertices);
+    drawFlatTopHexagon(p5, cX, cY, r);
     
     for (let i = 0; i < vertices.length-1; i++) {
 
@@ -91,7 +87,6 @@ export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_them
       vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
     }
 
-    console.log(vertices);
     drawPointyTopHexagon(p5, cX, cY, r);
 
 
@@ -194,7 +189,6 @@ export const drawMultiPointyTopHexatile = (p5, pos_x, pos_y, radius, tile_patter
     }
     for (let j = 0; j < tiles_wide; j++) {
       x_loc += (x_offset * j);
-      console.log("x_loc=", x_loc, "y_loc=", y_loc);
 
       drawPointyTopHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme);
     }
@@ -203,29 +197,27 @@ export const drawMultiPointyTopHexatile = (p5, pos_x, pos_y, radius, tile_patter
 
 export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_theme) => {
 
-  let tiles_high = tile_pattern.length;
-  let tiles_wide = tile_pattern[0].length;
-  console.log("tiles_high=", tiles_high, "tiles_wide=", tiles_wide);
+
+  let tiles_wide = tile_pattern.length;
+  let tiles_high = tile_pattern[0].length;
 
   let x_start = pos_x;
   let y_start = pos_y;
-  let x_offset = radius * 3; 
+  let x_offset = (radius * 3)/2;
   let y_offset = (radius * 2 * .8666);
-  let x_loc, y_loc;
+  let x_loc, y_loc, y_adjust;
 
-  for (let i = 0; i < tiles_high; i++) { // tiles high is the number of rows
-    x_loc = x_start;
-    y_loc = y_start + (y_offset * i);
-    /*
-    if (i % 2 == 0) {  
-      y_loc = y_start + y_offset * i/2;
+  for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
+    x_loc = x_start + (x_offset * i);
+  
+    if (i % 2 != 0) {  
+      y_adjust = y_offset/2;
     } else {  
-      y_loc = y_start + (y_offset * i);
-    }*/
-    console.log(i)
-    for (let j = 0; j < tiles_wide; j++) {
-      x_loc += (x_offset * j);
-      console.log("x_loc=", x_loc, "y_loc=", y_loc);
+      y_adjust = 0;
+    } 
+    for (let j = 0; j < tiles_high; j++) {
+      y_loc = y_start + y_adjust + (y_offset * j);
+
       drawHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme);
     }
   }
@@ -245,39 +237,72 @@ export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_
     }
   };
 
+
+
+
   const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme)  => {
 
-    let multi_tiles_wide, multi_tiles_high, multi_tile_width, multi_tile_height, x_offset, y_offset;
+    let tile_width, tile_height, tiles_in_mosaic_wide, tiles_in_mosaic_high, mosaic_width, mosaic_height, mosaics_wide, mosaics_high, x_offset, y_offset, x_adjust, y_adjust , tile_x_offset, tile_y_offset;
     let x_loc = 0;
     let y_loc = 0;
+
     let draw_fn = drawMultiHexatile;
+
+  
 
     if (tile_shape === 'pointyTopHexatile') {
       draw_fn = drawMultiPointyTopHexatile;
-      multi_tile_width = r * tile_pattern[0].length * 2 * .8666; 
-      multi_tile_height = tile_pattern[0][0].length * r * 1.5;
-      multi_tiles_wide = Math.round(p5.width/((multi_tile_width/2)*.866)) + 1;
-      multi_tiles_high = Math.round(p5.height/multi_tile_height) + 1;
 
-      x_offset = multi_tile_width;
-      y_offset = multi_tile_height;
     } else {
-      multi_tile_width = tile_pattern[0][0].length * r;
-      multi_tile_height = r * tile_pattern[0].length * 2 * .8666;
+      tile_width = r * 2;
+      tile_height = r * 2 * .8666;
+      tile_x_offset = (r * Math.sqrt(3) / 2);
+      console.log(tile_x_offset);
+      tile_y_offset = r;
+      console.log(tile_width, tile_height);
+      tiles_in_mosaic_wide = tile_pattern.length;
+      tiles_in_mosaic_high = tile_pattern[0].length;
+      console.log(tiles_in_mosaic_wide, tiles_in_mosaic_high);
+      console.log(tiles_in_mosaic_wide-1);
+      mosaic_width = tile_width + ((tiles_in_mosaic_wide-1) * tile_width-tile_x_offset);
+      mosaic_height = tile_height + ((tiles_in_mosaic_high-1) * tile_y_offset);
+      console.log(mosaic_width, mosaic_height);
+      mosaics_wide = Math.round(p5.width/mosaic_width) + 1;
+      mosaics_high = Math.round(p5.height/mosaic_height) + 1;
+      x_offset = tile_width/2
+      y_offset = tile_height;
+    
+
+      /*
+      multi_tile_width = ((tile_pattern[0].length-1) * hex_width/2) + (tile_pattern[0].length/2 % 2 != 0 ? hex_width/2 : 0) + 185;
+      multi_tile_height = ((tile_pattern[0][0].length-1) * hex_height/2) - (tile_pattern[0][0].length/2 % 2 != 0 ? hex_height : 0) +60;
       multi_tiles_wide = Math.round(p5.width/multi_tile_width) + 1;
-      multi_tiles_high = Math.round(p5.height/((multi_tile_height/2)*.866)) + 1;
+      multi_tiles_high = Math.round(p5.height/multi_tile_height) + 1;
       x_offset = multi_tile_width;
-      y_offset = multi_tile_height * 1.5;
+      y_offset = multi_tile_height + hex_height*1.5;*/
+
     }
 
-    console.log(multi_tiles_wide, multi_tiles_high);
     
     p5.noStroke(); //sets stroke default
 
-    for (let i = 0; i < multi_tiles_high; i++) {
-      y_loc = (y_offset * i); 
-      for (let j = 0; j < multi_tiles_wide; j++) {
-        x_loc = (multi_tile_width * j); 
+    for (let i = 0; i < mosaics_wide; i++) {
+
+
+      if (i % 2 != 0) {  
+        y_adjust = y_offset/2;
+      } else {  
+        y_adjust = 0;
+      } 
+
+      if (i > 0) {
+        x_loc = (mosaic_width*i) - tile_x_offset;
+      } else {
+        x_loc = 0;
+      }
+
+      for (let j = 0; j < mosaics_wide; j++) {
+        y_loc = y_adjust + (mosaic_height * j);
         draw_fn(p5, x_loc, y_loc, r, tile_pattern, color_theme);
       }
     }
