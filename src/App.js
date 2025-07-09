@@ -40,7 +40,6 @@ function App() {
     handleTileDesignChange: (event) => {
       setState(prev => ({ ...prev, t_design: event.target.value }));
     }
-
   };
 
   return (

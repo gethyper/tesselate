@@ -272,7 +272,6 @@ export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_
       x_offset = tile_width/2
       y_offset = tile_height;
     
-
       /*
       multi_tile_width = ((tile_pattern[0].length-1) * hex_width/2) + (tile_pattern[0].length/2 % 2 != 0 ? hex_width/2 : 0) + 185;
       multi_tile_height = ((tile_pattern[0][0].length-1) * hex_height/2) - (tile_pattern[0][0].length/2 % 2 != 0 ? hex_height : 0) +60;
