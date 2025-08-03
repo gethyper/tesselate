@@ -18,9 +18,9 @@ function App() {
   // Group all state in a single object
   const [state, setState] = useState({
     size: 20,
-    tile_design: TileDesigns["mosaicMitre"],
-    tile_shape: TileDesigns["mosaicMitre"].tileShape,
-    tile_pattern: TileDesigns["mosaicMitre"].tilePattern,
+    tile_design: TileDesigns["mosaicMitres"],
+    tile_shape: TileDesigns["mosaicMitres"].tileShape,
+    tile_pattern: TileDesigns["mosaicMitres"].tilePattern,
     color_theme: 'basic_b'
   });
 
@@ -44,15 +44,40 @@ function App() {
 
   return (
     <>
+      {/* Example 1: Using all optional parameters with custom values */}
       <Tesselate 
-        tile_shape={TileDesigns["monoTile"].tileShape}
-        tile_pattern={TileDesigns["monoTile"].tilePattern}
-        tile_offset={TileDesigns["monoTile"].tileOffset}
+        tile_shape={TileDesigns["pointyTop1x1"].tileShape}
+        tile_pattern={TileDesigns["pointyTop1x1"].tilePattern}
+        tile_offset={TileDesigns["pointyTop1x1"].tileOffset}
         color_theme={ColorThemes["basic_b"]}
-        r={10}
+        r={20}
         single_tile={false}
+        width="100vw"
+        height="100vh"
+        position="fixed"
+        top={0}
+        left={0}
+        zIndex={1}
+        overflow="hidden"
       />
 
+      {/* Example 2: Using minimal parameters (others will use defaults) */}
+      {/* 
+      <Tesselate 
+        r={state.size}
+        color_theme={ColorThemes[state.color_theme]}
+      />
+      */}
+
+      {/* Example 3: Using state values */}
+      {/*
+      <Tesselate 
+        tile_shape={state.tile_shape}
+        tile_pattern={state.tile_pattern}
+        color_theme={ColorThemes[state.color_theme]}
+        r={state.size}
+      />
+      */}
 
       <Box sx={{ 
         position: 'fixed', 

@@ -264,7 +264,7 @@ const TileDesigns= {
     ]
   },
 
-  'mosaicMitre': {
+  'mosaicMitres': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -283,16 +283,120 @@ const TileDesigns= {
     ]
   },
 
-  'monoTile': {
+  'flatTop1x1': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
     'tilePattern': [
       [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}]         
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}]         
       ]
     ]
   },
+
+  'flatTop1x2': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"}]         
+      ]
+    ]
+  },
+  'flatTop2x2': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+      ],
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+      ]
+    ]
+  },
+  'flatTop2x1': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+      ],
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+      ]
+    ]
+  },
+
+  'flatTop2x2': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"}]         
+      ],
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"}]         
+      ]
+    ]
+  },
+
+  'pointyTop1x1': {
+    'tileShape': "pointyTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}]         
+      ]
+    ]
+  },
+  'pointyTop1x2': {
+    'tileShape': "pointyTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}]          
+      ]
+    ]
+  },
+
+  'pointyTop2x1': {
+    'tileShape': "pointyTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}] 
+      ]
+    ]
+  },
+  'pointyTop2x2': {
+    'tileShape': "pointyTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}] 
+      ], 
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}] 
+      ]
+    ]
+  },
+
   'monoTileWithStroke': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
@@ -301,8 +405,6 @@ const TileDesigns= {
       [
         [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
         [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}] 
-
-
       ]
     ]
   },
