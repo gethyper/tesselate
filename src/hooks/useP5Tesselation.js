@@ -166,48 +166,34 @@ export const drawTri = (p5, x, y, w, h, tri_orientation, tri_color, tri_stroke=f
 
 export const drawMultiPointyTopHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_theme) => {
 
-
+console.log(tile_pattern);
   let tiles_wide = tile_pattern.length;
   let tiles_high = tile_pattern[0].length;
 
 
   let x_start = pos_x;
   let y_start = pos_y;
-  let x_offset = (radius * 2 * .8666);
-  let y_offset = radius * 3;
+  let r = radius;
+  let x_offset = (r * 2 * .8666);
+  let y_offset = r * 3/2;
   let x_loc, y_loc, y_adjust, x_adjust;
 
+
   for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
-    x_loc = x_start + (x_offset * i);
+    x_loc = x_start + (x_offset/2 * i);
   
-    if (i % 2 != 0) {  
-      y_adjust = y_offset/2;
-    } else {  
+    if ( i === 0 || i % 2 === 0) {  
       y_adjust = 0;
+    } else {  
+      y_adjust = y_offset;
     } 
     for (let j = 0; j < tiles_high; j++) {
-      y_loc = y_start + y_adjust + (y_offset * j);
-
+      y_loc = y_start + (radius *3* j) - y_adjust;
+      //y_loc = y_start + y_adjust + (r/2 * j);
+      console.log(y_loc);
       drawPointyTopHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme);
     }
   }
-
-  /*
-
-  for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
-    if (i % 2 == 0) {  
-      x_loc = x_start;
-      y_loc = y_start + y_offset * i/2;
-    } else {  
-      x_loc = x_start + (x_offset/2);
-      y_loc = y_start + (y_offset * i) /2;
-    }
-    for (let j = 0; j < tiles_high; j++) {
-      x_loc += (x_offset * j);
-
-      drawPointyTopHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme);
-    }
-  }*/
 };
 
 export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_theme) => {
@@ -222,11 +208,12 @@ export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_
   let y_offset = (radius * 2 * .8666);
   let x_loc, y_loc, y_adjust;
 
+
   for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
     x_loc = x_start + (x_offset * i);
   
     if (i % 2 != 0) {  
-      y_adjust = y_offset/2;
+      y_adjust = y_offset;
     } else {  
       y_adjust = 0;
     } 
@@ -288,7 +275,7 @@ const getTileXOffset = (tile_shape, r) => {
 const getTileYOffset = (tile_shape, r) => {
   let tile_y_offset;
   if (tile_shape === 'pointyTopHexatile') {
-    tile_y_offset = r/2;
+    tile_y_offset = r*3/2;
     } else {
     tile_y_offset = r * .8666;
   }
@@ -296,28 +283,35 @@ const getTileYOffset = (tile_shape, r) => {
 };
 
 
-const getMosaicWidth = (tile_width, tiles_in_mosaic_wide, tile_x_offset, options={}) => {
+const getMosaicWidth = (tile_width, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_x_offset, options={}) => {
 
   //if one tile wide, then the width is the tile width
   //if two  or more tiles wide, then the width is two tiles width minus the tile x offse
   let mosaic_width;
-  mosaic_width = ((tiles_in_mosaic_wide-1) * (tile_width-tile_x_offset)) + tile_width;
+  if (tiles_in_mosaic_wide === 1) {
+    mosaic_width = tile_width * tiles_in_mosaic_wide;
+  } else {
+    mosaic_width = ((tiles_in_mosaic_wide-1) * (tile_width-tile_x_offset)) + tile_width;
+  }
   return mosaic_width;
 };
 
 const getMosaicHeight = (tile_height, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_y_offset, options={}) => {
 
+  // is it one tile wide then height is the number of tiles high
   let mosaic_height;
   if (tiles_in_mosaic_high === 1 || tiles_in_mosaic_wide === 1) {
     mosaic_height = tile_height * tiles_in_mosaic_high;
+  } else if (tiles_in_mosaic_high % 2 === 0) {
+    mosaic_height = ((tiles_in_mosaic_high-1) * tile_height) + (tile_height);
+    console.log(mosaic_height)
   } else {
-    mosaic_height = (tiles_in_mosaic_high * tile_height) + tile_y_offset;
+    mosaic_height = ((tiles_in_mosaic_high-1) * tile_height) + tile_height;
   }
   return mosaic_height;
 };
 
 const getMosaicsWide = (p5, mosaic_width, tile_x_offset) => {
-
   let mosaics_wide;
   mosaics_wide = Math.round(p5.width/(mosaic_width-tile_x_offset)) + 1;
   return mosaics_wide;
@@ -326,7 +320,6 @@ const getMosaicsWide = (p5, mosaic_width, tile_x_offset) => {
 const getMosaicsHigh = (p5, mosaic_height, tile_y_offset) => {
 
   let mosaics_high;
-  console.log(p5.height, mosaic_height, tile_y_offset);
   mosaics_high = Math.round(p5.height/(mosaic_height-tile_y_offset)) + 1;
   return mosaics_high;
 };
@@ -363,11 +356,12 @@ const getMosaicYLoc= (mosaic_height, tile_y_offset, j, y_adjust) => {
     let y_loc = 0;
 
     let draw_fn = drawMultiHexatile;
-
-  
+    let Loc;
 
     if (tile_shape === 'pointyTopHexatile') {
       draw_fn = drawMultiPointyTopHexatile;
+      //x_loc_fn = getMosaicXLoc;
+      //y_loc_fn = getMosaicYLoc;
     } 
 
       tile_width = getTileWidth(tile_shape, r);
@@ -381,47 +375,32 @@ const getMosaicYLoc= (mosaic_height, tile_y_offset, j, y_adjust) => {
       console.log(tiles_in_mosaic_wide, tiles_in_mosaic_high);
 
 
-      mosaic_width = getMosaicWidth(tile_width, tiles_in_mosaic_wide, tile_x_offset);
+      mosaic_width = getMosaicWidth(tile_width, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_x_offset);
       mosaic_height = getMosaicHeight(tile_height, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_y_offset);
-console.log(mosaic_width, mosaic_height);
-      mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_y_offset);
-      mosaics_high = getMosaicsHigh(p5, mosaic_height, tile_x_offset);
+      console.log(mosaic_width, mosaic_height);
+      mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_x_offset);
+      mosaics_high = getMosaicsHigh(p5, mosaic_height, tile_y_offset);
       console.log(mosaics_wide, mosaics_high);
-      //x_offset = tile_width/2
-      //y_offset = tile_height;
-    
-      /*
-      multi_tile_width = ((tile_pattern[0].length-1) * hex_width/2) + (tile_pattern[0].length/2 % 2 != 0 ? hex_width/2 : 0) + 185;
-      multi_tile_height = ((tile_pattern[0][0].length-1) * hex_height/2) - (tile_pattern[0][0].length/2 % 2 != 0 ? hex_height : 0) +60;
-      multi_tiles_wide = Math.round(p5.width/multi_tile_width) + 1;
-      multi_tiles_high = Math.round(p5.height/multi_tile_height) + 1;
-      x_offset = multi_tile_width;
-      y_offset = multi_tile_height + hex_height*1.5;*/
 
-    
-
-    
     p5.noStroke(); //sets stroke default
 
-    for (let i = 0; i < mosaics_wide; i++) {
+    for (let i = 0; i < 1; i++) {
 
-      if (i % 2 != 0) {  
-        y_adjust = tile_y_offset;
-      } else {  
+      // no y adjust on first row, alternating rows OR if the number of tiles wide is even
+      if (i === 0 || i % 2 === 0 || tiles_in_mosaic_wide % 2 === 0) {  
         y_adjust = 0;
+      } else {  
+        y_adjust = tile_y_offset;
       } 
 
       if (i > 0) {
-        x_loc = (mosaic_width - tile_x_offset)*i ;
+        x_loc = (mosaic_width - tile_x_offset)*i;
       } else {
         x_loc = 0;
       }
-
-      for (let j = 0; j < mosaics_high; j++) {
-        //console.log(y_adjust);
-        
-        //y_loc = (mosaic_height-tile_y_offset) * j;
-        y_loc = (mosaic_height) * j - y_adjust;
+      console.log("y_adjust", y_adjust);
+      for (let j = 0; j < 10; j++) {
+        y_loc = (mosaic_height*j) - y_adjust; // 3x1, 3x3, 1x2, 1x1
         draw_fn(p5, x_loc, y_loc, r, tile_pattern, color_theme);
       }
     }
@@ -450,7 +429,6 @@ export function useP5Tesselation({
 
     // Store the p5 instance
     p5InstanceRef.current = p5;
-    console.log('Window dimensions:', window.innerWidth, window.innerHeight);
     
     // Create canvas and store reference
     const canvas = p5.createCanvas(window.innerWidth, window.innerHeight);
@@ -493,7 +471,6 @@ export function useP5Tesselation({
     // Only draw if we have a valid canvas
     if (!globalCanvasRef.current) return;
 
-    console.log('Canvas dimensions in draw:', p5.width, p5.height);
     p5.background(color_theme.bg);
 
     if (single_tile === true) {

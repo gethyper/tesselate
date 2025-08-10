@@ -44,11 +44,15 @@ function App() {
 
   return (
     <>
-      {/* Example 1: Using all optional parameters with custom values */}
+      {/* Example 1: Using all optional parameters with custom values */
+      
+      
+      }
       <Tesselate 
-        tile_shape={TileDesigns["pointyTop1x1"].tileShape}
-        tile_pattern={TileDesigns["pointyTop1x1"].tilePattern}
-        tile_offset={TileDesigns["pointyTop1x1"].tileOffset}
+        
+        tile_shape={TileDesigns["pointyTop1x2"].tileShape}
+        tile_pattern={TileDesigns["pointyTop1x2"].tilePattern}
+        tile_offset={TileDesigns["pointyTop1x2"].tileOffset} 
         color_theme={ColorThemes["basic_b"]}
         r={20}
         single_tile={false}

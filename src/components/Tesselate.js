@@ -10,10 +10,30 @@ const defaultPattern = TileDesigns['doubleHexatile'];
 const defaultColorTheme = ColorThemes['basic_b'];
 const defaultTileSize = 20;
 
-const Tesselate = (props) => {
+const Tesselate = ({
+  tile_shape = defaultPattern.tileShape,
+  tile_pattern = defaultPattern.tilePattern,
+  tile_offset = defaultPattern.tileOffset,
+  color_theme = defaultColorTheme,
+  r = defaultTileSize,
+  single_tile = false,
+  width = '100vw',
+  height = '100vh',
+  position = 'fixed',
+  top = 0,
+  left = 0,
+  zIndex = 1,
+  overflow = 'hidden'
+}) => {
   const sketchRef = useRef(null);
   const [mounted, setMounted] = useState(false);
-  const { setup, draw, remove } = useP5Tesselation(props);
+  const { setup, draw, remove } = useP5Tesselation({
+    tile_shape,
+    tile_pattern,
+    color_theme,
+    r,
+    single_tile
+  });
   
   // Simple mount/unmount effect
   useEffect(() => {
@@ -42,13 +62,13 @@ const Tesselate = (props) => {
   
   return (
     <Box sx={{ 
-      width: '100vw', 
-      height: '100vh', 
-      position: 'fixed', 
-      top: 0, 
-      left: 0, 
-      zIndex: 1,
-      overflow: 'hidden'
+      width, 
+      height, 
+      position, 
+      top, 
+      left, 
+      zIndex,
+      overflow
     }}>
       <div 
         className="sketch-container" 

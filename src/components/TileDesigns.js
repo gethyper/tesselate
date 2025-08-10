@@ -300,8 +300,8 @@ const TileDesigns= {
     'tileStroke': "",
     'tilePattern': [
       [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
-        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"}]         
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}], 
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]         
       ]
     ]
   },
@@ -311,10 +311,13 @@ const TileDesigns= {
     'tileStroke': "",
     'tilePattern': [
       [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"medium", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
       ],
       [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+        [{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"}],
+        [{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"}]         
+         
       ]
     ]
   },
@@ -324,29 +327,90 @@ const TileDesigns= {
     'tileStroke': "",
     'tilePattern': [
       [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
       ],
       [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"medium", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
       ]
     ]
   },
 
-  'flatTop2x2': {
+  'flatTop3x1': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
     'tilePattern': [
       [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
-        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"}]         
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
       ],
       [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"dark"}], 
-        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"}]         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"medium", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+      ],
+      [
+        [{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"}], 
       ]
     ]
   },
+
+  'flatTop3x3': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c: "medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}]
+
+      ],
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"medium", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}] 
+
+      ],
+      [
+        [{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"}],
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}]
+      ]
+    ]
+  },
+
+  'flatTop4x4': {
+    'tileShape': "flatTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c: "medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c: "medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}]
+
+      ],
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"medium", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c: "medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}] 
+
+      ],
+      [
+        [{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"}],
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c: "medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}]
+      ],
+      [
+        [{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"}],
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}], 
+        [{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c: "medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"},{c:"medium", s:"accent"}]
+      ]
+    ]
+  },
+
 
   'pointyTop1x1': {
     'tileShape': "pointyTopHexatile",
@@ -393,6 +457,66 @@ const TileDesigns= {
       [
         [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
         [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}] 
+      ]
+    ]
+  },
+  'pointyTop3x3': {
+    'tileShape': "pointyTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}] 
+
+      ], 
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}] 
+
+      ], 
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}] 
+
+      ]
+    ]
+  },
+  'pointyTop4x4': {
+    'tileShape': "pointyTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}]  
+
+      ], 
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}]  
+
+      ], 
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}]  
+
+      ], 
+      [
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}],         
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}], 
+        [{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"},{c:"dark", s:"accent"},{c:"light", s:"accent"},{c:"dark", s:"accent"}]  
+
       ]
     ]
   },
