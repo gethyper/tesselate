@@ -159,6 +159,30 @@ export const drawTri = (p5, x, y, w, h, tri_orientation, tri_color, tri_stroke=f
     }
 
     p5.triangle(x1, y1, x2, y2, x3, y3);
+
+    /*
+    function draw() {
+      background(220);
+    
+      beginShape();
+      // Stroke the top line
+      stroke(0);
+      strokeWeight(4);
+      vertex(100, 100);
+      vertex(300, 100);
+    
+      // Disable stroke for the right and bottom lines
+      noStroke();
+      vertex(300, 250);
+      vertex(100, 250);
+    
+      // Enable stroke again for the left line
+      stroke(0); // You might need to set stroke color again after noStroke()
+      vertex(100, 100); // Close the shape with a stroked left line
+    
+      endShape();
+    }*/
+
     p5.noStroke(); 
 }; 
 
@@ -166,7 +190,6 @@ export const drawTri = (p5, x, y, w, h, tri_orientation, tri_color, tri_stroke=f
 
 export const drawMultiPointyTopHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_theme) => {
 
-console.log(tile_pattern);
   let tiles_wide = tile_pattern.length;
   let tiles_high = tile_pattern[0].length;
 
@@ -176,22 +199,28 @@ console.log(tile_pattern);
   let r = radius;
   let x_offset = (r * 2 * .8666);
   let y_offset = r * 3/2;
-  let x_loc, y_loc, y_adjust, x_adjust;
+  let x_loc, y_loc, y_adjust, x_adjust; //y_adjust is the offset for the y position of the tile
 
 
   for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
-    x_loc = x_start + (x_offset/2 * i);
-  
-    if ( i === 0 || i % 2 === 0) {  
-      y_adjust = 0;
-    } else {  
-      y_adjust = y_offset;
-    } 
+    x_loc = x_start + (x_offset * i);
+
     for (let j = 0; j < tiles_high; j++) {
-      y_loc = y_start + (radius *3* j) - y_adjust;
+
+      if ( j === 0 || j % 2 === 0) {  
+        y_adjust = 0;
+        x_adjust = 0;
+      } else {  
+        y_adjust = y_offset;
+        x_adjust = r * .8666;
+      } 
+
+
+      y_loc = y_start + (radius* j*3) - y_adjust;
+ 
+
       //y_loc = y_start + y_adjust + (r/2 * j);
-      console.log(y_loc);
-      drawPointyTopHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme);
+      drawPointyTopHexatile(p5, x_loc+x_adjust, y_loc, radius, tile_pattern[i][j], color_theme);
     }
   }
 };
@@ -213,7 +242,7 @@ export const drawMultiHexatile = (p5, pos_x, pos_y, radius, tile_pattern, color_
     x_loc = x_start + (x_offset * i);
   
     if (i % 2 != 0) {  
-      y_adjust = y_offset;
+      y_adjust = y_offset/2;
     } else {  
       y_adjust = 0;
     } 
@@ -275,7 +304,7 @@ const getTileXOffset = (tile_shape, r) => {
 const getTileYOffset = (tile_shape, r) => {
   let tile_y_offset;
   if (tile_shape === 'pointyTopHexatile') {
-    tile_y_offset = r*3/2;
+    tile_y_offset = r/2;
     } else {
     tile_y_offset = r * .8666;
   }
@@ -283,7 +312,7 @@ const getTileYOffset = (tile_shape, r) => {
 };
 
 
-const getMosaicWidth = (tile_width, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_x_offset, options={}) => {
+const getMosaicWidth = (tile_shape, tile_width, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_x_offset, options={}) => {
 
   //if one tile wide, then the width is the tile width
   //if two  or more tiles wide, then the width is two tiles width minus the tile x offse
@@ -296,18 +325,32 @@ const getMosaicWidth = (tile_width, tiles_in_mosaic_wide, tiles_in_mosaic_high, 
   return mosaic_width;
 };
 
-const getMosaicHeight = (tile_height, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_y_offset, options={}) => {
+const getMosaicHeight = (tile_shape, tile_height, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_y_offset, options={}) => {
 
   // is it one tile wide then height is the number of tiles high
   let mosaic_height;
-  if (tiles_in_mosaic_high === 1 || tiles_in_mosaic_wide === 1) {
+
+  if (tile_shape != 'pointyTopHexatile') {
     mosaic_height = tile_height * tiles_in_mosaic_high;
-  } else if (tiles_in_mosaic_high % 2 === 0) {
-    mosaic_height = ((tiles_in_mosaic_high-1) * tile_height) + (tile_height);
-    console.log(mosaic_height)
   } else {
-    mosaic_height = ((tiles_in_mosaic_high-1) * tile_height) + tile_height;
+    if (tiles_in_mosaic_high % 2 === 0) {
+      mosaic_height = tile_height * tiles_in_mosaic_high - tile_y_offset;
+    } else {
+      mosaic_height = tile_height * tiles_in_mosaic_high -tile_y_offset;
+    }
   }
+  /*
+    if (tiles_in_mosaic_high === 1 || tiles_in_mosaic_wide === 1) {
+      mosaic_height = tile_height * tiles_in_mosaic_high;
+    } else if (tiles_in_mosaic_high % 2 === 0) {
+      mosaic_height = ((tiles_in_mosaic_high-1) * tile_height) + (tile_height);
+      console.log(mosaic_height);
+    } else {
+      mosaic_height = ((tiles_in_mosaic_high-1) * tile_height) + tile_height;
+    }
+  } else {
+    mosaic_height = tile_height * tiles_in_mosaic_high;
+  }*/
   return mosaic_height;
 };
 
@@ -318,11 +361,21 @@ const getMosaicsWide = (p5, mosaic_width, tile_x_offset) => {
 };
 
 const getMosaicsHigh = (p5, mosaic_height, tile_y_offset) => {
-
   let mosaics_high;
   mosaics_high = Math.round(p5.height/(mosaic_height-tile_y_offset)) + 1;
   return mosaics_high;
 };
+
+const getTileYAdjust = (tile_shape, r) => {
+
+  let tile_y_adjust;
+  if (tile_shape === 'pointyTopHexatile') {
+    tile_y_adjust = r;
+  } else {
+    tile_y_adjust = 0;
+  }
+  return tile_y_adjust;
+}
 
 const getMosaicXLocForOddRows= (mosaic_width, tile_x_offset, counter, options={}) => {
   let x_loc;
@@ -349,62 +402,46 @@ const getMosaicYLoc= (mosaic_height, tile_y_offset, j, y_adjust) => {
 
 
 
-  const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme)  => {
-
-    let tile_width, tile_height, tiles_in_mosaic_wide, tiles_in_mosaic_high, mosaic_width, mosaic_height, mosaics_wide, mosaics_high, x_offset, y_offset, x_adjust, y_adjust , tile_x_offset, tile_y_offset;
-    let x_loc = 0;
-    let y_loc = 0;
-
-    let draw_fn = drawMultiHexatile;
-    let Loc;
-
-    if (tile_shape === 'pointyTopHexatile') {
-      draw_fn = drawMultiPointyTopHexatile;
-      //x_loc_fn = getMosaicXLoc;
-      //y_loc_fn = getMosaicYLoc;
-    } 
-
-      tile_width = getTileWidth(tile_shape, r);
-      tile_height = getTileHeight(tile_shape, r);
-      tile_x_offset = getTileXOffset(tile_shape, r);
-      tile_y_offset = getTileYOffset(tile_shape, r);
-      console.log(tile_width, tile_height);
-      console.log(tile_x_offset, tile_y_offset);
-      tiles_in_mosaic_wide = tile_pattern.length;
-      tiles_in_mosaic_high = tile_pattern[0].length;
-      console.log(tiles_in_mosaic_wide, tiles_in_mosaic_high);
-
-
-      mosaic_width = getMosaicWidth(tile_width, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_x_offset);
-      mosaic_height = getMosaicHeight(tile_height, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_y_offset);
-      console.log(mosaic_width, mosaic_height);
-      mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_x_offset);
-      mosaics_high = getMosaicsHigh(p5, mosaic_height, tile_y_offset);
-      console.log(mosaics_wide, mosaics_high);
-
-    p5.noStroke(); //sets stroke default
-
-    for (let i = 0; i < 1; i++) {
-
-      // no y adjust on first row, alternating rows OR if the number of tiles wide is even
-      if (i === 0 || i % 2 === 0 || tiles_in_mosaic_wide % 2 === 0) {  
-        y_adjust = 0;
-      } else {  
-        y_adjust = tile_y_offset;
-      } 
-
-      if (i > 0) {
-        x_loc = (mosaic_width - tile_x_offset)*i;
-      } else {
-        x_loc = 0;
-      }
-      console.log("y_adjust", y_adjust);
-      for (let j = 0; j < 10; j++) {
-        y_loc = (mosaic_height*j) - y_adjust; // 3x1, 3x3, 1x2, 1x1
-        draw_fn(p5, x_loc, y_loc, r, tile_pattern, color_theme);
-      }
+const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme) => {
+  // Determine which drawing function to use
+  const isPointyTop = tile_shape === 'pointyTopHexatile';
+  const drawFunction = isPointyTop ? drawMultiPointyTopHexatile : drawMultiHexatile;
+  
+  // Calculate tile dimensions and offsets
+  const tile_width = getTileWidth(tile_shape, r);
+  const tile_height = getTileHeight(tile_shape, r);
+  const tile_x_offset = getTileXOffset(tile_shape, r);
+  const tile_y_offset = getTileYOffset(tile_shape, r);
+  
+  // Get mosaic dimensions
+  const tiles_in_mosaic_wide = tile_pattern.length;
+  const tiles_in_mosaic_high = tile_pattern[0].length;
+  
+  // Calculate how many complete mosaics fit on screen
+  const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_x_offset);
+  const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_wide, tiles_in_mosaic_high, tile_y_offset);
+  const mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_x_offset);
+  const mosaics_high = getMosaicsHigh(p5, mosaic_height, tile_y_offset);
+  
+  // Set default drawing properties
+  p5.noStroke();
+  
+  // Draw the grid of mosaics
+  for (let i = 0; i < mosaics_wide; i++) {
+    // Calculate X position
+    const x_loc = i > 0 ? (mosaic_width - tile_x_offset) * i : 0;
+    
+    // Calculate Y offset for alternating columns (for proper tessellation)
+    const shouldOffsetY = i > 0 && i % 2 !== 0 && tiles_in_mosaic_wide % 2 !== 0;
+    const mosaic_y_offset = shouldOffsetY ? tile_y_offset : 0;
+    
+    // Draw each mosaic in this column
+    for (let j = 0; j < mosaics_high; j++) {
+      const y_loc = (mosaic_height * j) - mosaic_y_offset;
+      drawFunction(p5, x_loc, y_loc, r, tile_pattern, color_theme);
     }
-  };
+  }
+};
 
 // Global refs to track canvas state
 const globalCanvasRef = { current: null };

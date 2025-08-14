@@ -50,9 +50,9 @@ function App() {
       }
       <Tesselate 
         
-        tile_shape={TileDesigns["pointyTop1x2"].tileShape}
-        tile_pattern={TileDesigns["pointyTop1x2"].tilePattern}
-        tile_offset={TileDesigns["pointyTop1x2"].tileOffset} 
+        tile_shape={TileDesigns["flatTop1x2"].tileShape}
+        tile_pattern={TileDesigns["flatTop1x2"].tilePattern}
+        tile_offset={TileDesigns["flatTop1x2"].tileOffset} 
         color_theme={ColorThemes["basic_b"]}
         r={20}
         single_tile={false}
