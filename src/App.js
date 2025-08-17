@@ -50,9 +50,12 @@ function App() {
       }
       <Tesselate 
         
-        tile_shape={TileDesigns["flatTop1x2"].tileShape}
-        tile_pattern={TileDesigns["flatTop1x2"].tilePattern}
-        tile_offset={TileDesigns["flatTop1x2"].tileOffset} 
+        tile_shape={TileDesigns["quadHex"].tileShape}
+        tile_pattern={TileDesigns["quadHex"].tilePattern}
+        tile_x_offset={10}
+        tile_y_offset={10}
+        mosaic_x_offset={20}
+        mosaic_y_offset={20}
         color_theme={ColorThemes["basic_b"]}
         r={20}
         single_tile={false}

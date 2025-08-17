@@ -13,7 +13,6 @@ const defaultTileSize = 20;
 const Tesselate = ({
   tile_shape = defaultPattern.tileShape,
   tile_pattern = defaultPattern.tilePattern,
-  tile_offset = defaultPattern.tileOffset,
   color_theme = defaultColorTheme,
   r = defaultTileSize,
   single_tile = false,
