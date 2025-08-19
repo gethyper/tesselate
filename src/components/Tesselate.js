@@ -16,6 +16,10 @@ const Tesselate = ({
   color_theme = defaultColorTheme,
   r = defaultTileSize,
   single_tile = false,
+  tile_x_adjust = 0,
+  tile_y_adjust = 0,
+  mosaic_x_adjust = 0,
+  mosaic_y_adjust = 0,
   width = '100vw',
   height = '100vh',
   position = 'fixed',
@@ -31,7 +35,11 @@ const Tesselate = ({
     tile_pattern,
     color_theme,
     r,
-    single_tile
+    single_tile,
+    tile_x_adjust,
+    tile_y_adjust,
+    mosaic_x_adjust,
+    mosaic_y_adjust
   });
   
   // Simple mount/unmount effect

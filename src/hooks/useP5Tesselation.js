@@ -47,7 +47,7 @@ export const drawFlatTopHexagon = (p5, cX, cY, r) => {
     //console.log("tile_components=", tile_components);
 
     let vertices = [];
-    let x1, y1, x2, y2, x3, y3, tri, tri_color, tri_stroke;
+    let x1, y1, x2, y2, x3, y3, tri, tri_color, stroke_options = {};
 
     for(let a = 0; a < p5.TAU; a+=p5.TAU/6){
       vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
@@ -57,15 +57,22 @@ export const drawFlatTopHexagon = (p5, cX, cY, r) => {
     
     for (let i = 0; i < vertices.length-1; i++) {
 
-        tri = tile_components[i];
-        tri_color = color_theme[tri['c']];  
-        tri_stroke = color_theme[tri['s']];
+      tri = tile_components[i];
+      console.log(tri);
+      tri_color = color_theme[tri['c'] || tri['color']];  
+      stroke_options['stroke_color'] = color_theme[tri['stroke'] || tri['s']];
+      stroke_options['stroke_a'] = color_theme[tri['stroke_a'] || tri['sa']];
+      stroke_options['stroke_b'] = color_theme[tri['stroke_b'] || tri['sb']];
+      stroke_options['stroke_c'] = color_theme[tri['stroke_c'] || tri['sc']];
+
         x1 = vertices[i][0];
         y1 = vertices[i][1];
         x2 = vertices[i+1][0];
         y2 = vertices[i+1][1];
         x3 = cX;
         y3 = cY;
+
+        /*
         p5.fill(tri_color);
 
         if (tri_stroke != null) {
@@ -73,6 +80,8 @@ export const drawFlatTopHexagon = (p5, cX, cY, r) => {
         }
         p5.triangle(x1, y1, x2, y2, x3, y3);
         p5.noStroke(); 
+        */
+        drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options);
       }
 
     }
@@ -80,7 +89,7 @@ export const drawFlatTopHexagon = (p5, cX, cY, r) => {
 export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_theme) => {
 
     let vertices = [];
-    let x1, y1, x2, y2, x3, y3, tri, tri_color, tri_stroke;
+    let x1, y1, x2, y2, x3, y3, tri, tri_color, stroke_options ={};
 
     for(let a = p5.TAU/12; a < p5.TAU + p5.TAU/12; a+=p5.TAU/6){
       vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
@@ -94,7 +103,11 @@ export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_them
         
         tri = tile_components[i];
         tri_color = color_theme[tri['color'] || tri['c']];  
-        tri_stroke = color_theme[tri['stroke'] || tri['s']];
+        stroke_options['stroke_color'] = color_theme[tri['stroke'] || tri['s']];
+        stroke_options['stroke_a'] = color_theme[tri['stroke_a'] || tri['sa']];
+        stroke_options['stroke_b'] = color_theme[tri['stroke_b'] || tri['sb']];
+        stroke_options['stroke_c'] = color_theme[tri['stroke_c'] || tri['sc']];
+
 
         x1 = vertices[i][0];
         y1 = vertices[i][1];
@@ -103,62 +116,86 @@ export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_them
         x3 = cX;
         y3 = cY;
 
-        p5.fill(tri_color);
+        
+        /*p5.fill(tri_color);
 
         if (tri_stroke != null) {
            p5.stroke(tri_stroke);
         }
-        p5.triangle(x1, y1, x2, y2, x3, y3);
-        p5.noStroke(); 
+        p5.triangle(x1, y1, x2, y2, x3, y3, {stroke_color: tri_stroke});
+
+        /*
+       if (tri_stroke != null) { 
+         stroke_options = {stroke_color: tri_stroke};
+       } *.
+
+        drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options);
+        p5.noStroke(); */
+
+        drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options);
+
       }
 
     }
   
 
-export const drawTri = (p5, x, y, w, h, tri_orientation, tri_color, tri_stroke=false) => {
+export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options={}) => {
 
-    let x1, x2, y1, y2, x3, y3;
+    let stroke_color = stroke_options.stroke_color ? stroke_options.stroke_color : null;
+    let stroke_weight = stroke_options.stroke_weight ? stroke_options.stroke_weight : 1;
+    let stroke_a = stroke_options.stroke_a ? stroke_options.stroke_a : null;
+    let stroke_b = stroke_options.stroke_b ? stroke_options.stroke_b : null;
+    let stroke_c = stroke_options.stroke_c ? stroke_options.stroke_c : null    ;
 
 
-    if (tri_orientation === "left") {
-      x1 = x;
-      y1 = y+(h/2);
-      x2 = x+w;
-      y2 = y;
-      x3 = x+w
-      y3 = y+h;
-    } else if (tri_orientation === "right") {
-      x1 = x;
-      y1 = y; 
-      x2 = x+w;
-      y2 = y+(h/2);
-      x3 = x;
-      y3 = y+h;
-    } else if (tri_orientation === "up") {
+    p5.fill(color);
+    p5.beginShape();
 
-      x1 = x;
-      y1 = y; 
-      x2 = x+(w/2);
-      y2 = y-h;
-      x3 = x+w;
-      y3 = y;
+    
 
-    } else if (tri_orientation === "down") {
-        x1 = x; 
-        y1 = y; 
-        x2 = x+(w/2); 
-        y2 = y+h; 
-        x3 = x+w; 
-        y3 = y; 
-    }
+    if (stroke_color != null) {
+      //console.log("stroke_color=", stroke_color);
+      p5.stroke(stroke_color);
+      p5.strokeWeight(stroke_weight);
+   } else { 
+    p5.noStroke();
+   }
 
-    p5.fill(tri_color);
+   p5.vertex(x1, y1);
+   p5.vertex(x2, y2);
+  p5.vertex(x3, y3);
+  p5.endShape(p5.CLOSE);
 
-    if (tri_stroke) {
-       p5.stroke(tri_stroke);
-    }
+  console.log("stroke_a=", stroke_a);
+  console.log("stroke_b=", stroke_b);
+  console.log("stroke_c=", stroke_c);
+  
+  if (stroke_a) {
+    console.log("stroke_a=", stroke_a);
+    console.log("stroke_a=", stroke_a);
+    p5.stroke(stroke_a);
+    p5.strokeWeight(stroke_weight);
+    p5.line(x1, y1, x2, y2);
+    console.log("stroke_a=", stroke_a);
+ } 
 
-    p5.triangle(x1, y1, x2, y2, x3, y3);
+ if (stroke_b) {
+  p5.stroke(stroke_b);
+  p5.strokeWeight(stroke_weight);
+  p5.line(x2, y2, x3, y3);
+} 
+
+if (stroke_c) {
+  p5.stroke(stroke_c);
+  p5.strokeWeight(stroke_weight);
+  p5.line(x3, y3, x1, y1);
+} 
+
+
+  p5.noStroke(); 
+
+
+    
 
     /*
     function draw() {
