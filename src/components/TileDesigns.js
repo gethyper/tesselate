@@ -15,7 +15,7 @@ const TileDesigns= {
     'tileShape': "flatTopHexagon",
     'tilePattern': [
       [
-        [{c:"accent", s: "bg"}],
+        [{c:"accent", s:"bg"}],
         [{c:"accent", s: "bg"}],
         [{c:"medium", s: "bg"}],
         [{c:"dark", s: "bg"}],

@@ -52,12 +52,14 @@ function App() {
         
         tile_shape={TileDesigns["shadowBoxes"].tileShape}
         tile_pattern={TileDesigns["shadowBoxes"].tilePattern}
-        tile_x_adjust={10}
-        tile_y_adjust={10}
-        mosaic_x_adjust={20}
-        mosaic_y_offset={20}
+        tile_options={{
+          tile_x_adjust: 10,
+          tile_y_adjust: 10,
+          mosaic_x_adjust: 20,
+          mosaic_y_offset: 20
+        }}
         color_theme={ColorThemes["basic_b"]}
-        r={10}
+        r={8}
         single_tile={false}
         width="100vw"
         height="100vh"
