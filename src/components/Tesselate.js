@@ -9,6 +9,7 @@ const Tesselate = ({
   color_theme,
   r,
   single_tile = false,
+  useGradient = false,
   tile_x_adjust = 0,
   tile_y_adjust = 0,
   mosaic_x_adjust = 0,
@@ -29,6 +30,7 @@ const Tesselate = ({
     color_theme,
     r,
     single_tile,
+    useGradient,
     tile_options: {
       tile_x_adjust,
       tile_y_adjust,

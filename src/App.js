@@ -30,6 +30,9 @@ function AppContent() {
 
   // Check for secret parameter to hide controls
   const hideControls = searchParams.get('secret') === 'true';
+  
+  // Check for gradient parameter
+  const useGradient = searchParams.get('gradient') === 'true';
 
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
@@ -85,6 +88,7 @@ function AppContent() {
         color_theme={safeTheme}
         r={tileSize}
         single_tile={false}
+        useGradient={useGradient}
         width="100vw"
         height="100vh"
         position="fixed"

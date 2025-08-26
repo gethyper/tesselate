@@ -122,7 +122,7 @@ export const drawFlatTopHexagon = (p5, cX, cY, r) => {
     p5.endShape(p5.CLOSE)
   }
 
-export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_options = {}) => {
+export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_options = {}, useGradient = false) => {
   const vertices = [];
   
   // Generate hexagon vertices
@@ -152,11 +152,11 @@ export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_o
     const x3 = cX;
     const y3 = cY;
 
-    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options);
+    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, useGradient);
   }
 };
 
-export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_options = {}) => {
+export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_options = {}, useGradient = false) => {
   const vertices = [];
   
   // Generate pointy-top hexagon vertices (rotated by 30 degrees)
@@ -186,12 +186,12 @@ export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_them
     const x3 = cX;
     const y3 = cY;
 
-    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options);
+    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, useGradient);
   }
 };
   
 
-export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = {}) => {
+export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = {}, useGradient = false) => {
   const stroke_color = stroke_options.stroke_color || null;
   const stroke_weight = stroke_options.stroke_weight || 1;
   const stroke_a = stroke_options.stroke_a || null;
@@ -199,7 +199,7 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
   const stroke_c = stroke_options.stroke_c || null;
 
   // Create and apply gradient fill
-  const fill = createGradientFill(p5, x1, y1, x2, y2, x3, y3, color);
+  const fill = createGradientFill(p5, x1, y1, x2, y2, x3, y3, color, useGradient);
   if (typeof fill === 'string') {
     p5.fill(fill);
   } else {
@@ -244,10 +244,10 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
 
 
 
-export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}) => {
+export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
 
-  const tile_x_adjust = tile_options.tile_x_adjust || 10;
-  const tile_y_adjust = tile_options.tile_y_adjust || 10;
+  const tile_x_adjust = tile_options.tile_x_adjust || 0;
+  const tile_y_adjust = tile_options.tile_y_adjust || 0;
 
 
   let tiles_wide = tile_pattern.length;
@@ -283,12 +283,12 @@ export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius,
       y_loc = y_start + ((tile_height - tile_y_offset) * j) + tile_y_adjust;
 
       //y_loc = y_start + y_adjust + (r/2 * j);
-      drawPointyTopHexatile(p5, x_loc+x_adjust, y_loc, radius, tile_pattern[i][j], color_theme);
+      drawPointyTopHexatile(p5, x_loc+x_adjust, y_loc, radius, tile_pattern[i][j], color_theme, tile_options, useGradient);
     }
   }
 };
 
-export const drawMultiHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}) => {
+export const drawMultiHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
 
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
   const tile_y_adjust = tile_options.tile_y_adjust || 0;
@@ -315,21 +315,21 @@ export const drawMultiHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pat
     for (let j = 0; j < tiles_high; j++) {
       y_loc = y_start + y_adjust + (y_offset * j);
 
-      drawHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme, tile_options);
+      drawHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme, tile_options, useGradient);
     }
   }
   };
 
-export const drawCenteredHexatile = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}) => {
+export const drawCenteredHexatile = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
   const x_loc = 0;
   const y_loc = 0;
 
   p5.noStroke(); 
   
   if (tile_shape === 'pointyTopHexatile') {
-    drawMultiPointyTopHexatile(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options);
+    drawMultiPointyTopHexatile(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options, useGradient);
   } else {
-    drawMultiHexatile(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options);
+    drawMultiHexatile(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options, useGradient);
   }
 };
 
@@ -400,18 +400,18 @@ const getMosaicsHigh = (p5, mosaic_height, tile_y_offset) => {
 
 
 
-const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}) => {
+const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
   // Determine which drawing function to use
   const isPointyTop = tile_shape === 'pointyTopHexatile';
   const drawFunction = isPointyTop ? drawMultiPointyTopHexatile : drawMultiHexatile;
   const tileFunction = isPointyTop ? tilePointyTopHexatile : tileFlatTopHexatile;
   
-  tileFunction(p5, r, tile_shape, tile_pattern, color_theme, drawFunction, tile_options);
+  tileFunction(p5, r, tile_shape, tile_pattern, color_theme, drawFunction, tile_options, useGradient);
 
 };
 
 
-const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}) => {
+const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}, useGradient = false) => {
   
     // Calculate tile dimensions and offsets
     const tile_width = getTileWidth(tile_shape, r);
@@ -467,12 +467,12 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
       const y_loc = row_increment - mosaic_y_offset;
 
 
-      draw_function(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme);
+      draw_function(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options, useGradient);
     }
   }
 };
 
-const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}) => {
+const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}, useGradient = false) => {
   
   // Calculate tile dimensions and offsets
   const tile_width = getTileWidth(tile_shape, r);
@@ -499,7 +499,7 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
     for (let j = 0; j < mosaics_high; j++) {
 
       const y_loc =  (mosaic_height * j) - tile_y_offset - col_offset;
-      draw_function(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme);
+      draw_function(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options, useGradient);
 
     }
   }
@@ -512,6 +512,7 @@ export function useP5Tesselation({
   color_theme = ColorThemes['basic_b'],
   r = 100,
   single_tile = false,
+  useGradient = false,
   tile_options = {},
 }) {
   const p5InstanceRef = useRef(null);
@@ -526,13 +527,13 @@ export function useP5Tesselation({
     p5.background(color_theme.bg);
 
     if (single_tile === true) {
-      drawCenteredHexatile(p5, tile_shape, r, tile_pattern, color_theme, tile_options);
+      drawCenteredHexatile(p5, tile_shape, r, tile_pattern, color_theme, tile_options, useGradient);
     } else {
-      fillWithTiles(p5, tile_shape, r, tile_pattern, color_theme, tile_options);
+      fillWithTiles(p5, tile_shape, r, tile_pattern, color_theme, tile_options, useGradient);
     }
     p5.noStroke();
     p5.noLoop(); // Stop after drawing once
-  }, [r, tile_shape, tile_pattern, color_theme, single_tile, tile_options]);
+  }, [r, tile_shape, tile_pattern, color_theme, single_tile, tile_options, useGradient]);
 
   return { setup, draw };
 }

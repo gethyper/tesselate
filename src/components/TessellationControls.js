@@ -7,7 +7,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Slider,
+  TextField,
   Typography,
   Collapse,
   Fade
@@ -27,13 +27,14 @@ const TessellationControls = ({
   const [isOpen, setIsOpen] = useState(false);
   const [previewSize, setPreviewSize] = useState(tileSize);
   const [isDragging, setIsDragging] = useState(false);
+  const [sizeTimeout, setSizeTimeout] = useState(null);
 
-  // Sync preview size when tileSize changes externally, but not while dragging
+  // Sync preview size when tileSize changes externally, but not while typing
   useEffect(() => {
-    if (!isDragging) {
+    if (!isDragging && !sizeTimeout) {
       setPreviewSize(tileSize);
     }
-  }, [tileSize, isDragging]);
+  }, [tileSize, isDragging, sizeTimeout]);
 
   // Filter out empty or incomplete themes
   const validThemes = Object.entries(ColorThemes).filter(([key, theme]) => 
@@ -57,10 +58,152 @@ const TessellationControls = ({
 
   const ColorPreview = ({ theme }) => (
     <Box sx={{ display: 'flex', gap: 0.5, mr: 1 }}>
-      <Box sx={{ width: 16, height: 16, bgcolor: theme.light, border: '1px solid #ccc' }} />
-      <Box sx={{ width: 16, height: 16, bgcolor: theme.medium, border: '1px solid #ccc' }} />
-      <Box sx={{ width: 16, height: 16, bgcolor: theme.dark, border: '1px solid #ccc' }} />
-      <Box sx={{ width: 16, height: 16, bgcolor: theme.accent, border: '1px solid #ccc' }} />
+      <Box 
+        sx={{ 
+          width: 16, 
+          height: 16, 
+          bgcolor: theme.light, 
+          border: '1px solid #ccc',
+          cursor: 'pointer',
+          '&:hover': {
+            transform: 'scale(1.2)',
+            zIndex: 1000,
+            position: 'relative',
+            '&::after': {
+              content: `"Light: ${theme.light}"`,
+              position: 'absolute',
+              top: '50%',
+              left: '20px',
+              transform: 'translateY(-50%)',
+              bgcolor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+              fontSize: '10px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }
+          }
+        }} 
+      />
+      <Box 
+        sx={{ 
+          width: 16, 
+          height: 16, 
+          bgcolor: theme.medium, 
+          border: '1px solid #ccc',
+          cursor: 'pointer',
+          '&:hover': {
+            transform: 'scale(1.2)',
+            zIndex: 1000,
+            position: 'relative',
+            '&::after': {
+              content: `"Medium: ${theme.medium}"`,
+              position: 'absolute',
+              top: '50%',
+              left: '20px',
+              transform: 'translateY(-50%)',
+              bgcolor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+              fontSize: '10px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }
+          }
+        }} 
+      />
+      <Box 
+        sx={{ 
+          width: 16, 
+          height: 16, 
+          bgcolor: theme.dark, 
+          border: '1px solid #ccc',
+          cursor: 'pointer',
+          '&:hover': {
+            transform: 'scale(1.2)',
+            zIndex: 1000,
+            position: 'relative',
+            '&::after': {
+              content: `"Dark: ${theme.dark}"`,
+              position: 'absolute',
+              top: '50%',
+              left: '20px',
+              transform: 'translateY(-50%)',
+              bgcolor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+              fontSize: '10px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }
+          }
+        }} 
+      />
+      <Box 
+        sx={{ 
+          width: 16, 
+          height: 16, 
+          bgcolor: theme.accent, 
+          border: '1px solid #ccc',
+          cursor: 'pointer',
+          '&:hover': {
+            transform: 'scale(1.2)',
+            zIndex: 1000,
+            position: 'relative',
+            '&::after': {
+              content: `"Accent: ${theme.accent}"`,
+              position: 'absolute',
+              top: '50%',
+              left: '20px',
+              transform: 'translateY(-50%)',
+              bgcolor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+              fontSize: '10px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }
+          }
+        }} 
+      />
+      <Box 
+        sx={{ 
+          width: 16, 
+          height: 16, 
+          bgcolor: theme.bg || '#transparent', 
+          border: '1px solid #ccc',
+          cursor: 'pointer',
+          opacity: theme.bg ? 1 : 0.3,
+          '&:hover': {
+            transform: 'scale(1.2)',
+            zIndex: 1000,
+            position: 'relative',
+            '&::after': {
+              content: theme.bg ? `"Background: ${theme.bg}"` : '"Background: N/A"',
+              position: 'absolute',
+              top: '50%',
+              left: '20px',
+              transform: 'translateY(-50%)',
+              bgcolor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+              fontSize: '10px',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none'
+            }
+          }
+        }} 
+      />
     </Box>
   );
 
@@ -74,47 +217,66 @@ const TessellationControls = ({
       }}
     >
       {!isOpen && (
-        <Fade in={!isOpen}>
-          <Box
-            onClick={() => setIsOpen(true)}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              bgcolor: 'rgba(255, 255, 255, 0.8)',
-              backdropFilter: 'blur(10px)',
-              borderRadius: 2,
-              px: 2,
-              py: 1,
-              cursor: 'pointer',
-              '&:hover': {
-                bgcolor: 'rgba(255, 255, 255, 0.85)',
-              },
-            }}
-          >
-           
-            <Typography variant="h6" sx={{ 
-              fontFamily: 'Tourney, sans-serif', 
-              fontWeight: 500, 
-              letterSpacing: 1,
-              flex: 1
-            }}>
-              <svg width="24" height="24" viewBox="0 0 24 24"><polygon points="12,2 20,6 20,18 12,22 4,18 4,6" stroke="black" strokeWidth="1px" fill="none" /></svg>
-              TESSELLATIONS
-            </Typography>
-            <Menu />
-          </Box>
-        </Fade>
+        <Box
+          onClick={() => setIsOpen(true)}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            bgcolor: 'rgba(255, 255, 255, 0.7)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid white',
+            borderRadius: 2,
+            px: 2,
+            py: 1,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease-in-out',
+            '&:hover': {
+              bgcolor: 'rgba(255, 255, 255, 0.75)',
+            },
+          }}
+        >
+         
+          <Typography variant="h6" sx={{ 
+            fontFamily: 'Tourney, sans-serif', 
+            fontWeight: 500, 
+            letterSpacing: 1,
+            flex: 1
+          }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" style={{paddingRight: '10px', paddingTop: "-12px"}}><polygon points="12,1 22,7 22,17 12,23 2,17 2,7" stroke="black" strokeWidth="1px" fill="none" /></svg>
+            TESSELLATIONS
+          </Typography>
+          <Menu sx={{ color: 'rgba(0, 0, 0, 0.54)' }} />
+        </Box>
       )}
 
-      <Collapse in={isOpen} timeout={300}>
+      <Collapse in={isOpen} timeout={200} sx={{ 
+        '& .MuiCollapse-wrapper': {
+          transition: 'all 0.2s ease-in-out',
+        },
+        '& .MuiCollapse-wrapperInner': {
+          transition: 'all 0.2s ease-in-out',
+        }
+      }}>
         <Paper
           elevation={8}
           sx={{
             p: 2,
-            minWidth: 300,
-            bgcolor: 'rgba(255, 255, 255, 0.8)',
+            minWidth: 210,
+            maxWidth: 300,
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(240, 240, 255, 0.75))',
             backdropFilter: 'blur(10px)',
+            border: '1px solid white',
+            transition: 'all 0.2s ease-in-out',
+            '& .MuiFormControl-root': {
+              transition: 'all 0.2s ease-in-out',
+            },
+            '& .MuiSelect-select': {
+              transition: 'all 0.2s ease-in-out',
+            },
+            '& .MuiTextField-root': {
+              transition: 'all 0.2s ease-in-out',
+            }
           }}
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -123,7 +285,7 @@ const TessellationControls = ({
               fontWeight: 500, 
               letterSpacing: 1 
             }}>
-              <svg width="24" height="24" viewBox="0 0 24 24"><polygon points="12,2 20,6 20,18 12,22 4,18 4,6" stroke="black" strokeWidth="1px" fill="none" /></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" style={{paddingRight: '10px', verticalAlign: 'middle'}}><polygon points="12,1 22,7 22,17 12,23 2,17 2,7" stroke="black" strokeWidth="1px" fill="none" /></svg>
               TESSELLATIONS
             </Typography>
             <IconButton onClick={() => setIsOpen(false)} size="small">
@@ -133,18 +295,27 @@ const TessellationControls = ({
 
           {/* Pattern Selector */}
           <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel id="pattern-label">Pattern</InputLabel>
+            <InputLabel id="pattern-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Pattern</InputLabel>
             <Select
               labelId="pattern-label"
               value={selectedPattern}
               label="Pattern"
+              size="small"
               onChange={(e) => {
                 onPatternChange(e.target.value);
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    bgcolor: 'rgba(255, 255, 255, 0.9)',
+                    backdropFilter: 'blur(10px)',
+                  }
+                }
               }}
             >
               {validPatterns.map(([key, design]) => (
                 <MenuItem key={key} value={key}>
-                  <Typography sx={{ textTransform: 'capitalize' }}>
+                  <Typography variant="caption" sx={{ textTransform: 'capitalize', fontFamily: 'Inter, sans-serif' }}>
                     {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                   </Typography>
                 </MenuItem>
@@ -154,20 +325,29 @@ const TessellationControls = ({
 
           {/* Theme Selector */}
           <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel id="theme-label">Theme</InputLabel>
+            <InputLabel id="theme-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Theme</InputLabel>
             <Select
               labelId="theme-label"
               value={selectedTheme}
               label="Theme"
+              size="small"
               onChange={(e) => {
                 onThemeChange(e.target.value);
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    bgcolor: 'rgba(255, 255, 255, 0.9)',
+                    backdropFilter: 'blur(10px)',
+                  }
+                }
               }}
             >
               {validThemes.map(([key, theme]) => (
                 <MenuItem key={key} value={key}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <ColorPreview theme={theme} />
-                    <Typography sx={{ textTransform: 'capitalize' }}>
+                    <Typography variant="caption" sx={{ textTransform: 'capitalize', fontFamily: 'Inter, sans-serif' }}>
                       {key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                     </Typography>
                   </Box>
@@ -176,34 +356,52 @@ const TessellationControls = ({
             </Select>
           </FormControl>
 
-          {/* Size Slider */}
-          <Box sx={{ mb: 1 }}>
-            <Typography gutterBottom>
-              Size: {previewSize}
-            </Typography>
-            <Slider
-              value={previewSize}
-              onChange={(e, newValue) => {
-                setPreviewSize(newValue);
-                setIsDragging(true);
-              }}
-              onChangeCommitted={(e, newValue) => {
-                setIsDragging(false);
-                onSizeChange(newValue);
-              }}
-              min={5}
-              max={100}
-              step={1}
-              marks={[
-                { value: 5, label: '5' },
-                { value: 25, label: '25' },
-                { value: 50, label: '50' },
-                { value: 75, label: '75' },
-                { value: 100, label: '100' }
-              ]}
-              sx={{ mb: 1 }}
-            />
-          </Box>
+          {/* Size Input */}
+          <TextField
+            label="Size"
+            type="number"
+            value={previewSize}
+            onChange={(e) => {
+              const inputValue = e.target.value;
+              
+              // Allow empty input for better UX while typing
+              if (inputValue === '') {
+                setPreviewSize('');
+                return;
+              }
+              
+              const numValue = parseInt(inputValue);
+              if (!isNaN(numValue)) {
+                setPreviewSize(numValue);
+                
+                // Clear existing timeout
+                if (sizeTimeout) {
+                  clearTimeout(sizeTimeout);
+                }
+                
+                // Set new timeout - only clamp when sending to parent
+                const newTimeout = setTimeout(() => {
+                  const clampedValue = Math.max(5, Math.min(100, numValue));
+                  onSizeChange(clampedValue);
+                }, 200);
+                setSizeTimeout(newTimeout);
+              }
+            }}
+            inputProps={{
+              step: 1
+            }}
+            size="small"
+            fullWidth
+            sx={{
+              mb: 2,
+              '& .MuiInputLabel-root': {
+                fontFamily: 'Inter, sans-serif'
+              },
+              '& .MuiInputBase-input': {
+                fontFamily: 'Inter, sans-serif'
+              }
+            }}
+          />
         </Paper>
       </Collapse>
     </Box>
