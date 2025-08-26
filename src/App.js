@@ -1,65 +1,89 @@
-import React, { useState } from 'react';
-import {
-  Container,
-  Paper,
-  Slider,
-  Typography,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import React, { useState, useRef } from 'react';
+import { BrowserRouter, useSearchParams } from 'react-router-dom';
 import Tesselate from './components/Tesselate';
+import TessellationControls from './components/TessellationControls';
 import TileDesigns from './components/TileDesigns';
-import ColorThemes  from './components/ColorThemes';
+import ColorThemes from './components/ColorThemes';
 
-function App() {
-  // Group all state in a single object
-  const [state, setState] = useState({
-    size: 20,
-    tile_design: TileDesigns["mosaicMitres"],
-    tile_shape: TileDesigns["mosaicMitres"].tileShape,
-    tile_pattern: TileDesigns["mosaicMitres"].tilePattern,
-    color_theme: 'basic_b'
+// Main App component that handles state management
+function AppContent() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // State management with URL and localStorage persistence
+  const [selectedPattern, setSelectedPattern] = useState(() => {
+    return searchParams.get('pattern') || 
+           localStorage.getItem('tessellation-pattern') || 
+           'shadowBoxes';
   });
 
+  const [selectedTheme, setSelectedTheme] = useState(() => {
+    return searchParams.get('theme') || 
+           localStorage.getItem('tessellation-theme') || 
+           'basic_b';
+  });
 
+  const [tileSize, setTileSize] = useState(() => {
+    const urlSize = searchParams.get('size');
+    const storageSize = localStorage.getItem('tessellation-size');
+    return Number(urlSize) || Number(storageSize) || 20;
+  });
 
-  // Group all handlers in an object
-  const handlers = {
-    handleTileSizeChange: (event, newValue) => {
-      setState(prev => ({ ...prev, size: newValue }));
-    },
+  // Check for secret parameter to hide controls
+  const hideControls = searchParams.get('secret') === 'true';
 
-    handleColorThemeChange: (themeName) => {
-      setState(prev => ({ ...prev, color_theme: themeName }));
-    },
-
-
-    handleTileDesignChange: (event) => {
-      setState(prev => ({ ...prev, t_design: event.target.value }));
-    }
+  // Update URL and localStorage when state changes
+  const updatePattern = (pattern) => {
+    setSelectedPattern(pattern);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('pattern', pattern);
+    setSearchParams(newParams);
+    localStorage.setItem('tessellation-pattern', pattern);
   };
+
+  const updateTheme = (theme) => {
+    setSelectedTheme(theme);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('theme', theme);
+    setSearchParams(newParams);
+    localStorage.setItem('tessellation-theme', theme);
+  };
+
+  const debounceTimerRef = useRef(null);
+  
+  const updateSize = (size) => {
+    // Update the UI immediately for responsiveness
+    setTileSize(size);
+    
+    // Debounce the URL and localStorage updates
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    
+    debounceTimerRef.current = setTimeout(() => {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set('size', size.toString());
+      setSearchParams(newParams);
+      localStorage.setItem('tessellation-size', size.toString());
+    }, 300); // 300ms delay
+  };
+
+  // This useEffect was causing the bounce - we already sync from localStorage on mount
+
+  // Get the current design and theme objects
+  const currentDesign = TileDesigns[selectedPattern];
+  const currentTheme = ColorThemes[selectedTheme];
+
+  // Fallback to defaults if selected items are invalid
+  const safeDesign = currentDesign || TileDesigns['shadowBoxes'];
+  const safeTheme = currentTheme || ColorThemes['basic_b'];
 
   return (
     <>
-      {/* Example 1: Using all optional parameters with custom values */
-      
-      
-      }
       <Tesselate 
-        
-        tile_shape={TileDesigns["shadowBoxes"].tileShape}
-        tile_pattern={TileDesigns["shadowBoxes"].tilePattern}
-        tile_options={{
-          tile_x_adjust: 10,
-          tile_y_adjust: 10,
-          mosaic_x_adjust: 20,
-          mosaic_y_offset: 20
-        }}
-        color_theme={ColorThemes["basic_b"]}
-        r={8}
+        tile_shape={safeDesign.tileShape}
+        tile_pattern={safeDesign.tilePattern}
+        color_theme={safeTheme}
+        r={tileSize}
         single_tile={false}
         width="100vw"
         height="100vh"
@@ -70,39 +94,27 @@ function App() {
         overflow="hidden"
       />
 
-      {/* Example 2: Using minimal parameters (others will use defaults) */}
-      {/* 
-      <Tesselate 
-        r={state.size}
-        color_theme={ColorThemes[state.color_theme]}
-      />
-      */}
-
-      {/* Example 3: Using state values */}
-      {/*
-      <Tesselate 
-        tile_shape={state.tile_shape}
-        tile_pattern={state.tile_pattern}
-        color_theme={ColorThemes[state.color_theme]}
-        r={state.size}
-      />
-      */}
-
-      <Box sx={{ 
-        position: 'fixed', 
-        bottom: 0, 
-        left: 0, 
-        right: 0, 
-        zIndex: 10,
-        display: 'flex',
-        justifyContent: 'center'
-      }}>
-      </Box>
+      {!hideControls && (
+        <TessellationControls
+          selectedPattern={selectedPattern}
+          selectedTheme={selectedTheme}
+          tileSize={tileSize}
+          onPatternChange={updatePattern}
+          onThemeChange={updateTheme}
+          onSizeChange={updateSize}
+        />
+      )}
     </>
-     
   );
 }
 
-   
+// Wrapper component to provide BrowserRouter
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
+}
 
 export default App;

@@ -1,20 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box } from '@mui/material';
 import Sketch from 'react-p5';
-import TileDesigns from './TileDesigns';
-import ColorThemes  from './ColorThemes';
 import { useP5Tesselation } from '../hooks/useP5Tesselation';
 
-// Default values (you can define these based on your needs)
-const defaultPattern = TileDesigns['doubleHexatile'];
-const defaultColorTheme = ColorThemes['basic_b'];
-const defaultTileSize = 20;
-
 const Tesselate = ({
-  tile_shape = defaultPattern.tileShape,
-  tile_pattern = defaultPattern.tilePattern,
-  color_theme = defaultColorTheme,
-  r = defaultTileSize,
+  tile_shape,
+  tile_pattern,
+  color_theme,
+  r,
   single_tile = false,
   tile_x_adjust = 0,
   tile_y_adjust = 0,
@@ -30,16 +23,18 @@ const Tesselate = ({
 }) => {
   const sketchRef = useRef(null);
   const [mounted, setMounted] = useState(false);
-  const { setup, draw, remove } = useP5Tesselation({
+  const { setup, draw } = useP5Tesselation({
     tile_shape,
     tile_pattern,
     color_theme,
     r,
     single_tile,
-    tile_x_adjust,
-    tile_y_adjust,
-    mosaic_x_adjust,
-    mosaic_y_adjust
+    tile_options: {
+      tile_x_adjust,
+      tile_y_adjust,
+      mosaic_x_adjust,
+      mosaic_y_adjust
+    }
   });
   
   // Simple mount/unmount effect
@@ -58,9 +53,10 @@ const Tesselate = ({
     
     return () => {
       setMounted(false);
-      remove();
     };
-  }, [remove]);
+  }, []);
+
+  // No longer needed since we removed noLoop()
   
   // Disable Strict Mode
   // Either wrap your component with:
@@ -89,8 +85,12 @@ const Tesselate = ({
       >
         {mounted && (
           <Sketch 
+            key={`${tile_shape}-${JSON.stringify(tile_pattern)}-${JSON.stringify(color_theme)}-${r}`}
             setup={setup} 
             draw={draw}
+            windowResized={(p5) => {
+              p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
+            }}
             style={{
               width: '100%',
               height: '100%',

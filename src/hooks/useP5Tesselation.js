@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import TileDesigns from '../components/TileDesigns';
 import ColorThemes  from '../components/ColorThemes';
 // Import tile pattern functions or define your pattern mapping
@@ -34,6 +34,77 @@ export const getHexagonVertices = (p5, cX, cY, r) => {
   }
   return vertices;
 }
+
+// Helper function to lighten/darken a color
+const adjustColor = (colorStr, percent) => {
+  // Handle named colors
+  if (colorStr === 'grey' || colorStr === 'gray') {
+    colorStr = '#808080';
+  } else if (colorStr === 'white') {
+    colorStr = '#FFFFFF';
+  } else if (colorStr === 'black') {
+    colorStr = '#000000';
+  }
+  
+  let hex = colorStr.replace('#', '');
+  
+  // Handle 3-character hex codes
+  if (hex.length === 3) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
+  
+  // Handle 5-character hex (malformed)
+  if (hex.length === 5) {
+    hex = hex + hex[4]; // duplicate last character
+  }
+  
+  const num = parseInt(hex, 16);
+  if (isNaN(num)) return colorStr; // Return original if can't parse
+  
+  const amt = Math.round(2.55 * percent);
+  const R = Math.min(255, Math.max(0, (num >> 16) + amt));
+  const G = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amt));
+  const B = Math.min(255, Math.max(0, (num & 0x0000FF) + amt));
+  return `rgb(${R}, ${G}, ${B})`;
+};
+
+// Create gradient fill for a shape
+export const createGradientFill = (p5, x1, y1, x2, y2, x3, y3, baseColor, useGradient = true) => {
+  if (!useGradient) {
+    return baseColor;
+  }
+  
+  // Calculate shape bounds
+  const minX = Math.min(x1, x2, x3);
+  const maxX = Math.max(x1, x2, x3);
+  const minY = Math.min(y1, y2, y3);
+  const maxY = Math.max(y1, y2, y3);
+  
+  // Calculate gradient start and end points at 45 degree angle
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+  const diagonal = Math.sqrt(Math.pow(maxX - minX, 2) + Math.pow(maxY - minY, 2));
+  const offset = diagonal / 2;
+  
+  // 45 degree angle (π/4 radians)
+  const angle = Math.PI / 4;
+  const startX = centerX - offset * Math.cos(angle);
+  const startY = centerY - offset * Math.sin(angle);
+  const endX = centerX + offset * Math.cos(angle);
+  const endY = centerY + offset * Math.sin(angle);
+  
+  // Create gradient colors (2% lighter to 2% darker)
+  const lightColor = adjustColor(baseColor, 2);
+  const darkColor = adjustColor(baseColor, -2);
+  
+  // Create linear gradient
+  const ctx = p5.drawingContext;
+  const gradient = ctx.createLinearGradient(startX, startY, endX, endY);
+  gradient.addColorStop(0, lightColor);
+  gradient.addColorStop(1, darkColor);
+  
+  return gradient;
+};
 
 export const drawFlatTopHexagon = (p5, cX, cY, r) => {
     p5.beginShape()
@@ -127,8 +198,13 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
   const stroke_b = stroke_options.stroke_b || null;
   const stroke_c = stroke_options.stroke_c || null;
 
-  // Draw the filled triangle
-  p5.fill(color);
+  // Create and apply gradient fill
+  const fill = createGradientFill(p5, x1, y1, x2, y2, x3, y3, color);
+  if (typeof fill === 'string') {
+    p5.fill(fill);
+  } else {
+    p5.drawingContext.fillStyle = fill;
+  }
   
   if (stroke_color) {
     p5.stroke(stroke_color);
@@ -214,8 +290,8 @@ export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius,
 
 export const drawMultiHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}) => {
 
-  const tile_x_adjust = tile_options.tile_x_adjust || 10;
-  const tile_y_adjust = tile_options.tile_y_adjust || 10;
+  const tile_x_adjust = tile_options.tile_x_adjust || 0;
+  const tile_y_adjust = tile_options.tile_y_adjust || 0;
 
 
   let tiles_wide = tile_pattern.length;
@@ -229,7 +305,7 @@ export const drawMultiHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pat
 
 
   for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
-    x_loc = x_start + (x_offset * i);
+    x_loc = x_start + (x_offset * i) + tile_x_adjust;
   
     if (i % 2 != 0) {  
       y_adjust = y_offset/2;
@@ -429,10 +505,6 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
   }
 };
 
-// Global refs to track canvas state
-const globalCanvasRef = { current: null };
-const globalP5Ref = { current: null };
-const globalParentRef = { current: null };
 
 export function useP5Tesselation({
   tile_shape = TileDesigns['tripleHex'].tileShape,
@@ -443,58 +515,14 @@ export function useP5Tesselation({
   tile_options = {},
 }) {
   const p5InstanceRef = useRef(null);
-  const canvasRef = useRef(null);
 
   const setup = useCallback((p5, canvasParentRef) => {
-    // If a canvas already exists, don't create a new one
-    if (globalCanvasRef.current) {
-      return;
-    }
-
-    // Store the p5 instance
-    p5InstanceRef.current = p5;
-    
-    // Create canvas and store reference
-    const canvas = p5.createCanvas(window.innerWidth, window.innerHeight);
-    
-    // Ensure canvas fills its container
-    canvas.style('width', '100%');
-    canvas.style('height', '100%');
-    canvas.style('display', 'block');
-    
-    // Manually append the canvas to the parent element
-    if (canvasParentRef && canvasParentRef.current) {
-      canvasParentRef.current.appendChild(canvas.elt);
-    }
-    
-    canvasRef.current = canvas;
-    globalCanvasRef.current = canvas;
-    globalP5Ref.current = p5;
-    globalParentRef.current = canvasParentRef?.current;
+    p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     p5.noStroke();
-    
-    // Handle window resize
-    const handleResize = () => {
-      if (globalP5Ref.current && globalCanvasRef.current) {
-        console.log('Resizing canvas to:', window.innerWidth, window.innerHeight);
-        globalP5Ref.current.resizeCanvas(window.innerWidth, window.innerHeight);
-        globalCanvasRef.current.style('width', '100%');
-        globalCanvasRef.current.style('height', '100%');
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup resize listener on component unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    p5InstanceRef.current = p5;
   }, []);
 
   const draw = useCallback((p5) => {
-    // Only draw if we have a valid canvas
-    if (!globalCanvasRef.current) return;
-
     p5.background(color_theme.bg);
 
     if (single_tile === true) {
@@ -502,33 +530,11 @@ export function useP5Tesselation({
     } else {
       fillWithTiles(p5, tile_shape, r, tile_pattern, color_theme, tile_options);
     }
-    p5.noLoop();
     p5.noStroke();
+    p5.noLoop(); // Stop after drawing once
   }, [r, tile_shape, tile_pattern, color_theme, single_tile, tile_options]);
 
-  // Proper cleanup function
-  const remove = useCallback(() => {
-    if (globalP5Ref.current) {
-      globalP5Ref.current.remove();
-      globalP5Ref.current = null;
-    }
-    if (globalCanvasRef.current) {
-      if (globalParentRef.current && globalCanvasRef.current.parentNode === globalParentRef.current) {
-        globalParentRef.current.removeChild(globalCanvasRef.current);
-      }
-      globalCanvasRef.current = null;
-      globalParentRef.current = null;
-    }
-    p5InstanceRef.current = null;
-    canvasRef.current = null;
-  }, []);
-
-  // Simple cleanup on unmount
-  useEffect(() => {
-    return remove;
-  }, [remove]);
-
-  return { setup, draw, remove };
+  return { setup, draw };
 }
 
 /*
