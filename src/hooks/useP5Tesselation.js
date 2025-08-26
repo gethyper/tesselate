@@ -1,4 +1,4 @@
-import { useCallback, useRef, useEffect } from 'react';
+import { useCallback, useRef } from 'react';
 import TileDesigns from '../components/TileDesigns';
 import ColorThemes  from '../components/ColorThemes';
 // Import tile pattern functions or define your pattern mapping
@@ -262,7 +262,7 @@ export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius,
 
   let x_start = pos_x;
   let y_start = pos_y;
-  let r = radius;
+  // let r = radius;
   let x_loc, y_loc, y_adjust, x_adjust; //y_adjust is the offset for the y position of the tile
 
 
@@ -275,7 +275,7 @@ export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius,
         y_adjust = 0;
         x_adjust = 0;
       } else {  
-        y_adjust = tile_y_offset;
+        // y_adjust = tile_y_offset;
         x_adjust = tile_x_offset;
       } 
 
@@ -307,7 +307,7 @@ export const drawMultiHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pat
   for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
     x_loc = x_start + (x_offset * i) + tile_x_adjust;
   
-    if (i % 2 != 0) {  
+    if (i % 2 !== 0) {  
       y_adjust = y_offset/2;
     } else {  
       y_adjust = 0;

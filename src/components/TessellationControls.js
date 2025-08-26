@@ -9,8 +9,7 @@ import {
   MenuItem,
   TextField,
   Typography,
-  Collapse,
-  Fade
+  Collapse
 } from '@mui/material';
 import { Menu, Close } from '@mui/icons-material';
 import TileDesigns from './TileDesigns';
@@ -26,15 +25,14 @@ const TessellationControls = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [previewSize, setPreviewSize] = useState(tileSize);
-  const [isDragging, setIsDragging] = useState(false);
   const [sizeTimeout, setSizeTimeout] = useState(null);
 
   // Sync preview size when tileSize changes externally, but not while typing
   useEffect(() => {
-    if (!isDragging && !sizeTimeout) {
+    if (!sizeTimeout) {
       setPreviewSize(tileSize);
     }
-  }, [tileSize, isDragging, sizeTimeout]);
+  }, [tileSize, sizeTimeout]);
 
   // Filter out empty or incomplete themes
   const validThemes = Object.entries(ColorThemes).filter(([key, theme]) => 
