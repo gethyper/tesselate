@@ -19,7 +19,7 @@ function AppContent() {
   const [selectedTheme, setSelectedTheme] = useState(() => {
     return searchParams.get('theme') || 
            localStorage.getItem('tessellation-theme') || 
-           'basic_b';
+           'basicBee';
   });
 
   const [tileSize, setTileSize] = useState(() => {
@@ -78,7 +78,7 @@ function AppContent() {
 
   // Fallback to defaults if selected items are invalid
   const safeDesign = currentDesign || TileDesigns['shadowBoxes'];
-  const safeTheme = currentTheme || ColorThemes['basic_b'];
+  const safeTheme = currentTheme || ColorThemes['basicBee'];
 
   return (
     <>
