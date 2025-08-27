@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# Tessellations
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Create and explore hexagonal tessellations with customizable patterns, colors, and sizes.
 
-## Available Scripts
+🎨 **[Try it live →](https://gethyper.github.io/tesselate/)**
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Interactive Canvas**: Full-screen tessellation patterns that respond to your settings
+- **Pattern Library**: Multiple geometric designs including hexagons, triangles, and complex arrangements
+- **Color Themes**: Curated color palettes with live preview
+- **Real-time Controls**: Adjust tile size, pattern, and colors instantly
+- **URL Sharing**: Share specific patterns and themes via URL parameters
+- **Responsive Design**: Works on desktop and mobile devices
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Controls
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Pattern**: Choose from various tessellation designs
+- **Theme**: Select color schemes with preview swatches
+- **Size**: Adjust tile dimensions (5-100px)
+- **Secret Mode**: Add `?secret=true` to hide controls for clean screenshots
+- **Gradient Mode**: Add `?gradient=true` for gradient fills
 
-### `npm test`
+## Development
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Quick Start
 
-### `npm run build`
+```bash
+npm install
+npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Open [http://localhost:3000](http://localhost:3000) to view in development mode.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Build & Deploy
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm run build
+npm run deploy  # Deploy to GitHub Pages
+```
 
-### `npm run eject`
+### Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- `src/components/Tesselate.js` - Main canvas component using p5.js
+- `src/components/TessellationControls.js` - Interactive settings panel
+- `src/components/TileDesigns.js` - Pattern definitions
+- `src/components/ColorThemes.js` - Color palette definitions
+- `src/hooks/useP5Tesselation.js` - Core tessellation logic
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Technology
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **React** with hooks for state management
+- **p5.js** for canvas rendering and geometric calculations
+- **Material-UI** for polished interface components
+- **GitHub Pages** for deployment
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Contributing
 
-## Learn More
+1. Fork the repository
+2. Create a feature branch
+3. Add new patterns in `TileDesigns.js` or themes in `ColorThemes.js`
+4. Test your changes locally
+5. Submit a pull request
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Built with React • Powered by p5.js • Deployed on GitHub Pages
