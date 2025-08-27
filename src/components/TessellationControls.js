@@ -241,7 +241,7 @@ const TessellationControls = ({
             letterSpacing: 1,
             flex: 1
           }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" style={{paddingRight: '10px', paddingTop: "-12px"}}><polygon points="12,1 22,7 22,17 12,23 2,17 2,7" stroke="black" strokeWidth="1px" fill="none" /></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" style={{paddingRight: '10px', verticalAlign: 'middle'}}><polygon points="12,1 22,7 22,17 12,23 2,17 2,7" stroke="black" strokeWidth="1px" fill="none" /></svg>
             TESSELLATIONS
           </Typography>
           <Menu sx={{ color: 'rgba(0, 0, 0, 0.54)' }} />
@@ -396,7 +396,8 @@ const TessellationControls = ({
                 fontFamily: 'Inter, sans-serif'
               },
               '& .MuiInputBase-input': {
-                fontFamily: 'Inter, sans-serif'
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.875rem'
               }
             }}
           />

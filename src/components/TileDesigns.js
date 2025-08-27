@@ -1,42 +1,21 @@
 const TileDesigns= {
 
-
-  'persianKnots': {
-    'tileShape': "flatTopHexagon",
-    'tilePattern': []
-  },
-
   'persianTriangles': {
     'tileShape': "flatTopHexagon",
     'tilePattern': []
   },
 
-  'palermoMeander': {
-    'tileShape': "flatTopHexagon",
+  'persianKnots': {
+    'tileShape': "pointyTopHexatile",
     'tilePattern': [
       [
-        [{c:"accent", s:"bg"}],
-        [{c:"accent", s: "bg"}],
-        [{c:"medium", s: "bg"}],
-        [{c:"dark", s: "bg"}],
-        [{c:"medium", s: "bg"}],
-        [{c:"dark", s: "bg"}]
+         [{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"}],
+        [{c:"light"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"medium", sb:"dark", sc:"dark"}]
+
       ],
       [
-        [{c:"dark", s: "bg"}],
-        [{c:"dark", s: "bg"}],
-        [{c:"accent", s: "bg"}],
-        [{c:"medium", s: "bg"}],
-        [{c:"accent", s: "bg"}],
-        [{c:"medium", s: "bg"}]
-      ],
-      [
-        [{c: "medium", s: "bg"}],
-        [{c: "medium", s: "bg"}],
-        [{c: "dark", s: "bg"}],
-        [{c: "light", s: "bg"}],
-        [{c: "dark", s: "bg"}],
-        [{c: "light", s: "bg"}]
+         [{c:"accent", sa:"dark"}, {c:"accent", sa:"dark"},{c:"accent", sa:"dark"},{c:"light", sb:"dark", sc:"dark"},{c:"accent"},{c:"accent", sa:"dark"}],
+         [{c:"medium", sa:"dark"},{c:"accent", sb:"dark", sc:"dark"},{c:"medium"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}]
       ]
     ]
   },
@@ -468,7 +447,59 @@ const TileDesigns= {
     ]
   },
 
-  'chamferedHex': {
+
+
+
+  'egyptianHexatile': {
+    'tileShape': "flatTopHexagon",
+    'tilePattern': [
+
+    ]
+  },
+
+  'brokeHexatile': {
+    "tileShape": "flatTopHexagon",
+    'tilePattern': [
+    ]
+  } 
+};
+
+export default TileDesigns; 
+
+
+
+  /*
+  'palermoMeander': {
+    'tileShape': "flatTopHexagon",
+    'tilePattern': [
+      [
+        [{c:"accent", s:"bg"}],
+        [{c:"accent", s: "bg"}],
+        [{c:"medium", s: "bg"}],
+        [{c:"dark", s: "bg"}],
+        [{c:"medium", s: "bg"}],
+        [{c:"dark", s: "bg"}]
+      ],
+      [
+        [{c:"dark", s: "bg"}],
+        [{c:"dark", s: "bg"}],
+        [{c:"accent", s: "bg"}],
+        [{c:"medium", s: "bg"}],
+        [{c:"accent", s: "bg"}],
+        [{c:"medium", s: "bg"}]
+      ],
+      [
+        [{c: "medium", s: "bg"}],
+        [{c: "medium", s: "bg"}],
+        [{c: "dark", s: "bg"}],
+        [{c: "light", s: "bg"}],
+        [{c: "dark", s: "bg"}],
+        [{c: "light", s: "bg"}]
+      ]
+    ]
+  },
+  
+    'chamferedHex': {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
@@ -505,20 +536,6 @@ const TileDesigns= {
       ]
     ]
   },
-
-
-  'egyptianHexatile': {
-    'tileShape': "flatTopHexagon",
-    'tilePattern': [
-
-    ]
-  },
-
-  'brokeHexatile': {
-    "tileShape": "flatTopHexagon",
-    'tilePattern': [
-    ]
-  }
-};
-
-export default TileDesigns; 
+  
+  
+  */
