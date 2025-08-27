@@ -1,8 +1,17 @@
 const TileDesigns= {
 
   'persianTriangles': {
-    'tileShape': "flatTopHexagon",
-    'tilePattern': []
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}],
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}]
+      ],
+      [
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}],
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}]
+      ]
+    ]
   },
 
   'persianKnots': {
