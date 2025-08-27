@@ -263,7 +263,7 @@ export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius,
   let x_start = pos_x;
   let y_start = pos_y;
   // let r = radius;
-  let x_loc, y_loc, y_adjust, x_adjust; //y_adjust is the offset for the y position of the tile
+  let x_loc, y_loc, x_adjust; //x_adjust is the offset for the x position of the tile
 
 
   for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
@@ -272,7 +272,7 @@ export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius,
     for (let j = 0; j < tiles_high; j++) {
 
       if ( j % 2 === 0) {  
-        y_adjust = 0;
+        // y_adjust = 0;
         x_adjust = 0;
       } else {  
         // y_adjust = tile_y_offset;
@@ -291,7 +291,7 @@ export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius,
 export const drawMultiHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
 
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
-  const tile_y_adjust = tile_options.tile_y_adjust || 0;
+  // const tile_y_adjust = tile_options.tile_y_adjust || 0;
 
 
   let tiles_wide = tile_pattern.length;

@@ -1,20 +1,6 @@
 const TileDesigns= {
 
-  'persianTriangles': {
-    'tileShape': "pointyTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}],
-        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}]
-      ],
-      [
-        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}],
-        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}]
-      ]
-    ]
-  },
-
-  'persianKnots': {
+    'persianKnots': {
     'tileShape': "pointyTopHexatile",
     'tilePattern': [
       [
@@ -25,6 +11,20 @@ const TileDesigns= {
       [
          [{c:"accent", sa:"dark"}, {c:"accent", sa:"dark"},{c:"accent", sa:"dark"},{c:"light", sb:"dark", sc:"dark"},{c:"accent"},{c:"accent", sa:"dark"}],
          [{c:"medium", sa:"dark"},{c:"accent", sb:"dark", sc:"dark"},{c:"medium"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}]
+      ]
+    ]
+  },
+
+  'persianTriangles': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}],
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}]
+      ],
+      [
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}],
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}]
       ]
     ]
   },
