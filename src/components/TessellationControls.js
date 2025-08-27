@@ -54,7 +54,7 @@ const TessellationControls = ({
     design.tilePattern.length > 0
   );
 
-  const ColorPreview = ({ theme }) => (
+  const ColorPreview = ({ theme, isFirstItem = false }) => (
     <Box sx={{ display: 'flex', gap: 0.5, mr: 1 }}>
       <Box 
         sx={{ 
@@ -70,9 +70,9 @@ const TessellationControls = ({
             '&::after': {
               content: `"Light: ${theme.light}"`,
               position: 'absolute',
-              top: '50%',
-              left: '20px',
-              transform: 'translateY(-50%)',
+              top: isFirstItem ? '25px' : '-30px',
+              left: '12px',
+              transform: 'none',
               bgcolor: 'rgba(0, 0, 0, 0.8)',
               color: 'white',
               px: 1,
@@ -99,9 +99,9 @@ const TessellationControls = ({
             '&::after': {
               content: `"Medium: ${theme.medium}"`,
               position: 'absolute',
-              top: '50%',
-              left: '20px',
-              transform: 'translateY(-50%)',
+              top: isFirstItem ? '25px' : '-30px',
+              left: '12px',
+              transform: 'none',
               bgcolor: 'rgba(0, 0, 0, 0.8)',
               color: 'white',
               px: 1,
@@ -128,9 +128,9 @@ const TessellationControls = ({
             '&::after': {
               content: `"Dark: ${theme.dark}"`,
               position: 'absolute',
-              top: '50%',
-              left: '20px',
-              transform: 'translateY(-50%)',
+              top: isFirstItem ? '25px' : '-30px',
+              left: '12px',
+              transform: 'none',
               bgcolor: 'rgba(0, 0, 0, 0.8)',
               color: 'white',
               px: 1,
@@ -157,9 +157,9 @@ const TessellationControls = ({
             '&::after': {
               content: `"Accent: ${theme.accent}"`,
               position: 'absolute',
-              top: '50%',
-              left: '20px',
-              transform: 'translateY(-50%)',
+              top: isFirstItem ? '25px' : '-30px',
+              left: '12px',
+              transform: 'none',
               bgcolor: 'rgba(0, 0, 0, 0.8)',
               color: 'white',
               px: 1,
@@ -187,9 +187,9 @@ const TessellationControls = ({
             '&::after': {
               content: theme.bg ? `"Background: ${theme.bg}"` : '"Background: N/A"',
               position: 'absolute',
-              top: '50%',
-              left: '20px',
-              transform: 'translateY(-50%)',
+              top: isFirstItem ? '25px' : '-30px',
+              left: '12px',
+              transform: 'none',
               bgcolor: 'rgba(0, 0, 0, 0.8)',
               color: 'white',
               px: 1,
@@ -341,10 +341,10 @@ const TessellationControls = ({
                 }
               }}
             >
-              {validThemes.map(([key, theme]) => (
+              {validThemes.map(([key, theme], index) => (
                 <MenuItem key={key} value={key}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <ColorPreview theme={theme} />
+                    <ColorPreview theme={theme} isFirstItem={index === 0} />
                     <Typography variant="caption" sx={{ textTransform: 'capitalize', fontFamily: 'Inter, sans-serif' }}>
                       {key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                     </Typography>
