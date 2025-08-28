@@ -34,6 +34,9 @@ function AppContent() {
   // Check for gradient parameter
   const useGradient = searchParams.get('gradient') === 'true';
 
+  // Check for texture parameter
+  const textureKey = searchParams.get('texture') || null;
+
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
     setSelectedPattern(pattern);
@@ -89,6 +92,7 @@ function AppContent() {
         r={tileSize}
         single_tile={false}
         useGradient={useGradient}
+        textureKey={textureKey}
         width="100vw"
         height="100vh"
         position="fixed"

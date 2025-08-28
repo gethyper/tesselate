@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import TileDesigns from '../components/TileDesigns';
 import ColorThemes  from '../components/ColorThemes';
+import { textures } from '../components/textures';
 // Import tile pattern functions or define your pattern mapping
 
 export const oldDrawHexagon = (p5, centerX, centerY, radius, numSides) => { 
@@ -152,7 +153,7 @@ export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_o
     const x3 = cX;
     const y3 = cY;
 
-    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, useGradient);
+    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, useGradient, tile_options.textureImg);
   }
 };
 
@@ -186,38 +187,135 @@ export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_them
     const x3 = cX;
     const y3 = cY;
 
-    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, useGradient);
+    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, useGradient, tile_options.textureImg);
   }
 };
-  
 
-export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = {}, useGradient = false) => {
+// Draw textured triangle using manual canvas drawing (works in 2D mode)
+export const drawTexturedTriangle = (p5, x1, y1, x2, y2, x3, y3, color, textureImg) => {
+  if (!textureImg) {
+    return;
+  }
+  
+  try {
+    
+    // Calculate triangle bounds
+    const minX = Math.min(x1, x2, x3);
+    const maxX = Math.max(x1, x2, x3);
+    const minY = Math.min(y1, y2, y3);
+    const maxY = Math.max(y1, y2, y3);
+    
+    // Get the canvas context
+    const ctx = p5.drawingContext;
+    ctx.save();
+    
+    // Create clipping path for the triangle
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.lineTo(x3, y3);
+    ctx.closePath();
+    ctx.clip();
+    
+    // First draw the base color
+    ctx.fillStyle = color;
+    ctx.fill();
+    
+    // Then draw the texture on top with 10% opacity
+    ctx.globalAlpha = 0.10;
+    ctx.drawImage(textureImg, minX, minY, maxX - minX, maxY - minY);
+    
+    // Restore context
+    ctx.restore();
+    
+  } catch (error) {
+    console.error('Error drawing textured triangle:', error);
+    // Fallback to solid color using p5.js
+    p5.fill(color);
+    p5.noStroke();
+    p5.beginShape();
+    p5.vertex(x1, y1);
+    p5.vertex(x2, y2);
+    p5.vertex(x3, y3);
+    p5.endShape(p5.CLOSE);
+  }
+};
+
+// Helper function to parse color strings
+// eslint-disable-next-line no-unused-vars
+const parseColor = (colorStr) => {
+  if (!colorStr) return null;
+  
+  // Handle named colors
+  if (colorStr === 'grey' || colorStr === 'gray') {
+    return { r: 128, g: 128, b: 128 };
+  } else if (colorStr === 'white') {
+    return { r: 255, g: 255, b: 255 };
+  } else if (colorStr === 'black') {
+    return { r: 0, g: 0, b: 0 };
+  }
+  
+  // Handle hex colors
+  if (colorStr.startsWith('#')) {
+    let hex = colorStr.replace('#', '');
+    if (hex.length === 3) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    const num = parseInt(hex, 16);
+    if (!isNaN(num)) {
+      return {
+        r: (num >> 16) & 255,
+        g: (num >> 8) & 255,
+        b: num & 255
+      };
+    }
+  }
+  
+  // Handle rgb() format
+  const rgbMatch = colorStr.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (rgbMatch) {
+    return {
+      r: parseInt(rgbMatch[1]),
+      g: parseInt(rgbMatch[2]),
+      b: parseInt(rgbMatch[3])
+    };
+  }
+  
+  return null;
+};
+
+export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = {}, useGradient = false, textureImg = null) => {
   const stroke_color = stroke_options.stroke_color || null;
   const stroke_weight = stroke_options.stroke_weight || 1;
   const stroke_a = stroke_options.stroke_a || null;
   const stroke_b = stroke_options.stroke_b || null;
   const stroke_c = stroke_options.stroke_c || null;
 
-  // Create and apply gradient fill
-  const fill = createGradientFill(p5, x1, y1, x2, y2, x3, y3, color, useGradient);
-  if (typeof fill === 'string') {
-    p5.fill(fill);
+  if (textureImg) {
+    // Draw texture with color tinting
+    drawTexturedTriangle(p5, x1, y1, x2, y2, x3, y3, color, textureImg);
   } else {
-    p5.drawingContext.fillStyle = fill;
+    // Create and apply gradient fill or solid color
+    const fill = createGradientFill(p5, x1, y1, x2, y2, x3, y3, color, useGradient);
+    if (typeof fill === 'string') {
+      p5.fill(fill);
+    } else {
+      p5.drawingContext.fillStyle = fill;
+    }
+    
+    if (stroke_color) {
+      p5.stroke(stroke_color);
+      p5.strokeWeight(stroke_weight);
+    } else {
+      p5.noStroke();
+    }
+    
+    p5.beginShape();
+    p5.vertex(x1, y1);
+    p5.vertex(x2, y2);
+    p5.vertex(x3, y3);
+    p5.endShape(p5.CLOSE);
   }
-  
-  if (stroke_color) {
-    p5.stroke(stroke_color);
-    p5.strokeWeight(stroke_weight);
-  } else {
-    p5.noStroke();
-  }
-  
-  p5.beginShape();
-  p5.vertex(x1, y1);
-  p5.vertex(x2, y2);
-  p5.vertex(x3, y3);
-  p5.endShape(p5.CLOSE);
 
   // Draw individual edge strokes if specified
   if (stroke_a || stroke_b || stroke_c) {
@@ -513,27 +611,65 @@ export function useP5Tesselation({
   r = 100,
   single_tile = false,
   useGradient = false,
+  textureKey = null,
   tile_options = {},
 }) {
+  // Ensure we always have valid defaults
+  const safeTileShape = tile_shape || TileDesigns['tripleHex'].tileShape;
+  const safeTilePattern = tile_pattern || TileDesigns['tripleHex'].tilePattern;
+  const safeColorTheme = color_theme || ColorThemes['basic_b'];
   const p5InstanceRef = useRef(null);
+  const textureImageRef = useRef(null);
 
   const setup = useCallback((p5, canvasParentRef) => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     p5.noStroke();
     p5InstanceRef.current = p5;
-  }, []);
+    
+    // Load texture if specified
+    if (textureKey && textures[textureKey]) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        textureImageRef.current = img;
+        p5.redraw();
+      };
+      img.onerror = (error) => {
+        console.error('Failed to load texture:', textureKey, error);
+      };
+      img.src = textures[textureKey];
+    }
+  }, [textureKey]);
 
   const draw = useCallback((p5) => {
-    p5.background(color_theme.bg);
+    try {
+      p5.background(safeColorTheme.bg);
 
-    if (single_tile === true) {
-      drawCenteredHexatile(p5, tile_shape, r, tile_pattern, color_theme, tile_options, useGradient);
-    } else {
-      fillWithTiles(p5, tile_shape, r, tile_pattern, color_theme, tile_options, useGradient);
+      // Update tile_options with current texture
+      const updatedTileOptions = {
+        ...tile_options,
+        textureImg: textureImageRef.current
+      };
+
+      // Safety check for tile_pattern
+      if (!safeTilePattern || !Array.isArray(safeTilePattern) || safeTilePattern.length === 0) {
+        return;
+      }
+
+      if (single_tile === true) {
+        drawCenteredHexatile(p5, safeTileShape, r, safeTilePattern, safeColorTheme, updatedTileOptions, useGradient);
+      } else {
+        fillWithTiles(p5, safeTileShape, r, safeTilePattern, safeColorTheme, updatedTileOptions, useGradient);
+      }
+      
+      p5.noStroke();
+      p5.noLoop(); // Stop after drawing once
+      
+    } catch (error) {
+      console.error('Error in draw function:', error);
     }
-    p5.noStroke();
-    p5.noLoop(); // Stop after drawing once
-  }, [r, tile_shape, tile_pattern, color_theme, single_tile, tile_options, useGradient]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [r, safeTileShape, safeTilePattern, safeColorTheme, single_tile, tile_options, useGradient, textureKey]);
 
   return { setup, draw };
 }

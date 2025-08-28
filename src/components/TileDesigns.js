@@ -4,13 +4,13 @@ const TileDesigns= {
     'tileShape': "pointyTopHexatile",
     'tilePattern': [
       [
-         [{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"}],
-        [{c:"light"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"medium", sb:"dark", sc:"dark"}]
+        [{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"},{c:"dark", sa:"dark"}],
+        [{c:"light", sc:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark", sb:"dark"},{c:"medium", sb:"dark", sc:"dark"}]
 
       ],
       [
-         [{c:"accent", sa:"dark"}, {c:"accent", sa:"dark"},{c:"accent", sa:"dark"},{c:"light", sb:"dark", sc:"dark"},{c:"accent"},{c:"accent", sa:"dark"}],
-         [{c:"medium", sa:"dark"},{c:"accent", sb:"dark", sc:"dark"},{c:"medium"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}]
+         [{c:"accent", sa:"dark"}, {c:"accent", sa:"dark"},{c:"accent", sa:"dark"},{c:"light", sb:"dark", sc:"dark"},{c:"accent", sc:"dark"},{c:"accent", sa:"dark"}],
+         [{c:"medium", sa:"dark"},{c:"accent", sb:"dark", sc:"dark"},{c:"medium", sb:":dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}]
       ]
     ]
   },

@@ -10,6 +10,7 @@ const Tesselate = ({
   r,
   single_tile = false,
   useGradient = false,
+  textureKey = null,
   tile_x_adjust = 0,
   tile_y_adjust = 0,
   mosaic_x_adjust = 0,
@@ -31,6 +32,7 @@ const Tesselate = ({
     r,
     single_tile,
     useGradient,
+    textureKey,
     tile_options: {
       tile_x_adjust,
       tile_y_adjust,
@@ -87,7 +89,7 @@ const Tesselate = ({
       >
         {mounted && (
           <Sketch 
-            key={`${tile_shape}-${JSON.stringify(tile_pattern)}-${JSON.stringify(color_theme)}-${r}`}
+            key={`${tile_shape}-${JSON.stringify(tile_pattern)}-${JSON.stringify(color_theme)}-${r}-${textureKey}`}
             setup={setup} 
             draw={draw}
             windowResized={(p5) => {
