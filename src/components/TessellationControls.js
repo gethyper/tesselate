@@ -310,6 +310,12 @@ const TessellationControls = ({
                   }
                 }
               }}
+              sx={{
+                '& .MuiSelect-select': {
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.875rem'
+                }
+              }}
             >
               {validPatterns.map(([key, design]) => (
                 <MenuItem key={key} value={key}>
@@ -340,6 +346,12 @@ const TessellationControls = ({
                   }
                 }
               }}
+              sx={{
+                '& .MuiSelect-select': {
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.875rem'
+                }
+              }}
             >
               {validThemes.map(([key, theme], index) => (
                 <MenuItem key={key} value={key}>
@@ -358,6 +370,7 @@ const TessellationControls = ({
           <TextField
             label="Size"
             type="number"
+            size="small"
             value={previewSize}
             onChange={(e) => {
               const inputValue = e.target.value;
@@ -388,15 +401,19 @@ const TessellationControls = ({
             inputProps={{
               step: 1
             }}
-            size="small"
             fullWidth
             sx={{
               mb: 2,
               '& .MuiInputLabel-root': {
-                fontFamily: 'Inter, sans-serif'
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.875rem'
               },
               '& .MuiInputBase-input': {
                 fontFamily: 'Inter, sans-serif',
+                fontSize: '0.875rem',
+                padding: '8.5px 14px'
+              },
+              '& .MuiInputBase-root': {
                 fontSize: '0.875rem'
               }
             }}

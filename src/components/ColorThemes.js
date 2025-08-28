@@ -11,7 +11,9 @@ const ColorThemes = {
     "Moar S'mores!": {light:"#FFF8F0", medium:"#D2B48C", dark:"#3C1810", accent:"#F4A460", bg:"#2F1B14"},
     "End-century Modern": {light:"#F5F3F0", medium:"#E07A5F", dark:"#3D5A80", accent:"#F2CC8F", bg:"#81B29A"},
     "Purp-uh-trator": {light:"#E6D7FF", medium:"#663399", dark:"#4B0082", accent:"#DA70D6", bg:"#2E1A47"},
-    "Scarlet A+": {light:"#FFF5F5", medium:"#DC143C", dark:"#8B0000", accent:"#FFD700", bg:"#1A0000"}
+    "Scarlet A+": {light:"#FFF5F5", medium:"#DC143C", dark:"#8B0000", accent:"#FFD700", bg:"#1A0000"},
+    "Transparent Aluminum": {light:"#F8F8FF", medium:"#E6E6FA", dark:"#B8B8D1", accent:"#D3D3D3", bg:"#C0C0C0"},
+    "Chrome Dreams": {light:"#E0FFFF", medium:"#00FFFF", dark:"#008B8B", accent:"#40E0D0", bg:"#2F4F4F"}
   };
 
 export default ColorThemes; 
