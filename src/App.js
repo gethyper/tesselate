@@ -41,6 +41,10 @@ function AppContent() {
   const mosaicXOffset = Number(searchParams.get('mosaic_x_offset')) || 0;
   const mosaicYOffset = Number(searchParams.get('mosaic_y_offset')) || 0;
 
+  // Check for tile offset parameters
+  const tileXOffset = Number(searchParams.get('tile_x_offset')) || 0;
+  const tileYOffset = Number(searchParams.get('tile_y_offset')) || 0;
+
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
     setSelectedPattern(pattern);
@@ -99,6 +103,8 @@ function AppContent() {
         textureKey={textureKey}
         mosaic_x_adjust={mosaicXOffset}
         mosaic_y_adjust={mosaicYOffset}
+        tile_x_adjust={tileXOffset}
+        tile_y_adjust={tileYOffset}
         width="100vw"
         height="100vh"
         position="fixed"

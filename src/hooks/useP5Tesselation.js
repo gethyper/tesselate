@@ -4,6 +4,15 @@ import ColorThemes  from '../components/ColorThemes';
 import { textures } from '../components/textures';
 // Import tile pattern functions or define your pattern mapping
 
+/**
+ * Legacy function to draw a polygon with specified number of sides
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} centerX - X coordinate of the center
+ * @param {number} centerY - Y coordinate of the center
+ * @param {number} radius - Radius of the polygon
+ * @param {number} numSides - Number of sides for the polygon
+ */
 export const oldDrawHexagon = (p5, centerX, centerY, radius, numSides) => { 
 
     // p5 already has some functionality for drawing more complex shapes
@@ -28,6 +37,15 @@ export const oldDrawHexagon = (p5, centerX, centerY, radius, numSides) => {
     p5.endShape(p5.CLOSE)
 };
 
+/**
+ * Calculates and returns the vertices of a flat-top hexagon
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} cX - X coordinate of the hexagon center
+ * @param {number} cY - Y coordinate of the hexagon center
+ * @param {number} r - Radius of the hexagon
+ * @returns {Array<Array<number>>} Array of [x, y] coordinate pairs representing the vertices
+ */
 export const getHexagonVertices = (p5, cX, cY, r) => {
   const vertices = [];
   for (let a = 0; a < p5.TAU; a += p5.TAU / 6) {
@@ -36,7 +54,13 @@ export const getHexagonVertices = (p5, cX, cY, r) => {
   return vertices;
 }
 
-// Helper function to lighten/darken a color
+/**
+ * Adjusts the brightness of a color by a given percentage
+ * 
+ * @param {string} colorStr - Color string (hex, named color, or rgb)
+ * @param {number} percent - Percentage to adjust brightness (-100 to 100)
+ * @returns {string} Adjusted color in rgb format
+ */
 const adjustColor = (colorStr, percent) => {
   // Handle named colors
   if (colorStr === 'grey' || colorStr === 'gray') {
@@ -69,7 +93,20 @@ const adjustColor = (colorStr, percent) => {
   return `rgb(${R}, ${G}, ${B})`;
 };
 
-// Create gradient fill for a shape
+/**
+ * Creates a linear gradient fill for a triangular shape at a 45-degree angle
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} x1 - X coordinate of first vertex
+ * @param {number} y1 - Y coordinate of first vertex
+ * @param {number} x2 - X coordinate of second vertex
+ * @param {number} y2 - Y coordinate of second vertex
+ * @param {number} x3 - X coordinate of third vertex
+ * @param {number} y3 - Y coordinate of third vertex
+ * @param {string} baseColor - Base color for the gradient
+ * @param {boolean} useGradient - Whether to apply gradient effect
+ * @returns {string|CanvasGradient} Color string or canvas gradient object
+ */
 export const createGradientFill = (p5, x1, y1, x2, y2, x3, y3, baseColor, useGradient = true) => {
   if (!useGradient) {
     return baseColor;
@@ -107,6 +144,14 @@ export const createGradientFill = (p5, x1, y1, x2, y2, x3, y3, baseColor, useGra
   return gradient;
 };
 
+/**
+ * Draws a flat-top hexagon outline
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} cX - X coordinate of the hexagon center
+ * @param {number} cY - Y coordinate of the hexagon center
+ * @param {number} r - Radius of the hexagon
+ */
 export const drawFlatTopHexagon = (p5, cX, cY, r) => {
     p5.beginShape()
     for(let a = 0; a < p5.TAU; a+=p5.TAU/6){
@@ -115,7 +160,15 @@ export const drawFlatTopHexagon = (p5, cX, cY, r) => {
     p5.endShape(p5.CLOSE)
   }
 
-  export const drawPointyTopHexagon = (p5, cX, cY, r) => {
+/**
+ * Draws a pointy-top hexagon outline (rotated 30 degrees from flat-top)
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} cX - X coordinate of the hexagon center
+ * @param {number} cY - Y coordinate of the hexagon center
+ * @param {number} r - Radius of the hexagon
+ */
+export const drawPointyTopHexagon = (p5, cX, cY, r) => {
     p5.beginShape()
     for(let a = p5.TAU/12; a < p5.TAU + p5.TAU/12; a+=p5.TAU/6){
       p5.vertex(cX + r * p5.cos(a), cY + r * p5.sin(a))
@@ -123,6 +176,18 @@ export const drawFlatTopHexagon = (p5, cX, cY, r) => {
     p5.endShape(p5.CLOSE)
   }
 
+/**
+ * Draws a single flat-top hexagonal tile composed of triangular segments
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} cX - X coordinate of the hexagon center
+ * @param {number} cY - Y coordinate of the hexagon center
+ * @param {number} r - Radius of the hexagon
+ * @param {Array} tile_components - Array of tile component definitions with colors and strokes
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Object} tile_options - Optional tile configuration including texture
+ * @param {boolean} useGradient - Whether to apply gradient effects to triangles
+ */
 export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_options = {}, useGradient = false) => {
   const vertices = [];
   
@@ -157,6 +222,18 @@ export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_o
   }
 };
 
+/**
+ * Draws a single pointy-top hexagonal tile composed of triangular segments
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} cX - X coordinate of the hexagon center
+ * @param {number} cY - Y coordinate of the hexagon center
+ * @param {number} r - Radius of the hexagon
+ * @param {Array} tile_components - Array of tile component definitions with colors and strokes
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Object} tile_options - Optional tile configuration including texture
+ * @param {boolean} useGradient - Whether to apply gradient effects to triangles
+ */
 export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_options = {}, useGradient = false) => {
   const vertices = [];
   
@@ -191,7 +268,19 @@ export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_them
   }
 };
 
-// Draw textured triangle using manual canvas drawing (works in 2D mode)
+/**
+ * Draws a textured triangle using canvas clipping and image overlay
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} x1 - X coordinate of first vertex
+ * @param {number} y1 - Y coordinate of first vertex
+ * @param {number} x2 - X coordinate of second vertex
+ * @param {number} y2 - Y coordinate of second vertex
+ * @param {number} x3 - X coordinate of third vertex
+ * @param {number} y3 - Y coordinate of third vertex
+ * @param {string} color - Base color for the triangle
+ * @param {HTMLImageElement} textureImg - Texture image to overlay
+ */
 export const drawTexturedTriangle = (p5, x1, y1, x2, y2, x3, y3, color, textureImg) => {
   if (!textureImg) {
     return;
@@ -241,7 +330,12 @@ export const drawTexturedTriangle = (p5, x1, y1, x2, y2, x3, y3, color, textureI
   }
 };
 
-// Helper function to parse color strings
+/**
+ * Parses color strings and returns RGB components
+ * 
+ * @param {string} colorStr - Color string (hex, named color, or rgb format)
+ * @returns {Object|null} Object with r, g, b properties or null if parsing fails
+ */
 // eslint-disable-next-line no-unused-vars
 const parseColor = (colorStr) => {
   if (!colorStr) return null;
@@ -284,6 +378,21 @@ const parseColor = (colorStr) => {
   return null;
 };
 
+/**
+ * Draws a triangle with optional gradient, texture, and stroke customization
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} x1 - X coordinate of first vertex
+ * @param {number} y1 - Y coordinate of first vertex
+ * @param {number} x2 - X coordinate of second vertex
+ * @param {number} y2 - Y coordinate of second vertex
+ * @param {number} x3 - X coordinate of third vertex
+ * @param {number} y3 - Y coordinate of third vertex
+ * @param {string} color - Fill color for the triangle
+ * @param {Object} stroke_options - Stroke configuration object
+ * @param {boolean} useGradient - Whether to apply gradient fill
+ * @param {HTMLImageElement|null} textureImg - Optional texture image
+ */
 export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = {}, useGradient = false, textureImg = null) => {
   const stroke_color = stroke_options.stroke_color || null;
   const stroke_weight = stroke_options.stroke_weight || 1;
@@ -342,82 +451,223 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
 
 
 
-export const drawMultiPointyTopHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
-
+/**
+ * Unified function to draw multiple hexagonal tiles (both flat-top and pointy-top)
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} pos_x - Starting X position for the tile pattern
+ * @param {number} pos_y - Starting Y position for the tile pattern
+ * @param {number} radius - Radius of each hexagonal tile
+ * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Object} tile_options - Optional tile configuration
+ * @param {boolean} useGradient - Whether to apply gradient effects
+ */
+export const drawMultiUnified = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
+  const isPointyTop = tile_shape === 'pointyTopHexatile';
+  
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
   const tile_y_adjust = tile_options.tile_y_adjust || 0;
-
 
   let tiles_wide = tile_pattern.length;
   let tiles_high = tile_pattern[0].length;
 
-      // Calculate tile dimensions and offsets
+  // Calculate tile dimensions and offsets
   const tile_width = getTileWidth(tile_shape, radius, tile_x_adjust);
   const tile_height = getTileHeight(tile_shape, radius, tile_y_adjust);
-  const tile_x_offset = getTileXOffset(tile_shape, radius);
-  const tile_y_offset = getTileYOffset(tile_shape, radius);
-
+  const tile_x_offset = getTileXOffset(tile_shape, radius, tile_x_adjust);
+  const tile_y_offset = getTileYOffset(tile_shape, radius, tile_y_adjust);
 
   let x_start = pos_x;
   let y_start = pos_y;
-  // let r = radius;
-  let x_loc, y_loc, x_adjust; //x_adjust is the offset for the x position of the tile
+  
+  if (isPointyTop) {
+    // Pointy-top tile positioning logic
+    for (let i = 0; i < tiles_wide; i++) {
+      const x_loc = x_start + (tile_width * i) - tile_x_offset;
 
+      for (let j = 0; j < tiles_high; j++) {
+        let x_adjust;
+        if (j % 2 === 0) {  
+          x_adjust = 0;
+        } else { 
+          x_adjust = tile_x_offset;
+        } 
 
-  for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
-    x_loc = x_start + ((tile_width * i) - tile_x_offset) + tile_x_adjust;
-
-    for (let j = 0; j < tiles_high; j++) {
-
-      if ( j % 2 === 0) {  
-        // y_adjust = 0;
-        x_adjust = 0;
+        const y_loc = y_start + ((tile_height - tile_y_offset) * j);
+        drawPointyTopHexatile(p5, x_loc + x_adjust, y_loc, radius, tile_pattern[i][j], color_theme, tile_options, useGradient);
+      }
+    }
+  } else {
+    // Flat-top tile positioning logic  
+    const x_offset = getTileXOffset(tile_shape, radius, tile_x_adjust);
+    const y_offset = getTileYOffset(tile_shape, radius, tile_y_adjust);
+    
+    for (let i = 0; i < tiles_wide; i++) {
+      const x_loc = x_start + (x_offset * i);
+    
+      let y_adjust;
+      if (i % 2 !== 0) {  
+        y_adjust = y_offset / 2;
       } else {  
-        // y_adjust = tile_y_offset;
-        x_adjust = tile_x_offset;
+        y_adjust = 0;
       } 
-
-      // Try adding instead of subtracting y_adjust
-      y_loc = y_start + ((tile_height - tile_y_offset) * j) + tile_y_adjust;
-
-      //y_loc = y_start + y_adjust + (r/2 * j);
-      drawPointyTopHexatile(p5, x_loc+x_adjust, y_loc, radius, tile_pattern[i][j], color_theme, tile_options, useGradient);
+      
+      for (let j = 0; j < tiles_high; j++) {
+        const y_loc = y_start + y_adjust + (y_offset * j);
+        drawHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme, tile_options, useGradient);
+      }
     }
   }
 };
 
-export const drawMultiHexatile = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
+/**
+ * Draws multiple pointy-top hexagonal tiles in a tessellated pattern
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {string} tile_shape - The shape type (used for consistency with other functions)
+ * @param {number} pos_x - Starting X position for the tile pattern
+ * @param {number} pos_y - Starting Y position for the tile pattern
+ * @param {number} radius - Radius of each hexagonal tile
+ * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Object} tile_options - Optional tile configuration
+ * @param {boolean} useGradient - Whether to apply gradient effects
+ */
+export const drawMultiPointyTopHexatile = (
+  p5, 
+  tile_shape, 
+  pos_x, 
+  pos_y, 
+  radius, 
+  tile_pattern, 
+  color_theme, 
+  tile_options = {}, 
+  useGradient = false
+) => {
+  // Extract adjustments from options with defaults
+  const { tile_x_adjust = 0, tile_y_adjust = 0 } = tile_options;
 
-  const tile_x_adjust = tile_options.tile_x_adjust || 0;
-  // const tile_y_adjust = tile_options.tile_y_adjust || 0;
+  // Grid dimensions
+  const tilesWide = tile_pattern.length;
+  const tilesHigh = tile_pattern[0].length;
 
+  // Calculate tile dimensions and offsets using helper functions
+  const tileWidth = getTileWidth(tile_shape, radius, tile_x_adjust);
+  const tileHeight = getTileHeight(tile_shape, radius, tile_y_adjust);
+  const tileXOffset = getTileXOffset(tile_shape, radius, tile_x_adjust);
+  const tileYOffset = getTileYOffset(tile_shape, radius, tile_y_adjust);
 
-  let tiles_wide = tile_pattern.length;
-  let tiles_high = tile_pattern[0].length;
+  // Starting position
+  const startX = pos_x;
+  const startY = pos_y;
 
-  let x_start = pos_x;
-  let y_start = pos_y;
-  let x_offset = (radius * 3)/2;
-  let y_offset = (radius * 2 * .8666);
-  let x_loc, y_loc, y_adjust;
+  // Draw tiles in a tessellated pattern
+  for (let column = 0; column < tilesWide; column++) {
+    // Base X position for this column
+    const baseX = startX + (tileWidth * column) - tileXOffset;
 
+    for (let row = 0; row < tilesHigh; row++) {
+      // Alternate rows are offset horizontally for proper tessellation
+      const horizontalOffset = (row % 2 === 0) ? 0 : tileXOffset;
+      
+      // Calculate final tile position
+      const tileX = baseX + horizontalOffset;
+      const tileY = startY + ((tileHeight - tileYOffset) * row);
 
-  for (let i = 0; i < tiles_wide; i++) { // tiles high is the number of rows
-    x_loc = x_start + (x_offset * i) + tile_x_adjust;
-  
-    if (i % 2 !== 0) {  
-      y_adjust = y_offset/2;
-    } else {  
-      y_adjust = 0;
-    } 
-    for (let j = 0; j < tiles_high; j++) {
-      y_loc = y_start + y_adjust + (y_offset * j);
-
-      drawHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme, tile_options, useGradient);
+      drawPointyTopHexatile(
+        p5, 
+        tileX, 
+        tileY, 
+        radius, 
+        tile_pattern[column][row], 
+        color_theme, 
+        tile_options, 
+        useGradient
+      );
     }
   }
-  };
+};
 
+/**
+ * Draws multiple flat-top hexagonal tiles in a tessellated pattern
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {string} tile_shape - The shape type (used for consistency with other functions)
+ * @param {number} pos_x - Starting X position for the tile pattern
+ * @param {number} pos_y - Starting Y position for the tile pattern
+ * @param {number} radius - Radius of each hexagonal tile
+ * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Object} tile_options - Optional tile configuration
+ * @param {boolean} useGradient - Whether to apply gradient effects
+ */
+export const drawMultiHexatile = (
+  p5, 
+  tile_shape, 
+  pos_x, 
+  pos_y, 
+  radius, 
+  tile_pattern, 
+  color_theme, 
+  tile_options = {}, 
+  useGradient = false
+) => {
+  // Extract adjustments from options with defaults
+  const { tile_x_adjust = 0, tile_y_adjust = 0 } = tile_options;
+
+  // Grid dimensions
+  const tilesWide = tile_pattern.length;
+  const tilesHigh = tile_pattern[0].length;
+
+  // Starting position
+  const startX = pos_x;
+  const startY = pos_y;
+  
+  // Flat-top hexagon tessellation constants
+  const HORIZONTAL_SPACING_RATIO = 1.5; // 3/2 ratio for flat-top hex spacing
+  const VERTICAL_SPACING_RATIO = Math.sqrt(3) / 2; // √3/2 ≈ 0.866 for flat-top hex height
+  
+  // Calculate spacing between tiles
+  const horizontalSpacing = radius * HORIZONTAL_SPACING_RATIO;
+  const verticalSpacing = radius * 2 * VERTICAL_SPACING_RATIO;
+
+  // Draw tiles in a tessellated pattern
+  for (let column = 0; column < tilesWide; column++) {
+    const tileX = startX + (horizontalSpacing * column);
+    
+    // Alternate columns are offset vertically for proper tessellation
+    const verticalOffset = (column % 2 !== 0) ? verticalSpacing / 2 : 0;
+    
+    for (let row = 0; row < tilesHigh; row++) {
+      const tileY = startY + verticalOffset + (verticalSpacing * row);
+      
+      drawHexatile(
+        p5, 
+        tileX, 
+        tileY, 
+        radius, 
+        tile_pattern[column][row], 
+        color_theme, 
+        tile_options, 
+        useGradient
+      );
+    }
+  }
+};
+
+/**
+ * Draws a hexagonal tile pattern centered at origin (0,0)
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} r - Radius of each hexagonal tile
+ * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Object} tile_options - Optional tile configuration
+ * @param {boolean} useGradient - Whether to apply gradient effects
+ */
 export const drawCenteredHexatile = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
   const x_loc = 0;
   const y_loc = 0;
@@ -431,26 +681,70 @@ export const drawCenteredHexatile = (p5, tile_shape, r, tile_pattern, color_them
   }
 };
 
+/**
+ * Calculates the width of a hexagonal tile based on its orientation
+ * 
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} r - Radius of the hexagon
+ * @param {number} tile_x_adjust - Additional horizontal adjustment
+ * @returns {number} Width of the tile
+ */
 const getTileWidth = (tile_shape, r, tile_x_adjust = 0) => {
   const isPointyTop = tile_shape === 'pointyTopHexatile';
   return isPointyTop ? (r * 2 * 0.8666) + tile_x_adjust : (r * 2) + tile_x_adjust;
 };
 
+/**
+ * Calculates the height of a hexagonal tile based on its orientation
+ * 
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} r - Radius of the hexagon
+ * @param {number} tile_y_adjust - Additional vertical adjustment
+ * @returns {number} Height of the tile
+ */
 const getTileHeight = (tile_shape, r, tile_y_adjust = 0) => {
   const isPointyTop = tile_shape === 'pointyTopHexatile';
   return isPointyTop ? (r * 2) + tile_y_adjust : (r * 2 * 0.8666) + tile_y_adjust;
 };
 
-const getTileXOffset = (tile_shape, r) => {
+/**
+ * Calculates the horizontal offset needed for proper hexagon tessellation
+ * 
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} r - Radius of the hexagon
+ * @param {number} tile_x_adjust - Additional horizontal adjustment
+ * @returns {number} Horizontal offset for tessellation
+ */
+const getTileXOffset = (tile_shape, r, tile_x_adjust = 0) => {
   const isPointyTop = tile_shape === 'pointyTopHexatile';
-  return isPointyTop ? r * 0.8666 : r / 2;
+  const baseOffset = isPointyTop ? r * 0.8666 : r / 2;
+  return baseOffset + tile_x_adjust;
 };
 
-const getTileYOffset = (tile_shape, r) => {
+/**
+ * Calculates the vertical offset needed for proper hexagon tessellation
+ * 
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} r - Radius of the hexagon
+ * @param {number} tile_y_adjust - Additional vertical adjustment
+ * @returns {number} Vertical offset for tessellation
+ */
+const getTileYOffset = (tile_shape, r, tile_y_adjust = 0) => {
   const isPointyTop = tile_shape === 'pointyTopHexatile';
-  return isPointyTop ? r / 2 : r * 0.8666;
+  const baseOffset = isPointyTop ? r / 2 : r * 0.8666;
+  return baseOffset + tile_y_adjust;
 };
 
+/**
+ * Calculates the total width of a mosaic pattern
+ * 
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} tile_width - Width of individual tiles
+ * @param {number} tiles_in_mosaic_wide - Number of tiles horizontally in the mosaic
+ * @param {number} tile_x_offset - Horizontal offset between tiles
+ * @param {number} mosaic_x_adjust - Additional horizontal adjustment for the mosaic
+ * @returns {number} Total width of the mosaic
+ */
 const getMosaicWidth = (tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset, mosaic_x_adjust = 0) => {
   // Handle single tile case
   if (tiles_in_mosaic_wide === 1) {
@@ -469,6 +763,16 @@ const getMosaicWidth = (tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_off
   }
 };
 
+/**
+ * Calculates the total height of a mosaic pattern
+ * 
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} tile_height - Height of individual tiles
+ * @param {number} tiles_in_mosaic_high - Number of tiles vertically in the mosaic
+ * @param {number} tile_y_offset - Vertical offset between tiles
+ * @param {number} mosaic_y_adjust - Additional vertical adjustment for the mosaic
+ * @returns {number} Total height of the mosaic
+ */
 const getMosaicHeight = (tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset, mosaic_y_adjust = 0) => {
   // Handle single tile case
   if (tiles_in_mosaic_high === 1) {
@@ -487,10 +791,26 @@ const getMosaicHeight = (tile_shape, tile_height, tiles_in_mosaic_high, tile_y_o
   }
 };
 
+/**
+ * Calculates how many mosaics fit horizontally across the canvas
+ * 
+ * @param {Object} p5 - The p5.js instance (for accessing canvas width)
+ * @param {number} mosaic_width - Width of a single mosaic
+ * @param {number} tile_x_offset - Horizontal offset between tiles
+ * @returns {number} Number of mosaics that fit horizontally
+ */
 const getMosaicsWide = (p5, mosaic_width, tile_x_offset) => {
   return Math.round(p5.width / (mosaic_width - tile_x_offset)) + 1;
 };
 
+/**
+ * Calculates how many mosaics fit vertically across the canvas
+ * 
+ * @param {Object} p5 - The p5.js instance (for accessing canvas height)
+ * @param {number} mosaic_height - Height of a single mosaic
+ * @param {number} tile_y_offset - Vertical offset between tiles
+ * @returns {number} Number of mosaics that fit vertically
+ */
 const getMosaicsHigh = (p5, mosaic_height, tile_y_offset) => {
   return Math.round(p5.height / (mosaic_height - tile_y_offset)) + 1;
 };
@@ -498,6 +818,17 @@ const getMosaicsHigh = (p5, mosaic_height, tile_y_offset) => {
 
 
 
+/**
+ * Fills the entire canvas with tessellated hexagonal tiles
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} r - Radius of each hexagonal tile
+ * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Object} tile_options - Optional tile configuration
+ * @param {boolean} useGradient - Whether to apply gradient effects
+ */
 const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
   // Determine which drawing function to use
   const isPointyTop = tile_shape === 'pointyTopHexatile';
@@ -505,10 +836,105 @@ const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile_option
   const tileFunction = isPointyTop ? tilePointyTopHexatile : tileFlatTopHexatile;
   
   tileFunction(p5, r, tile_shape, tile_pattern, color_theme, drawFunction, tile_options, useGradient);
-
 };
 
 
+/**
+ * Unified tiling function that works for both flat-top and pointy-top hexagons
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} r - Radius of each hexagonal tile
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Function} draw_function - Function to draw individual tile patterns
+ * @param {Object} tile_options - Optional tile configuration
+ * @param {boolean} useGradient - Whether to apply gradient effects
+ */
+const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}, useGradient = false) => {
+  const isPointyTop = tile_shape === 'pointyTopHexatile';
+  
+  // Extract tile adjustments
+  const tile_x_adjust = tile_options.tile_x_adjust || 0;
+  const tile_y_adjust = tile_options.tile_y_adjust || 0;
+  
+  // Calculate tile dimensions and offsets
+  const tile_width = getTileWidth(tile_shape, r, tile_x_adjust);
+  const tile_height = getTileHeight(tile_shape, r, tile_y_adjust);
+  const tile_x_offset = getTileXOffset(tile_shape, r, tile_x_adjust);
+  const tile_y_offset = getTileYOffset(tile_shape, r, tile_y_adjust);
+  
+  // Get mosaic dimensions
+  const tiles_in_mosaic_wide = tile_pattern.length;
+  const tiles_in_mosaic_high = tile_pattern[0].length;
+  
+  // Calculate mosaic dimensions for screen tiling
+  const mosaic_x_adjust = tile_options.mosaic_x_adjust || 0;
+  const mosaic_y_adjust = tile_options.mosaic_y_adjust || 0;
+  const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset, mosaic_x_adjust);
+  const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset, mosaic_y_adjust);
+  const mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_x_offset);
+  const mosaics_high = getMosaicsHigh(p5, mosaic_height, tile_y_offset);
+
+  // Unified tiling logic
+  for (let i = 0; i < mosaics_wide; i++) {
+    for (let j = 0; j < mosaics_high; j++) {
+      let x_loc, y_loc;
+      
+      if (isPointyTop) {
+        // Pointy-top positioning logic
+        let column_increment, row_increment;
+        
+        if (i > 0) {
+          if (tiles_in_mosaic_wide > 1) {
+            column_increment = (mosaic_width * i) - (tile_x_offset * i);
+          } else {
+            column_increment = (mosaic_width * i);
+          }    
+        } else {
+          column_increment = 0;
+        }
+
+        const mosaic_x_offset = (tiles_in_mosaic_high % 2 !== 0 && j % 2 !== 0) ? tile_x_offset : 0;
+        const mosaic_y_offset = (tiles_in_mosaic_high % 2 !== 0 && j > 0) ? tile_y_offset * j : 0;
+
+        if (j > 0) {
+          if (tiles_in_mosaic_high % 2 === 0) {
+            row_increment = (mosaic_height * j) - (tile_y_offset * j);
+          } else {
+            row_increment = (mosaic_height * j); 
+          }
+        } else {
+          row_increment = 0;
+        }
+
+        x_loc = column_increment + mosaic_x_offset;
+        y_loc = row_increment - mosaic_y_offset;
+        
+      } else {
+        // Flat-top positioning logic
+        const col_offset = (i % 2 !== 0) ? tile_y_offset : 0;
+        x_loc = (mosaic_width * i) - tile_x_offset;
+        y_loc = (mosaic_height * j) - tile_y_offset - col_offset;
+      }
+
+      draw_function(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options, useGradient);
+    }
+  }
+};
+
+/**
+ * Tiles the canvas with pointy-top hexagonal patterns
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} r - Radius of each hexagonal tile
+ * @param {string} tile_shape - Shape type (should be 'pointyTopHexatile')
+ * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Function} draw_function - Function to draw individual tile patterns
+ * @param {Object} tile_options - Optional tile configuration
+ * @param {boolean} useGradient - Whether to apply gradient effects
+ */
 const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}, useGradient = false) => {
   
     // Calculate tile dimensions and offsets
@@ -572,6 +998,18 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
   }
 };
 
+/**
+ * Tiles the canvas with flat-top hexagonal patterns
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {number} r - Radius of each hexagonal tile
+ * @param {string} tile_shape - Shape type (should be flat-top hexagon)
+ * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Function} draw_function - Function to draw individual tile patterns
+ * @param {Object} tile_options - Optional tile configuration
+ * @param {boolean} useGradient - Whether to apply gradient effects
+ */
 const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}, useGradient = false) => {
   
   // Calculate tile dimensions and offsets
@@ -608,6 +1046,20 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
 };
 
 
+/**
+ * React hook for creating p5.js hexagonal tessellation visualizations
+ * 
+ * @param {Object} config - Configuration object for the tessellation
+ * @param {string} config.tile_shape - Shape type for tiles (default: 'tripleHex')
+ * @param {Array<Array>} config.tile_pattern - 2D array defining the tile pattern
+ * @param {Object} config.color_theme - Color theme object containing color definitions
+ * @param {number} config.r - Radius of each hexagonal tile (default: 100)
+ * @param {boolean} config.single_tile - Whether to draw only a single centered tile (default: false)
+ * @param {boolean} config.useGradient - Whether to apply gradient effects (default: false)
+ * @param {string|null} config.textureKey - Key for texture to apply to tiles (default: null)
+ * @param {Object} config.tile_options - Additional tile configuration options (default: {})
+ * @returns {Object} Object containing setup and draw functions for p5.js
+ */
 export function useP5Tesselation({
   tile_shape = TileDesigns['tripleHex'].tileShape,
   tile_pattern = TileDesigns['tripleHex'].tilePattern,
