@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/tesselate/static/css/main.2c2c266f.css",
-    "main.js": "/tesselate/static/js/main.98494a55.js",
+    "main.js": "/tesselate/static/js/main.28a895d3.js",
     "static/js/206.a7f64e5b.chunk.js": "/tesselate/static/js/206.a7f64e5b.chunk.js",
     "static/media/Texturelabs_Glass_157M.jpg": "/tesselate/static/media/Texturelabs_Glass_157M.24293ee7030a246e35e3.jpg",
     "static/media/Texturelabs_Grunge_219M.png": "/tesselate/static/media/Texturelabs_Grunge_219M.8d30e99ab9204bbdb4f6.png",
@@ -64,6 +64,6 @@
   },
   "entrypoints": [
     "static/css/main.2c2c266f.css",
-    "static/js/main.98494a55.js"
+    "static/js/main.28a895d3.js"
   ]
 }
