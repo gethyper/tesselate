@@ -522,8 +522,10 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
     const tiles_in_mosaic_high = tile_pattern[0].length;
     
     // Calculate how many complete mosaics fit on screen
-    const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset);
-    const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset);
+    const mosaic_x_adjust = tile_options.mosaic_x_adjust || 0;
+    const mosaic_y_adjust = tile_options.mosaic_y_adjust || 0;
+    const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset, mosaic_x_adjust);
+    const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset, mosaic_y_adjust);
     const mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_x_offset);
     const mosaics_high = getMosaicsHigh(p5, mosaic_height, tile_y_offset);
   
@@ -581,8 +583,10 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
   // Get mosaic dimensions and number of tiles in mosaic
   const tiles_in_mosaic_wide = tile_pattern.length;
   const tiles_in_mosaic_high = tile_pattern[0].length;
-  const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset);
-  const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset);
+  const mosaic_x_adjust = tile_options.mosaic_x_adjust || 0;
+  const mosaic_y_adjust = tile_options.mosaic_y_adjust || 0;
+  const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset, mosaic_x_adjust);
+  const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset, mosaic_y_adjust);
 
    // Calculate how many mosaics fit on screen
   const mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_x_offset);
