@@ -1,6 +1,6 @@
 const TileDesigns= {
 
-    'persianKnots': {
+  'persianKnots': {
     'tileShape': "pointyTopHexatile",
     'tilePattern': [
       [

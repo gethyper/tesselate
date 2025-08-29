@@ -452,77 +452,6 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
 
 
 /**
- * Unified function to draw multiple hexagonal tiles (both flat-top and pointy-top)
- * 
- * @param {Object} p5 - The p5.js instance
- * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
- * @param {number} pos_x - Starting X position for the tile pattern
- * @param {number} pos_y - Starting Y position for the tile pattern
- * @param {number} radius - Radius of each hexagonal tile
- * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
- * @param {Object} color_theme - Color theme object containing color definitions
- * @param {Object} tile_options - Optional tile configuration
- * @param {boolean} useGradient - Whether to apply gradient effects
- */
-export const drawMultiUnified = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
-  const isPointyTop = tile_shape === 'pointyTopHexatile';
-  
-  const tile_x_adjust = tile_options.tile_x_adjust || 0;
-  const tile_y_adjust = tile_options.tile_y_adjust || 0;
-
-  let tiles_wide = tile_pattern.length;
-  let tiles_high = tile_pattern[0].length;
-
-  // Calculate tile dimensions and offsets
-  const tile_width = getTileWidth(tile_shape, radius, tile_x_adjust);
-  const tile_height = getTileHeight(tile_shape, radius, tile_y_adjust);
-  const tile_x_offset = getTileXOffset(tile_shape, radius, tile_x_adjust);
-  const tile_y_offset = getTileYOffset(tile_shape, radius, tile_y_adjust);
-
-  let x_start = pos_x;
-  let y_start = pos_y;
-  
-  if (isPointyTop) {
-    // Pointy-top tile positioning logic
-    for (let i = 0; i < tiles_wide; i++) {
-      const x_loc = x_start + (tile_width * i) - tile_x_offset;
-
-      for (let j = 0; j < tiles_high; j++) {
-        let x_adjust;
-        if (j % 2 === 0) {  
-          x_adjust = 0;
-        } else { 
-          x_adjust = tile_x_offset;
-        } 
-
-        const y_loc = y_start + ((tile_height - tile_y_offset) * j);
-        drawPointyTopHexatile(p5, x_loc + x_adjust, y_loc, radius, tile_pattern[i][j], color_theme, tile_options, useGradient);
-      }
-    }
-  } else {
-    // Flat-top tile positioning logic  
-    const x_offset = getTileXOffset(tile_shape, radius, tile_x_adjust);
-    const y_offset = getTileYOffset(tile_shape, radius, tile_y_adjust);
-    
-    for (let i = 0; i < tiles_wide; i++) {
-      const x_loc = x_start + (x_offset * i);
-    
-      let y_adjust;
-      if (i % 2 !== 0) {  
-        y_adjust = y_offset / 2;
-      } else {  
-        y_adjust = 0;
-      } 
-      
-      for (let j = 0; j < tiles_high; j++) {
-        const y_loc = y_start + y_adjust + (y_offset * j);
-        drawHexatile(p5, x_loc, y_loc, radius, tile_pattern[i][j], color_theme, tile_options, useGradient);
-      }
-    }
-  }
-};
-
-/**
  * Draws multiple pointy-top hexagonal tiles in a tessellated pattern
  * 
  * @param {Object} p5 - The p5.js instance
@@ -654,6 +583,31 @@ export const drawMultiHexatile = (
         useGradient
       );
     }
+  }
+};
+
+/**
+ * Unified function to draw multiple hexagonal tiles (both flat-top and pointy-top)
+ * 
+ * @param {Object} p5 - The p5.js instance
+ * @param {string} tile_shape - Shape type ('pointyTopHexatile' or flat-top)
+ * @param {number} pos_x - Starting X position for the tile pattern
+ * @param {number} pos_y - Starting Y position for the tile pattern
+ * @param {number} radius - Radius of each hexagonal tile
+ * @param {Array<Array>} tile_pattern - 2D array defining the tile pattern
+ * @param {Object} color_theme - Color theme object containing color definitions
+ * @param {Object} tile_options - Optional tile configuration
+ * @param {boolean} useGradient - Whether to apply gradient effects
+ */
+export const drawMultiUnified = (p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
+  const isPointyTop = tile_shape === 'pointyTopHexatile';
+  
+  if (isPointyTop) {
+    // Use the existing pointy-top logic
+    drawMultiPointyTopHexatile(p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options, useGradient);
+  } else {
+    // Use the existing flat-top logic  
+    drawMultiHexatile(p5, tile_shape, pos_x, pos_y, radius, tile_pattern, color_theme, tile_options, useGradient);
   }
 };
 
@@ -803,6 +757,10 @@ const getMosaicsWide = (p5, mosaic_width, tile_x_offset) => {
   return Math.round(p5.width / (mosaic_width - tile_x_offset)) + 1;
 };
 
+const getTilesWide = (p5, tile_width, tile_x_offset) => {
+  return Math.round(p5.width / (tile_width - tile_x_offset)) + 1;
+};
+
 /**
  * Calculates how many mosaics fit vertically across the canvas
  * 
@@ -813,6 +771,10 @@ const getMosaicsWide = (p5, mosaic_width, tile_x_offset) => {
  */
 const getMosaicsHigh = (p5, mosaic_height, tile_y_offset) => {
   return Math.round(p5.height / (mosaic_height - tile_y_offset)) + 1;
+};
+
+const getTilesHigh = (p5, tile_height, tile_y_offset) => {
+  return Math.round(p5.height / (tile_height - tile_y_offset)) + 1;
 };
 
 
@@ -830,12 +792,10 @@ const getMosaicsHigh = (p5, mosaic_height, tile_y_offset) => {
  * @param {boolean} useGradient - Whether to apply gradient effects
  */
 const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
-  // Determine which drawing function to use
-  const isPointyTop = tile_shape === 'pointyTopHexatile';
-  const drawFunction = isPointyTop ? drawMultiPointyTopHexatile : drawMultiHexatile;
-  const tileFunction = isPointyTop ? tilePointyTopHexatile : tileFlatTopHexatile;
+  // Use unified drawing function
+  const tileFunction = tile_shape === 'pointyTopHexatile' ? tilePointyTopHexatile : tileFlatTopHexatile;
   
-  tileFunction(p5, r, tile_shape, tile_pattern, color_theme, drawFunction, tile_options, useGradient);
+  tileFunction(p5, r, tile_shape, tile_pattern, color_theme, drawMultiUnified, tile_options, useGradient);
 };
 
 
@@ -942,58 +902,25 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
     const tile_height = getTileHeight(tile_shape, r);
     const tile_x_offset = getTileXOffset(tile_shape, r);
     const tile_y_offset = getTileYOffset(tile_shape, r);
+    const tiles_wide = getTilesWide(p5, tile_width, tile_x_offset);
+    const tiles_high = getTilesHigh(p5, tile_height, tile_y_offset);
     
     // Get mosaic dimensions
     const tiles_in_mosaic_wide = tile_pattern.length;
     const tiles_in_mosaic_high = tile_pattern[0].length;
     
-    // Calculate how many complete mosaics fit on screen
-    const mosaic_x_adjust = tile_options.mosaic_x_adjust || 0;
-    const mosaic_y_adjust = tile_options.mosaic_y_adjust || 0;
-    const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset, mosaic_x_adjust);
-    const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset, mosaic_y_adjust);
-    const mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_x_offset);
-    const mosaics_high = getMosaicsHigh(p5, mosaic_height, tile_y_offset);
+  for (let i = 0; i < tiles_wide ; i++) {
+
+    const x_pos = (i === 0) ? 0 : (tile_width * i);
+    const tile_column = (i % (tiles_in_mosaic_wide));
   
-  
-  for (let i = 0; i < mosaics_wide; i++) {
-
-
-    let column_increment, row_increment;
-
-    if (i > 0) {
-      if (tiles_in_mosaic_wide > 1) {
-        column_increment = (mosaic_width * i) - (tile_x_offset * i);
-      } else {
-        column_increment = (mosaic_width * i);
-      }    
-    } else {
-      column_increment = 0;
-    }
-
-    
-    for (let j = 0; j < mosaics_high; j++) {
-
-      //Additional tiling adjustments for pointy top tiles
-      const mosaic_x_offset = (tiles_in_mosaic_high % 2 !== 0 && j % 2 !== 0) ? tile_x_offset : 0;
-      const mosaic_y_offset = (tiles_in_mosaic_high % 2 !== 0 && j > 0) ? tile_y_offset * j : 0;
-
-      if (j > 0) {
-        if (tiles_in_mosaic_high % 2 === 0) {
-          row_increment = (mosaic_height * j) - (tile_y_offset * j);
-        } else {
-          row_increment = (mosaic_height * j); 
-        }
-      } else {
-        row_increment = 0;
-      }
-
-      //Calcluate X/Y position of mosaic
-      const x_loc = column_increment + mosaic_x_offset;
-      const y_loc = row_increment - mosaic_y_offset;
-
-
-      draw_function(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options, useGradient);
+    for (let j = 0; j < tiles_high; j++) {
+      
+      const tile_row = (j % (tiles_in_mosaic_high));
+      const offset_x = (j % 2 !== 0) ?  tile_x_offset : 0
+      const x_loc = x_pos + offset_x;
+      const y_loc = (tile_height - tile_y_offset) * j;
+      drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern [tile_column][tile_row], color_theme, tile_options, useGradient);
     }
   }
 };
@@ -1017,30 +944,37 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
   const tile_height = getTileHeight(tile_shape, r);
   const tile_x_offset = getTileXOffset(tile_shape, r);
   const tile_y_offset = getTileYOffset(tile_shape, r);
+  const tiles_wide = getTilesWide(p5, tile_width, tile_x_offset);
+  const tiles_high = getTilesHigh(p5, tile_height, tile_y_offset);
   
   // Get mosaic dimensions and number of tiles in mosaic
   const tiles_in_mosaic_wide = tile_pattern.length;
   const tiles_in_mosaic_high = tile_pattern[0].length;
-  const mosaic_x_adjust = tile_options.mosaic_x_adjust || 0;
+  /*const mosaic_x_adjust = tile_options.mosaic_x_adjust || 0;
   const mosaic_y_adjust = tile_options.mosaic_y_adjust || 0;
   const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset, mosaic_x_adjust);
   const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset, mosaic_y_adjust);
 
-   // Calculate how many mosaics fit on screen
-  const mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_x_offset);
-  const mosaics_high = getMosaicsHigh(p5, mosaic_height, tile_y_offset);
+    // Get mosaic dimensions
+    const tiles_in_mosaic_wide = tile_pattern.length;
+    const tiles_in_mosaic_high = tile_pattern[0].length;*/
+    
+  for (let i = 0; i < tiles_wide ; i++) {
 
-  for (let i = 0; i < mosaics_wide; i++) {
+    const x_pos = (i === 0) ? 0 : ((tile_width-tile_x_offset)*i);
+    const tile_column = (i % (tiles_in_mosaic_wide));
+    console.log(tile_column)
+    const offset_y = (i % 2 !== 0) ? tile_y_offset : 0;
+  
+    for (let j = 0; j < tiles_high; j++) {
+      
+      const tile_row = (j % (tiles_in_mosaic_high));
+      
+      const x_loc = x_pos;
+      const y_loc = ((tile_height) * j) + offset_y;
 
-    // Calculate Y offset for alternating columns (for proper tessellation)
-    const col_offset = (i % 2 !== 0 && tiles_in_mosaic_wide % 2) ? tile_y_offset : 0;
-    const x_loc = (mosaic_width - tile_x_offset)* i;
-
-    for (let j = 0; j < mosaics_high; j++) {
-
-      const y_loc =  (mosaic_height * j) - tile_y_offset - col_offset;
-      draw_function(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options, useGradient);
-
+      //const y_loc = y_start + y_adjust + (y_offset * j);
+      drawHexatile(p5, x_loc, y_loc, r, tile_pattern [tile_column][tile_row], color_theme, tile_options, useGradient);
     }
   }
 };
