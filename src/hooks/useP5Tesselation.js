@@ -196,6 +196,15 @@ export const drawHexatile = (p5, cX, cY, r, tile_components, color_theme, tile_o
     vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
   }
   
+  // Draw shadow if requested
+  if (tile_options.addShadows) {
+    p5.push();
+    p5.fill(0, 0, 0, 50); // Semi-transparent black shadow
+    p5.noStroke();
+    drawFlatTopHexagon(p5, cX + 3, cY + 3, r); // Offset shadow
+    p5.pop();
+  }
+  
   // Draw the hexagon outline
   drawFlatTopHexagon(p5, cX, cY, r);
   
@@ -240,6 +249,15 @@ export const drawPointyTopHexatile = (p5, cX, cY, r, tile_components, color_them
   // Generate pointy-top hexagon vertices (rotated by 30 degrees)
   for (let a = p5.TAU / 12; a < p5.TAU + p5.TAU / 12; a += p5.TAU / 6) {
     vertices.push([cX + r * p5.cos(a), cY + r * p5.sin(a)]);
+  }
+
+  // Draw shadow if requested
+  if (tile_options.addShadows) {
+    p5.push();
+    p5.fill(0, 0, 0, 50); // Semi-transparent black shadow
+    p5.noStroke();
+    drawPointyTopHexagon(p5, cX + 3, cY + 3, r); // Offset shadow
+    p5.pop();
   }
 
   // Draw the hexagon outline
@@ -791,7 +809,7 @@ const getTilesHigh = (p5, tile_height, tile_y_offset) => {
  * @param {Object} tile_options - Optional tile configuration
  * @param {boolean} useGradient - Whether to apply gradient effects
  */
-const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
+export const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
   // Use unified drawing function
   const tileFunction = tile_shape === 'pointyTopHexatile' ? tilePointyTopHexatile : tileFlatTopHexatile;
   
@@ -902,12 +920,14 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
     const tile_height = getTileHeight(tile_shape, r);
     const tile_x_offset = getTileXOffset(tile_shape, r);
     const tile_y_offset = getTileYOffset(tile_shape, r);
-    const tiles_wide = getTilesWide(p5, tile_width, tile_x_offset);
-    const tiles_high = getTilesHigh(p5, tile_height, tile_y_offset);
     
     // Get mosaic dimensions
     const tiles_in_mosaic_wide = tile_pattern.length;
     const tiles_in_mosaic_high = tile_pattern[0].length;
+    
+    // Use single mosaic dimensions if requested, otherwise fill canvas
+    const tiles_wide = tile_options.showSingleMosaic ? tiles_in_mosaic_wide : getTilesWide(p5, tile_width, tile_x_offset);
+    const tiles_high = tile_options.showSingleMosaic ? tiles_in_mosaic_high : getTilesHigh(p5, tile_height, tile_y_offset);
     
   for (let i = 0; i < tiles_wide ; i++) {
 
@@ -944,26 +964,19 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
   const tile_height = getTileHeight(tile_shape, r);
   const tile_x_offset = getTileXOffset(tile_shape, r);
   const tile_y_offset = getTileYOffset(tile_shape, r);
-  const tiles_wide = getTilesWide(p5, tile_width, tile_x_offset);
-  const tiles_high = getTilesHigh(p5, tile_height, tile_y_offset);
   
   // Get mosaic dimensions and number of tiles in mosaic
   const tiles_in_mosaic_wide = tile_pattern.length;
   const tiles_in_mosaic_high = tile_pattern[0].length;
-  /*const mosaic_x_adjust = tile_options.mosaic_x_adjust || 0;
-  const mosaic_y_adjust = tile_options.mosaic_y_adjust || 0;
-  const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset, mosaic_x_adjust);
-  const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset, mosaic_y_adjust);
-
-    // Get mosaic dimensions
-    const tiles_in_mosaic_wide = tile_pattern.length;
-    const tiles_in_mosaic_high = tile_pattern[0].length;*/
+  
+  // Use single mosaic dimensions if requested, otherwise fill canvas
+  const tiles_wide = tile_options.showSingleMosaic ? tiles_in_mosaic_wide : getTilesWide(p5, tile_width, tile_x_offset);
+  const tiles_high = tile_options.showSingleMosaic ? tiles_in_mosaic_high : getTilesHigh(p5, tile_height, tile_y_offset);
     
   for (let i = 0; i < tiles_wide ; i++) {
 
     const x_pos = (i === 0) ? 0 : ((tile_width-tile_x_offset)*i);
     const tile_column = (i % (tiles_in_mosaic_wide));
-    console.log(tile_column)
     const offset_y = (i % 2 !== 0) ? tile_y_offset : 0;
   
     for (let j = 0; j < tiles_high; j++) {

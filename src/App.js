@@ -1,12 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { BrowserRouter, useSearchParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useSearchParams } from 'react-router-dom';
 import Tesselate from './components/Tesselate';
 import TessellationControls from './components/TessellationControls';
+import Gallery from './components/Gallery';
 import TileDesigns from './components/TileDesigns';
 import ColorThemes from './components/ColorThemes';
 
-// Main App component that handles state management
-function AppContent() {
+// Tessellation page component
+function TessellationPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // State management with URL and localStorage persistence
@@ -128,11 +129,14 @@ function AppContent() {
   );
 }
 
-// Wrapper component to provide BrowserRouter
+// Main App component with routing
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <Routes>
+        <Route path="/" element={<TessellationPage />} />
+        <Route path="/gallery" element={<Gallery />} />
+      </Routes>
     </BrowserRouter>
   );
 }
