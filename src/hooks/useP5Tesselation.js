@@ -1025,9 +1025,9 @@ export function useP5Tesselation({
   const p5InstanceRef = useRef(null);
   const textureImageRef = useRef(null);
 
-  const setup = useCallback((p5, canvasParentRef) => {
+  const setup = useCallback((p5) => {
     console.log("Canvas created");
-    p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
+    p5.createCanvas(p5.windowWidth, p5.windowHeight);
     p5.noStroke();
     p5InstanceRef.current = p5;
     
