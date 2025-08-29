@@ -810,6 +810,7 @@ const getTilesHigh = (p5, tile_height, tile_y_offset) => {
  * @param {boolean} useGradient - Whether to apply gradient effects
  */
 export const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
+  console.log("fillWithTiles called");
   // Use unified drawing function
   const tileFunction = tile_shape === 'pointyTopHexatile' ? tilePointyTopHexatile : tileFlatTopHexatile;
   
@@ -1025,6 +1026,7 @@ export function useP5Tesselation({
   const textureImageRef = useRef(null);
 
   const setup = useCallback((p5, canvasParentRef) => {
+    console.log("Canvas created");
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     p5.noStroke();
     p5InstanceRef.current = p5;

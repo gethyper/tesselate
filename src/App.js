@@ -135,6 +135,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<TessellationPage />} />
+        <Route path="/tesselate" element={<TessellationPage />} />
         <Route path="/gallery" element={<Gallery />} />
       </Routes>
     </BrowserRouter>
