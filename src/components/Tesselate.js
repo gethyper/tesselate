@@ -13,8 +13,6 @@ const Tesselate = ({
   textureKey = null,
   tile_x_adjust = 0,
   tile_y_adjust = 0,
-  mosaic_x_adjust = 0,
-  mosaic_y_adjust = 0,
   width = '100vw',
   height = '100vh',
   position = 'fixed',
@@ -36,8 +34,6 @@ const Tesselate = ({
     tile_options: {
       tile_x_adjust,
       tile_y_adjust,
-      mosaic_x_adjust,
-      mosaic_y_adjust
     }
   });
   
@@ -59,7 +55,7 @@ const Tesselate = ({
         p5InstanceRef.current = null;
       }
     };
-  }, [tile_shape, tile_pattern, color_theme, r, single_tile, useGradient, textureKey, tile_x_adjust, tile_y_adjust, mosaic_x_adjust, mosaic_y_adjust, setup, draw]);
+  }, [tile_shape, tile_pattern, color_theme, r, single_tile, useGradient, textureKey, tile_x_adjust, tile_y_adjust, setup, draw]);
 
   // No longer needed since we removed noLoop()
   

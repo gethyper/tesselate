@@ -38,13 +38,9 @@ function TessellationPage() {
   // Check for texture parameter
   const textureKey = searchParams.get('texture') || null;
 
-  // Check for mosaic offset parameters
-  const mosaicXOffset = Number(searchParams.get('mosaic_x_offset')) || 0;
-  const mosaicYOffset = Number(searchParams.get('mosaic_y_offset')) || 0;
-
-  // Check for tile offset parameters
-  const tileXOffset = Number(searchParams.get('tile_x_offset')) || 0;
-  const tileYOffset = Number(searchParams.get('tile_y_offset')) || 0;
+  // Check for tile adjustment parameters
+  const tileXAdjust = Number(searchParams.get('tile_x_adjust')) || 0;
+  const tileYAdjust = Number(searchParams.get('tile_y_adjust')) || 0;
 
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
@@ -102,10 +98,8 @@ function TessellationPage() {
         single_tile={false}
         useGradient={useGradient}
         textureKey={textureKey}
-        mosaic_x_adjust={mosaicXOffset}
-        mosaic_y_adjust={mosaicYOffset}
-        tile_x_adjust={tileXOffset}
-        tile_y_adjust={tileYOffset}
+        tile_x_adjust={tileXAdjust}
+        tile_y_adjust={tileYAdjust}
         width="100vw"
         height="100vh"
         position="fixed"
