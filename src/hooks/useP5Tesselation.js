@@ -746,6 +746,47 @@ const getTilesHigh = (p5, tile_height, tile_y_offset, tile_y_adjust = 0) => {
 
 
 /**
+ * Calculate tile adjustment effects based on position and effect type
+ * 
+ * @param {Object} adjustment - Adjustment object from URL parsing
+ * @param {number} i - Column index
+ * @param {number} j - Row index
+ * @param {number} r - Tile radius
+ * @returns {number} Calculated adjustment value
+ */
+const calculateTileAdjustment = (adjustment, i, j, r) => {
+  if (!adjustment || adjustment.type === 'numeric') {
+    return adjustment?.value || 0;
+  }
+
+  switch (adjustment.type) {
+    case 'wave':
+    case 'sine':
+      // wave:amplitude:frequency
+      const amplitude = adjustment.values[0] || 10;
+      const frequency = adjustment.values[1] || 1;
+      return amplitude * Math.sin((i + j) * frequency * 0.1);
+    
+    case 'random':
+      // random:intensity
+      const intensity = adjustment.values[0] || 5;
+      // Use deterministic random based on position for consistency
+      const seed = i * 1000 + j;
+      const pseudoRandom = Math.sin(seed) * 10000;
+      return (pseudoRandom - Math.floor(pseudoRandom) - 0.5) * intensity * 2;
+    
+    case 'alt':
+      // alt:value1:value2
+      const value1 = adjustment.values[0] || 0;
+      const value2 = adjustment.values[1] || 0;
+      return (i + j) % 2 === 0 ? value1 : value2;
+    
+    default:
+      return 0;
+  }
+};
+
+/**
  * Fills the entire canvas with tessellated hexagonal tiles
  * 
  * @param {Object} p5 - The p5.js instance
@@ -795,7 +836,29 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
 
     const tile_x_adjust = tile_options.tile_x_adjust || 0;
     const tile_y_adjust = tile_options.tile_y_adjust || 0;
-    const tile_x_y_normalize = tile_x_adjust === tile_y_adjust ? tile_x_adjust/2 : 0
+    
+    // Handle both numeric and effect-based adjustments
+    const getXAdjustment = (i, j) => {
+      if (typeof tile_x_adjust === 'object' && tile_x_adjust.type !== 'numeric') {
+        return calculateTileAdjustment(tile_x_adjust, i, j, r);
+      }
+      const numericValue = typeof tile_x_adjust === 'object' ? tile_x_adjust.value : tile_x_adjust;
+      return numericValue * i; // Legacy numeric behavior
+    };
+    
+    const getYAdjustment = (i, j) => {
+      if (typeof tile_y_adjust === 'object' && tile_y_adjust.type !== 'numeric') {
+        return calculateTileAdjustment(tile_y_adjust, i, j, r);
+      }
+      const numericValue = typeof tile_y_adjust === 'object' ? tile_y_adjust.value : tile_y_adjust;
+      return numericValue * j; // Legacy numeric behavior
+    };
+    
+    // Normalization when both adjustments are equal (legacy behavior) 
+    const getNumericValue = (adj) => typeof adj === 'object' ? adj.value : adj;
+    const xNumeric = getNumericValue(tile_x_adjust);
+    const yNumeric = getNumericValue(tile_y_adjust);
+    const tile_x_y_normalize = (xNumeric === yNumeric && typeof tile_x_adjust !== 'object' && typeof tile_y_adjust !== 'object') ? xNumeric/2 : 0;
 
   
     // Calculate tile dimensions and offsets
@@ -809,8 +872,10 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
     const tiles_in_mosaic_high = tile_pattern[0].length;
     
     // Use single mosaic dimensions if requested, otherwise fill canvas
-    const tiles_wide = tile_options.showSingleMosaic ? tiles_in_mosaic_wide : getTilesWide(p5, tile_width, tile_x_offset, tile_x_adjust);
-    const tiles_high = tile_options.showSingleMosaic ? tiles_in_mosaic_high : getTilesHigh(p5, tile_height, tile_y_offset, tile_y_adjust);
+    const xAdjustForTiling = typeof tile_x_adjust === 'object' ? tile_x_adjust.value || 0 : tile_x_adjust;
+    const yAdjustForTiling = typeof tile_y_adjust === 'object' ? tile_y_adjust.value || 0 : tile_y_adjust;
+    const tiles_wide = tile_options.showSingleMosaic ? tiles_in_mosaic_wide : getTilesWide(p5, tile_width, tile_x_offset, xAdjustForTiling);
+    const tiles_high = tile_options.showSingleMosaic ? tiles_in_mosaic_high : getTilesHigh(p5, tile_height, tile_y_offset, yAdjustForTiling);
     
   for (let i = 0; i < tiles_wide ; i++) {
 
@@ -820,9 +885,9 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
     for (let j = 0; j < tiles_high; j++) {
       
       const tile_row = (j % (tiles_in_mosaic_high));
-      const offset_x = (j % 2 !== 0) ?  tile_x_offset + tile_x_y_normalize : 0
-      const x_loc = x_pos + offset_x + tile_x_adjust * i;
-      const y_loc = (tile_height - tile_y_offset) * j + tile_y_adjust * j;
+      const offset_x = (j % 2 !== 0) ?  tile_x_offset + tile_x_y_normalize : 0;
+      const x_loc = x_pos + offset_x + getXAdjustment(i, j);
+      const y_loc = (tile_height - tile_y_offset) * j + getYAdjustment(i, j);
       drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern [tile_column][tile_row], color_theme, tile_options, useGradient);
     }
   }
@@ -844,8 +909,29 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
   
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
   const tile_y_adjust = tile_options.tile_y_adjust || 0;
-  const tile_x_y_normalize = tile_x_adjust === tile_y_adjust ? tile_y_adjust/2 : 0
-  console.log(tile_x_y_normalize);
+  
+  // Handle both numeric and effect-based adjustments
+  const getXAdjustment = (i, j) => {
+    if (typeof tile_x_adjust === 'object' && tile_x_adjust.type !== 'numeric') {
+      return calculateTileAdjustment(tile_x_adjust, i, j, r);
+    }
+    const numericValue = typeof tile_x_adjust === 'object' ? tile_x_adjust.value : tile_x_adjust;
+    return numericValue * i; // Legacy numeric behavior
+  };
+  
+  const getYAdjustment = (i, j) => {
+    if (typeof tile_y_adjust === 'object' && tile_y_adjust.type !== 'numeric') {
+      return calculateTileAdjustment(tile_y_adjust, i, j, r);
+    }
+    const numericValue = typeof tile_y_adjust === 'object' ? tile_y_adjust.value : tile_y_adjust;
+    return numericValue * j; // Legacy numeric behavior
+  };
+  
+  // Normalization when both adjustments are equal (legacy behavior)
+  const getNumericValue = (adj) => typeof adj === 'object' ? adj.value : adj;
+  const xNumeric = getNumericValue(tile_x_adjust);
+  const yNumeric = getNumericValue(tile_y_adjust);
+  const tile_x_y_normalize = (xNumeric === yNumeric && typeof tile_x_adjust !== 'object' && typeof tile_y_adjust !== 'object') ? yNumeric/2 : 0;
 
   // Calculate tile dimensions and offsets
   const tile_width = getTileWidth(tile_shape, r);
@@ -858,8 +944,10 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
   const tiles_in_mosaic_high = tile_pattern[0].length;
   
   // Use single mosaic dimensions if requested, otherwise fill canvas
-  const tiles_wide = tile_options.showSingleMosaic ? tiles_in_mosaic_wide : getTilesWide(p5, tile_width, tile_x_offset, tile_x_adjust);
-  const tiles_high = tile_options.showSingleMosaic ? tiles_in_mosaic_high : getTilesHigh(p5, tile_height, tile_y_offset, tile_y_adjust);
+  const xAdjustForTiling = typeof tile_x_adjust === 'object' ? tile_x_adjust.value || 0 : tile_x_adjust;
+  const yAdjustForTiling = typeof tile_y_adjust === 'object' ? tile_y_adjust.value || 0 : tile_y_adjust;
+  const tiles_wide = tile_options.showSingleMosaic ? tiles_in_mosaic_wide : getTilesWide(p5, tile_width, tile_x_offset, xAdjustForTiling);
+  const tiles_high = tile_options.showSingleMosaic ? tiles_in_mosaic_high : getTilesHigh(p5, tile_height, tile_y_offset, yAdjustForTiling);
     
   for (let i = 0; i < tiles_wide ; i++) {
 
@@ -872,8 +960,8 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
       
       const tile_row = (j % (tiles_in_mosaic_high));
       
-      const x_loc = x_pos + (tile_x_adjust * i);
-      const y_loc = ((tile_height) * j) + offset_y + (tile_y_adjust * j);
+      const x_loc = x_pos + getXAdjustment(i, j);
+      const y_loc = ((tile_height) * j) + offset_y + getYAdjustment(i, j);
 
       //const y_loc = y_start + y_adjust + (y_offset * j);
       drawHexatile(p5, x_loc, y_loc, r, tile_pattern [tile_column][tile_row], color_theme, tile_options, useGradient);

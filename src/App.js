@@ -38,9 +38,33 @@ function TessellationPage() {
   // Check for texture parameter
   const textureKey = searchParams.get('texture') || null;
 
-  // Check for tile adjustment parameters
-  const tileXAdjust = Number(searchParams.get('tile_x_adjust')) || 0;
-  const tileYAdjust = Number(searchParams.get('tile_y_adjust')) || 0;
+  // Parse tile adjustment parameters (support both numeric and effect patterns)
+  const parseAdjustment = (param) => {
+    if (!param) return { type: 'numeric', value: 0 };
+    
+    // Check if it's an effect pattern (contains colons)
+    if (param.includes(':')) {
+      const parts = param.split(':');
+      const effectType = parts[0];
+      const values = parts.slice(1).map(Number);
+      
+      return {
+        type: effectType,
+        values: values,
+        raw: param
+      };
+    }
+    
+    // Plain numeric value
+    return {
+      type: 'numeric',
+      value: Number(param),
+      raw: param
+    };
+  };
+
+  const tileXAdjust = parseAdjustment(searchParams.get('tile_x_adjust'));
+  const tileYAdjust = parseAdjustment(searchParams.get('tile_y_adjust'));
 
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
