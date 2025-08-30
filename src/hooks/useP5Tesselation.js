@@ -798,11 +798,13 @@ const calculateTileAdjustment = (adjustment, i, j, r) => {
  * @param {boolean} useGradient - Whether to apply gradient effects
  */
 export const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
-  console.log("fillWithTiles called");
+  console.log("🔧 fillWithTiles called - START");
   // Use unified drawing function
   const tileFunction = tile_shape === 'pointyTopHexatile' ? tilePointyTopHexatile : tileFlatTopHexatile;
   
+  console.log(`🔧 About to call ${tile_shape === 'pointyTopHexatile' ? 'tilePointyTopHexatile' : 'tileFlatTopHexatile'}`);
   tileFunction(p5, r, tile_shape, tile_pattern, color_theme, drawMultiUnified, tile_options, useGradient);
+  console.log("🔧 fillWithTiles called - END");
 };
 
 
@@ -1021,7 +1023,7 @@ export function useP5Tesselation({
       img.crossOrigin = "anonymous";
       img.onload = () => {
         textureImageRef.current = img;
-        p5.redraw();
+        // Don't call redraw here - let the component handle it
       };
       img.onerror = (error) => {
         console.error('Failed to load texture:', textureKey, error);
@@ -1037,7 +1039,10 @@ export function useP5Tesselation({
   const draw = useCallback((p5) => {
     try {
       drawCounterRef.current++;
-      console.log(`🎨 DRAW #${drawCounterRef.current} called at ${Date.now()}`);
+      const drawId = Math.random().toString(36).substr(2, 9);
+      console.log(`🎨 DRAW #${drawCounterRef.current} [ID:${drawId}] called at ${Date.now()}`);
+      console.log(`🔍 p5.isLooping: ${p5.isLooping()}, frameCount: ${p5.frameCount}`);
+      console.trace('Draw function call stack');
       
       const params = paramsRef.current;
       p5.background(params.safeColorTheme.bg);
@@ -1053,10 +1058,13 @@ export function useP5Tesselation({
         return;
       }
 
+      console.log(`🏗️ About to call fillWithTiles...`);
       fillWithTiles(p5, params.safeTileShape, params.r, params.safeTilePattern, params.safeColorTheme, updatedTileOptions, params.useGradient);
+      console.log(`✅ fillWithTiles completed`);
       
       p5.noStroke();
-      p5.noLoop(); // CRITICAL: Stop infinite draw loop!
+      console.log(`🎯 Draw function ending...`);
+      // Don't call noLoop here - let the component manage it
       
     } catch (error) {
       console.error('Error in draw function:', error);
