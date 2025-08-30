@@ -777,76 +777,7 @@ export const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile
  * @param {Object} tile_options - Optional tile configuration
  * @param {boolean} useGradient - Whether to apply gradient effects
  */
-/*
-const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}, useGradient = false) => {
-  const isPointyTop = tile_shape === 'pointyTopHexatile';
-  
-  // Extract tile adjustments
-  const tile_x_adjust = tile_options.tile_x_adjust || 0;
-  const tile_y_adjust = tile_options.tile_y_adjust || 0;
-  
-  // Calculate tile dimensions and offsets
-  const tile_width = getTileWidth(tile_shape, r);
-  const tile_height = getTileHeight(tile_shape, r);
-  const tile_x_offset = getTileXOffset(tile_shape, r);
-  const tile_y_offset = getTileYOffset(tile_shape, r);
-  
-  // Get mosaic dimensions
-  const tiles_in_mosaic_wide = tile_pattern.length;
-  const tiles_in_mosaic_high = tile_pattern[0].length;
-  
-  // Calculate mosaic dimensions for screen tiling
-  const mosaic_width = getMosaicWidth(tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset);
-  const mosaic_height = getMosaicHeight(tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset);
-  const mosaics_wide = getMosaicsWide(p5, mosaic_width, tile_x_offset);
-  const mosaics_high = getMosaicsHigh(p5, mosaic_height, tile_y_offset);
 
-  // Unified tiling logic
-  for (let i = 0; i < mosaics_wide; i++) {
-    for (let j = 0; j < mosaics_high; j++) {
-      let x_loc, y_loc;
-      
-      if (isPointyTop) {
-        // Pointy-top positioning logic
-        let column_increment, row_increment;
-        
-        if (i > 0) {
-          if (tiles_in_mosaic_wide > 1) {
-            column_increment = (mosaic_width * i) - (tile_x_offset * i);
-          } else {
-            column_increment = (mosaic_width * i);
-          }    
-        } else {
-          column_increment = 0;
-        }
-
-        const mosaic_x_offset = (tiles_in_mosaic_high % 2 !== 0 && j % 2 !== 0) ? tile_x_offset : 0;
-        const mosaic_y_offset = (tiles_in_mosaic_high % 2 !== 0 && j > 0) ? tile_y_offset * j : 0;
-
-        if (j > 0) {
-          if (tiles_in_mosaic_high % 2 === 0) {
-            row_increment = (mosaic_height * j) - (tile_y_offset * j);
-          } else {
-            row_increment = (mosaic_height * j); 
-          }
-        } else {
-          row_increment = 0;
-        }
-
-        x_loc = column_increment + mosaic_x_offset;
-        y_loc = row_increment - mosaic_y_offset;
-        
-      } else {
-        // Flat-top positioning logic
-        const col_offset = (i % 2 !== 0) ? tile_y_offset : 0;
-        x_loc = (mosaic_width * i) - tile_x_offset;
-        y_loc = (mosaic_height * j) - tile_y_offset - col_offset;
-      }
-
-      draw_function(p5, tile_shape, x_loc, y_loc, r, tile_pattern, color_theme, tile_options, useGradient);
-    }
-  }
-};*/
 
 /**
  * Tiles the canvas with pointy-top hexagonal patterns
@@ -864,6 +795,8 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
 
     const tile_x_adjust = tile_options.tile_x_adjust || 0;
     const tile_y_adjust = tile_options.tile_y_adjust || 0;
+    const tile_x_y_normalize = tile_x_adjust === tile_y_adjust ? tile_x_adjust/2 : 0
+
   
     // Calculate tile dimensions and offsets
     const tile_width = getTileWidth(tile_shape, r);
@@ -887,7 +820,7 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
     for (let j = 0; j < tiles_high; j++) {
       
       const tile_row = (j % (tiles_in_mosaic_high));
-      const offset_x = (j % 2 !== 0) ?  tile_x_offset : 0
+      const offset_x = (j % 2 !== 0) ?  tile_x_offset + tile_x_y_normalize : 0
       const x_loc = x_pos + offset_x + tile_x_adjust * i;
       const y_loc = (tile_height - tile_y_offset) * j + tile_y_adjust * j;
       drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern [tile_column][tile_row], color_theme, tile_options, useGradient);
@@ -911,6 +844,8 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
   
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
   const tile_y_adjust = tile_options.tile_y_adjust || 0;
+  const tile_x_y_normalize = tile_x_adjust === tile_y_adjust ? tile_y_adjust/2 : 0
+  console.log(tile_x_y_normalize);
 
   // Calculate tile dimensions and offsets
   const tile_width = getTileWidth(tile_shape, r);
@@ -930,14 +865,15 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
 
     const x_pos = (i === 0) ? 0 : ((tile_width-tile_x_offset)*i);
     const tile_column = (i % (tiles_in_mosaic_wide));
-    const offset_y = (i % 2 !== 0) ? tile_y_offset : 0;
+    const offset_y = (i % 2 !== 0) ? tile_y_offset + tile_x_y_normalize : 0;
+   
   
     for (let j = 0; j < tiles_high; j++) {
       
       const tile_row = (j % (tiles_in_mosaic_high));
       
       const x_loc = x_pos + (tile_x_adjust * i);
-      const y_loc = ((tile_height) * j) + offset_y + tile_y_adjust * j;
+      const y_loc = ((tile_height) * j) + offset_y + (tile_y_adjust * j);
 
       //const y_loc = y_start + y_adjust + (y_offset * j);
       drawHexatile(p5, x_loc, y_loc, r, tile_pattern [tile_column][tile_row], color_theme, tile_options, useGradient);
