@@ -836,6 +836,7 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
 
     const tile_x_adjust = tile_options.tile_x_adjust || 0;
     const tile_y_adjust = tile_options.tile_y_adjust || 0;
+    console.log(tile_x_adjust, tile_y_adjust)
     
     // Handle both numeric and effect-based adjustments
     const getXAdjustment = (i, j) => {
@@ -859,7 +860,9 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
     const xNumeric = getNumericValue(tile_x_adjust);
     const yNumeric = getNumericValue(tile_y_adjust);
     const tile_x_y_normalize = (xNumeric === yNumeric && typeof tile_x_adjust !== 'object' && typeof tile_y_adjust !== 'object') ? xNumeric/2 : 0;
-
+    
+    // Extra operation when tile_x_adjust and tile_y_adjust are the same
+    const extraOffset = (xNumeric === yNumeric) ? yNumeric/2 : 0;
   
     // Calculate tile dimensions and offsets
     const tile_width = getTileWidth(tile_shape, r);
@@ -885,7 +888,7 @@ const tilePointyTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, dra
     for (let j = 0; j < tiles_high; j++) {
       
       const tile_row = (j % (tiles_in_mosaic_high));
-      const offset_x = (j % 2 !== 0) ?  tile_x_offset + tile_x_y_normalize : 0;
+      const offset_x = (j % 2 !== 0) ?  tile_x_offset + tile_x_y_normalize + extraOffset : 0;
       const x_loc = x_pos + offset_x + getXAdjustment(i, j);
       const y_loc = (tile_height - tile_y_offset) * j + getYAdjustment(i, j);
       drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern [tile_column][tile_row], color_theme, tile_options, useGradient);
@@ -910,6 +913,7 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
   const tile_y_adjust = tile_options.tile_y_adjust || 0;
   
+  
   // Handle both numeric and effect-based adjustments
   const getXAdjustment = (i, j) => {
     if (typeof tile_x_adjust === 'object' && tile_x_adjust.type !== 'numeric') {
@@ -932,6 +936,9 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
   const xNumeric = getNumericValue(tile_x_adjust);
   const yNumeric = getNumericValue(tile_y_adjust);
   const tile_x_y_normalize = (xNumeric === yNumeric && typeof tile_x_adjust !== 'object' && typeof tile_y_adjust !== 'object') ? yNumeric/2 : 0;
+  
+  // Extra operation when tile_x_adjust and tile_y_adjust are the same
+  const extraOffset = (xNumeric === yNumeric) ? xNumeric/2 : 0;
 
   // Calculate tile dimensions and offsets
   const tile_width = getTileWidth(tile_shape, r);
@@ -953,7 +960,7 @@ const tileFlatTopHexatile = (p5, r, tile_shape, tile_pattern, color_theme, draw_
 
     const x_pos = (i === 0) ? 0 : ((tile_width-tile_x_offset)*i);
     const tile_column = (i % (tiles_in_mosaic_wide));
-    const offset_y = (i % 2 !== 0) ? tile_y_offset + tile_x_y_normalize : 0;
+    const offset_y = (i % 2 !== 0) ? tile_y_offset + tile_x_y_normalize + extraOffset : 0;
    
   
     for (let j = 0; j < tiles_high; j++) {
@@ -1000,9 +1007,10 @@ export function useP5Tesselation({
   const safeColorTheme = color_theme || ColorThemes['basic_b'];
   const p5InstanceRef = useRef(null);
   const textureImageRef = useRef(null);
+  const paramsRef = useRef({ r, safeTileShape, safeTilePattern, safeColorTheme, tile_options, useGradient });
 
   const setup = useCallback((p5) => {
-    console.log("Canvas created");
+    console.log("🏗️ SETUP CALLED - Canvas created");
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
     p5.noStroke();
     p5InstanceRef.current = p5;
@@ -1022,32 +1030,38 @@ export function useP5Tesselation({
     }
   }, [textureKey]);
 
+  // Update params ref when dependencies change  
+  paramsRef.current = { r, safeTileShape, safeTilePattern, safeColorTheme, tile_options, useGradient };
+
+  let drawCounterRef = useRef(0);
   const draw = useCallback((p5) => {
     try {
-      p5.background(safeColorTheme.bg);
+      drawCounterRef.current++;
+      console.log(`🎨 DRAW #${drawCounterRef.current} called at ${Date.now()}`);
+      
+      const params = paramsRef.current;
+      p5.background(params.safeColorTheme.bg);
 
       // Update tile_options with current texture
       const updatedTileOptions = {
-        ...tile_options,
+        ...params.tile_options,
         textureImg: textureImageRef.current
       };
 
       // Safety check for tile_pattern
-      if (!safeTilePattern || !Array.isArray(safeTilePattern) || safeTilePattern.length === 0) {
+      if (!params.safeTilePattern || !Array.isArray(params.safeTilePattern) || params.safeTilePattern.length === 0) {
         return;
       }
 
-
-      fillWithTiles(p5, safeTileShape, r, safeTilePattern, safeColorTheme, updatedTileOptions, useGradient);
+      fillWithTiles(p5, params.safeTileShape, params.r, params.safeTilePattern, params.safeColorTheme, updatedTileOptions, params.useGradient);
       
       p5.noStroke();
-      p5.noLoop(); // Stop after drawing once
+      p5.noLoop(); // CRITICAL: Stop infinite draw loop!
       
     } catch (error) {
       console.error('Error in draw function:', error);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [r, safeTileShape, safeTilePattern, safeColorTheme, single_tile, tile_options, useGradient, textureKey]);
+  }, []); // No dependencies - everything comes from refs!
 
   return { setup, draw };
 }
