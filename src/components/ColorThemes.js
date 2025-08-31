@@ -21,7 +21,9 @@ const ColorThemes = {
     "Hydrant Spin": {light:"#FF4500", medium:"#DC143C", dark:"#8B0000", accent:"#FFD700", bg:"#2F4F4F"},
     "Raking in Grands": {light:"#F0F8FF", medium:"#228B22", dark:"#006400", accent:"#FFD700", bg:"#2F4F2F"},
     "Decades Menu": {light:"#FFE135", medium:"#FF6B35", dark:"#B83A4B", accent:"#00B4D8", bg:"#2D1B69"},
-    "Coily Cubes": {light:"#8A2BE2", medium:"#FF4500", dark:"#4B0082", accent:"#32CD32", bg:"#1A1A2E"}
+    "Electric Sheep": {light:"#8A2BE2", medium:"#FF4500", dark:"#4B0082", accent:"#32CD32", bg:"#1A1A2E"},
+    "Coily Cubes": {light:"#50AF9F", medium:"#5040EF", dark:"#304040", accent:"#DFDF00", bg:"#000000"}
+
   };
 
 export default ColorThemes; 
