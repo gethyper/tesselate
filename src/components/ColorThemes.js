@@ -16,7 +16,7 @@ const ColorThemes = {
     "Chrome Dreams": {light:"#E0FFFF", medium:"#00FFFF", dark:"#008B8B", accent:"#40E0D0", bg:"#2F4F4F"},
     "That's Bananas!": {light:"#FFF8DC", medium:"#FFD700", dark:"#8B4513", accent:"#32CD32", bg:"#FFFF00"},
     "Faded Robot": {light:"#E8E8E8", medium:"#9E9E9E", dark:"#424242", accent:"#607D8B", bg:"#F5F5F5"},
-    "Pre-Ghost": {light:"#F8F8FF", medium:"#E6E6FA", dark:"#C0C0C0", accent:"#DDA0DD", bg:"#F5F5F5"},
+    "Pre-ghost": {light:"#F8F8FF", medium:"#E6E6FA", dark:"#C0C0C0", accent:"#DDA0DD", bg:"#F5F5F5"},
     "Nanobeast": {light:"#00FF41", medium:"#FF073A", dark:"#0A0A0A", accent:"#FF6EC7", bg:"#1A0033"},
     "Hydrant Spin": {light:"#FF4500", medium:"#DC143C", dark:"#8B0000", accent:"#FFD700", bg:"#2F4F4F"},
     "Raking in Grands": {light:"#F0F8FF", medium:"#228B22", dark:"#006400", accent:"#FFD700", bg:"#2F4F2F"},
