@@ -102,6 +102,24 @@ function TessellationPage() {
     }, 300); // 300ms delay
   };
 
+  const updateAdjustments = (xValue, yValue) => {
+    const newParams = new URLSearchParams(searchParams);
+    
+    if (xValue === '0' && yValue === '0') {
+      // Remove adjustment parameters when set to none
+      newParams.delete('tile_x_adjust');
+      newParams.delete('tile_y_adjust');
+    } else {
+      if (xValue !== '0') newParams.set('tile_x_adjust', xValue);
+      else newParams.delete('tile_x_adjust');
+      
+      if (yValue !== '0') newParams.set('tile_y_adjust', yValue);
+      else newParams.delete('tile_y_adjust');
+    }
+    
+    setSearchParams(newParams);
+  };
+
   // This useEffect was causing the bounce - we already sync from localStorage on mount
 
   // Get the current design and theme objects
@@ -145,6 +163,7 @@ function TessellationPage() {
           textureKey={textureKey}
           tileXAdjust={tileXAdjust}
           tileYAdjust={tileYAdjust}
+          onAdjustChange={updateAdjustments}
         />
       )}
     </>

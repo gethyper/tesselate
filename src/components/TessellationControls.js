@@ -33,13 +33,15 @@ const TessellationControls = ({
   useGradient = false,
   textureKey = null,
   tileXAdjust = { type: 'numeric', value: 0 },
-  tileYAdjust = { type: 'numeric', value: 0 }
+  tileYAdjust = { type: 'numeric', value: 0 },
+  onAdjustChange
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [previewSize, setPreviewSize] = useState(tileSize);
   const [sizeTimeout, setSizeTimeout] = useState(null);
   const [downloadDialogOpen, setDownloadDialogOpen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [adjustAmount, setAdjustAmount] = useState('1x');
 
   // Download functions
   const downloadImage = (format = '1920x1080') => {
@@ -154,6 +156,97 @@ const TessellationControls = ({
   // Get the current theme's dark color
   const currentTheme = ColorThemes[selectedTheme];
   const themeColor = currentTheme?.dark || 'rgba(25, 118, 210, 0.8)';
+
+  // Get multiplier from amount
+  const getMultiplier = () => {
+    return parseInt(adjustAmount.replace('x', ''));
+  };
+
+  // Greatest hits adjust tile options (base values, will be multiplied by amount)
+  const adjustOptions = [
+    { label: 'None', value: 'none', baseX: '0', baseY: '0' },
+    { label: 'Shift X', value: 'shift_x', baseX: '5', baseY: '0' },
+    { label: 'Shift Y', value: 'shift_y', baseX: '0', baseY: '5' },
+    { label: 'Shift X & Y', value: 'shift_xy', baseX: '5', baseY: '5' },
+    { label: 'Wave X', value: 'wave_x', baseX: 'wave:10:0.1', baseY: '0' },
+    /*
+    { label: 'Wave Y', value: 'wave_y', baseX: '0', baseY: 'wave:10:0.1' },
+    { label: 'Wave X & Y', value: 'wave_xy', baseX: 'wave:10:0.1', baseY: 'wave:10:0.1' },
+    { label: 'Spiral', value: 'spiral', baseX: 'spiral:5:0.05', baseY: 'spiral:5:0.05' },
+    { label: 'Ripple', value: 'ripple', baseX: 'ripple:15:0.08', baseY: 'ripple:15:0.08' },
+    { label: 'Wobble', value: 'wobble', baseX: 'random:3', baseY: 'random:3' }
+     */
+  ];
+
+  // Apply multiplier to adjustment values
+  const getAdjustedValues = (option) => {
+    const multiplier = getMultiplier();
+    
+    if (option.value === 'none') {
+      return { x: '0', y: '0' };
+    }
+
+    const applyMultiplier = (value) => {
+      if (value === '0') return '0';
+      
+      if (value.includes(':')) {
+        // Handle effect patterns like "wave:10:0.1"
+        const parts = value.split(':');
+        const effectType = parts[0];
+        const param1 = parseFloat(parts[1]) * multiplier;
+        const param2 = parseFloat(parts[2]) * multiplier;
+        return `${effectType}:${param1}:${param2}`;
+      } else {
+        // Handle simple numeric values
+        return (parseFloat(value) * multiplier).toString();
+      }
+    };
+
+    return {
+      x: applyMultiplier(option.baseX),
+      y: applyMultiplier(option.baseY)
+    };
+  };
+
+  // Get current adjust option
+  const getCurrentAdjustOption = () => {
+    const xRaw = tileXAdjust.raw || '0';
+    const yRaw = tileYAdjust.raw || '0';
+    
+    // Check if current values match any option at any multiplier level
+    for (const option of adjustOptions) {
+      for (const mult of [1, 2, 3, 5, 10, 20]) {
+        // Calculate adjusted values using the specific multiplier being tested
+        const applyTestMultiplier = (value) => {
+          if (value === '0') return '0';
+          
+          if (value.includes(':')) {
+            const parts = value.split(':');
+            const effectType = parts[0];
+            const param1 = parseFloat(parts[1]) * mult;
+            const param2 = parseFloat(parts[2]) * mult;
+            return `${effectType}:${param1}:${param2}`;
+          } else {
+            return (parseFloat(value) * mult).toString();
+          }
+        };
+
+        const testValues = {
+          x: applyTestMultiplier(option.baseX),
+          y: applyTestMultiplier(option.baseY)
+        };
+        
+        if (testValues.x === xRaw && testValues.y === yRaw) {
+          // Update amount state to match the multiplier found
+          if (adjustAmount !== `${mult}x`) {
+            setAdjustAmount(`${mult}x`);
+          }
+          return option.value;
+        }
+      }
+    }
+    return 'custom';
+  };
 
   // Generate current URL for sharing
   const generateCurrentUrl = () => {
@@ -429,7 +522,8 @@ const TessellationControls = ({
               sx={{
                 '& .MuiSelect-select': {
                   fontFamily: 'Inter, sans-serif',
-                  fontSize: '0.875rem'
+                  fontSize: '0.875rem',
+                  padding: '8.5px 14px'
                 }
               }}
             >
@@ -465,7 +559,8 @@ const TessellationControls = ({
               sx={{
                 '& .MuiSelect-select': {
                   fontFamily: 'Inter, sans-serif',
-                  fontSize: '0.875rem'
+                  fontSize: '0.875rem',
+                  padding: '11px 14px'
                 }
               }}
             >
@@ -482,58 +577,202 @@ const TessellationControls = ({
             </Select>
           </FormControl>
 
-          {/* Size Input */}
-          <TextField
-            label="Size"
-            type="number"
-            size="small"
-            value={previewSize}
-            onChange={(e) => {
-              const inputValue = e.target.value;
-              
-              // Allow empty input for better UX while typing
-              if (inputValue === '') {
-                setPreviewSize('');
-                return;
-              }
-              
-              const numValue = parseInt(inputValue);
-              if (!isNaN(numValue)) {
-                setPreviewSize(numValue);
+          {/* Size and Adjust Tiles Row */}
+          <Box sx={{ display: 'flex', gap: '2%', mb: 2 }}>
+            {/* Size Input - 1/3 width */}
+            <TextField
+              label="Size"
+              type="number"
+              size="small"
+              value={previewSize}
+              onChange={(e) => {
+                const inputValue = e.target.value;
                 
-                // Clear existing timeout
-                if (sizeTimeout) {
-                  clearTimeout(sizeTimeout);
+                // Allow empty input for better UX while typing
+                if (inputValue === '') {
+                  setPreviewSize('');
+                  return;
                 }
                 
-                // Set new timeout - only clamp when sending to parent
-                const newTimeout = setTimeout(() => {
-                  const clampedValue = Math.max(10, Math.min(100, numValue));
-                  onSizeChange(clampedValue);
-                }, 200);
-                setSizeTimeout(newTimeout);
-              }
-            }}
-            inputProps={{
-              step: 1
-            }}
-            fullWidth
-            sx={{
-              mb: 2,
-              '& .MuiInputLabel-root': {
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.875rem'
-              },
-              '& .MuiInputBase-input': {
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.875rem',
-                padding: '8.5px 14px'
-              },
-              '& .MuiInputBase-root': {
-                fontSize: '0.875rem'
-              }
-            }}
-          />
+                const numValue = parseInt(inputValue);
+                if (!isNaN(numValue)) {
+                  setPreviewSize(numValue);
+                  
+                  // Clear existing timeout
+                  if (sizeTimeout) {
+                    clearTimeout(sizeTimeout);
+                  }
+                  
+                  // Set new timeout - only clamp when sending to parent
+                  const newTimeout = setTimeout(() => {
+                    const clampedValue = Math.max(10, Math.min(100, numValue));
+                    onSizeChange(clampedValue);
+                  }, 200);
+                  setSizeTimeout(newTimeout);
+                }
+              }}
+              inputProps={{
+                step: 1
+              }}
+              sx={{
+                flex: '0 0 27%',
+                '& .MuiInputLabel-root': {
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.875rem' 
+
+                },
+                '& .MuiInputBase-input': {
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.8rem',
+                  padding: '10.5px 14px'
+
+                },
+                '& .MuiInputBase-root': {
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.875rem'
+
+                }
+              }}
+            />
+
+            {/* Adjust Tiles Selector - 45% width */}
+            <FormControl sx={{ flex: '0 0 45%' }}>
+              <InputLabel id="adjust-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Adjust</InputLabel>
+              <Select
+                labelId="adjust-label"
+                value={getCurrentAdjustOption()}
+                label="Adjust"
+                size="small"
+                onChange={(e) => {
+                  const selectedOption = adjustOptions.find(opt => opt.value === e.target.value);
+                  if (selectedOption && onAdjustChange) {
+                    const adjustedValues = getAdjustedValues(selectedOption);
+                    onAdjustChange(adjustedValues.x, adjustedValues.y);
+                  }
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      bgcolor: 'rgba(255, 255, 255, 0.9)',
+                      backdropFilter: 'blur(10px)',
+                    }
+                  }
+                }}
+                sx={{
+                  '& .MuiSelect-select': {
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '0.875rem',
+                    padding: '8.5px 14px'
+                  }
+                }}
+              >
+                {adjustOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    <Typography variant="caption" sx={{ textTransform: 'capitalize', fontFamily: 'Inter, sans-serif' }}>
+                      {option.label}
+                    </Typography>
+                  </MenuItem>
+                ))}
+                <MenuItem value="custom">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontStyle: 'italic' }}>
+                    Custom
+                  </Typography>
+                </MenuItem>
+              </Select>
+            </FormControl>
+
+            {/* Amount Selector - remaining width */}
+            <FormControl sx={{ flex: '1' }}>
+              <InputLabel id="amount-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Amount</InputLabel>
+              <Select
+                labelId="amount-label"
+                value={adjustAmount}
+                label="Amount"
+                size="small"
+                onChange={(e) => {
+                  setAdjustAmount(e.target.value);
+                  
+                  // If there's a current adjustment selected, reapply it with the new amount
+                  const currentOption = getCurrentAdjustOption();
+                  if (currentOption !== 'custom' && onAdjustChange) {
+                    const selectedOption = adjustOptions.find(opt => opt.value === currentOption);
+                    if (selectedOption) {
+                      // Update the amount first, then calculate adjusted values
+                      const tempAmount = e.target.value;
+                      const multiplier = parseInt(tempAmount.replace('x', ''));
+                      
+                      const applyMultiplier = (value) => {
+                        if (value === '0') return '0';
+                        
+                        if (value.includes(':')) {
+                          const parts = value.split(':');
+                          const effectType = parts[0];
+                          const param1 = parseFloat(parts[1]) * multiplier;
+                          const param2 = parseFloat(parts[2]) * multiplier;
+                          return `${effectType}:${param1}:${param2}`;
+                        } else {
+                          return (parseFloat(value) * multiplier).toString();
+                        }
+                      };
+
+                      const adjustedValues = {
+                        x: applyMultiplier(selectedOption.baseX),
+                        y: applyMultiplier(selectedOption.baseY)
+                      };
+                      
+                      onAdjustChange(adjustedValues.x, adjustedValues.y);
+                    }
+                  }
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      bgcolor: 'rgba(255, 255, 255, 0.9)',
+                      backdropFilter: 'blur(10px)',
+                    }
+                  }
+                }}
+                sx={{
+                  '& .MuiSelect-select': {
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '0.875rem',
+                    padding: '8.5px 14px'
+                  }
+                }}
+              >
+                <MenuItem value="1x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    1x
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="2x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    2x
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="3x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    3x
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="5x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    5x
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="10x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    10x
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="20x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    20x
+                  </Typography>
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
 
           {/* Download Button */}
           <Button

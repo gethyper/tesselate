@@ -90,6 +90,15 @@ const Showcase = {
     colorTheme: "Raking in Grands", 
     tileSize: 29,
     featured: false
+  },
+
+  "modern_hex_grid": {
+    title: "Modern Hex Grid",
+    description: "Clean geometric pattern with mid-century modern colors",
+    tilePattern: "pointyTop3x3",
+    colorTheme: "End-century Modern",
+    tileSize: 18,
+    featured: true
   }
 };
 

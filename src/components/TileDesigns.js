@@ -110,7 +110,7 @@ const TileDesigns= {
     ]
   },
 
-  'flatTop1x1': {
+  'flatTop 1x1': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -121,7 +121,7 @@ const TileDesigns= {
     ]
   },
 
-  'flatTop1x2': {
+  'flatTop 1x2': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -132,7 +132,7 @@ const TileDesigns= {
       ]
     ]
   },
-  'flatTop2x2': {
+  'flatTop 2x2': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -148,7 +148,7 @@ const TileDesigns= {
       ]
     ]
   },
-  'flatTop2x1': {
+  'flatTop 2x1': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -162,7 +162,7 @@ const TileDesigns= {
     ]
   },
 
-  'flatTop3x1': {
+  'flatTop 3x1': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -179,7 +179,7 @@ const TileDesigns= {
     ]
   },
 
-  'flatTop3x3': {
+  'flatTop 3x3': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -204,7 +204,7 @@ const TileDesigns= {
     ]
   },
 
-  'flatTop4x4': {
+  'flatTop 4x4': {
     'tileShape': "flatTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -239,7 +239,7 @@ const TileDesigns= {
   },
 
 
-  'pointyTop1x1': {
+  'pointyTop 1x1': {
     'tileShape': "pointyTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -249,7 +249,7 @@ const TileDesigns= {
       ]
     ]
   },
-  'pointyTop1x2': {
+  'pointyTop 1x2': {
     'tileShape': "pointyTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -261,7 +261,7 @@ const TileDesigns= {
     ]
   },
 
-  'pointyTop2x1': {
+  'pointyTop 2x1': {
     'tileShape': "pointyTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -274,7 +274,7 @@ const TileDesigns= {
       ]
     ]
   },
-  'pointyTop2x2': {
+  'pointyTop 2x2': {
     'tileShape': "pointyTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -289,7 +289,7 @@ const TileDesigns= {
       ]
     ]
   },
-  'pointyTop3x3': {
+  'pointyTop 3x3': {
     'tileShape': "pointyTopHexatile",
     'tileXOffset': 0,
     'tileStroke': "",
@@ -314,7 +314,7 @@ const TileDesigns= {
       ]
     ]
   },
-  'pointyTop4x4': {
+  'pointyTop 4x4': {
     'tileShape': "pointyTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -349,7 +349,7 @@ const TileDesigns= {
     ]
   },
 
-  'pointyTop5x5': {
+  'pointyTop 5x5': {
     'tileShape': "pointyTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
@@ -392,7 +392,7 @@ const TileDesigns= {
     ]
   },
 
-  'pointyTop6x6': {
+  'pointyTop 6x6': {
     'tileShape': "pointyTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
