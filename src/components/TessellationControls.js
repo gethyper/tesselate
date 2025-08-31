@@ -9,9 +9,17 @@ import {
   MenuItem,
   TextField,
   Typography,
-  Collapse
+  Collapse,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Card,
+  CardContent,
+  CardActions
 } from '@mui/material';
-import { Menu, Close } from '@mui/icons-material';
+import { Menu, Close, Download, Instagram, Web, Monitor, Tablet } from '@mui/icons-material';
 import TileDesigns from './TileDesigns';
 import ColorThemes from './ColorThemes';
 
@@ -21,11 +29,100 @@ const TessellationControls = ({
   tileSize, 
   onPatternChange, 
   onThemeChange, 
-  onSizeChange 
+  onSizeChange,
+  useGradient = false,
+  textureKey = null,
+  tileXAdjust = { type: 'numeric', value: 0 },
+  tileYAdjust = { type: 'numeric', value: 0 }
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [previewSize, setPreviewSize] = useState(tileSize);
   const [sizeTimeout, setSizeTimeout] = useState(null);
+  const [downloadDialogOpen, setDownloadDialogOpen] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
+  // Download functions
+  const downloadImage = (format = '1920x1080') => {
+    const canvas = document.querySelector('canvas');
+    if (!canvas) return;
+
+    let filename, dataUrl, width, height;
+    
+    // Define format dimensions
+    switch (format) {
+      case '1920x1080':
+        width = 1920;
+        height = 1080;
+        filename = `tessellation_1920x1080_${selectedPattern}_${selectedTheme}.png`;
+        break;
+      case '1024x768':
+        width = 1024;
+        height = 768;
+        filename = `tessellation_1024x768_${selectedPattern}_${selectedTheme}.png`;
+        break;
+      case '1080x1080':
+        width = 1080;
+        height = 1080;
+        filename = `tessellation_1080x1080_${selectedPattern}_${selectedTheme}.png`;
+        break;
+      default:
+        width = 1920;
+        height = 1080;
+        filename = `tessellation_1920x1080_${selectedPattern}_${selectedTheme}.png`;
+    }
+
+    // Create temporary canvas with specified dimensions
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = width;
+    tempCanvas.height = height;
+    const ctx = tempCanvas.getContext('2d');
+    
+    // Fill with background color or white
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+    
+    // Calculate scaling to fit the original canvas within the target dimensions
+    const scale = Math.min(width / canvas.width, height / canvas.height);
+    const scaledWidth = canvas.width * scale;
+    const scaledHeight = canvas.height * scale;
+    const x = (width - scaledWidth) / 2;
+    const y = (height - scaledHeight) / 2;
+    
+    ctx.drawImage(canvas, x, y, scaledWidth, scaledHeight);
+    
+    dataUrl = tempCanvas.toDataURL('image/png');
+
+    // Create download link
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = dataUrl;
+    link.click();
+    
+    // Close the dialog
+    setDownloadDialogOpen(false);
+  };
+
+  const handleDownloadDialogOpen = () => {
+    setDownloadDialogOpen(true);
+  };
+
+  const handleDownloadDialogClose = () => {
+    setDownloadDialogOpen(false);
+    setShowSettings(false); // Reset settings visibility when closing
+  };
+
+  // Keyboard shortcut for showing settings (Spacebar)
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (downloadDialogOpen && event.code === 'Space') {
+        event.preventDefault();
+        setShowSettings(prev => !prev);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [downloadDialogOpen]);
 
   // Sync preview size when tileSize changes externally, but not while typing
   useEffect(() => {
@@ -53,6 +150,25 @@ const TessellationControls = ({
     design.tilePattern && 
     design.tilePattern.length > 0
   );
+
+  // Get the current theme's dark color
+  const currentTheme = ColorThemes[selectedTheme];
+  const themeColor = currentTheme?.dark || 'rgba(25, 118, 210, 0.8)';
+
+  // Generate current URL for sharing
+  const generateCurrentUrl = () => {
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set('pattern', selectedPattern);
+    url.searchParams.set('theme', selectedTheme);
+    url.searchParams.set('size', tileSize.toString());
+    
+    if (useGradient) url.searchParams.set('gradient', 'true');
+    if (textureKey) url.searchParams.set('texture', textureKey);
+    if (tileXAdjust.raw && tileXAdjust.raw !== '0') url.searchParams.set('tile_x_adjust', tileXAdjust.raw);
+    if (tileYAdjust.raw && tileYAdjust.raw !== '0') url.searchParams.set('tile_y_adjust', tileYAdjust.raw);
+    
+    return url.toString();
+  };
 
   const ColorPreview = ({ theme, isFirstItem = false }) => (
     <Box sx={{ display: 'flex', gap: 0.5, mr: 1 }}>
@@ -392,7 +508,7 @@ const TessellationControls = ({
                 
                 // Set new timeout - only clamp when sending to parent
                 const newTimeout = setTimeout(() => {
-                  const clampedValue = Math.max(5, Math.min(100, numValue));
+                  const clampedValue = Math.max(10, Math.min(100, numValue));
                   onSizeChange(clampedValue);
                 }, 200);
                 setSizeTimeout(newTimeout);
@@ -418,6 +534,255 @@ const TessellationControls = ({
               }
             }}
           />
+
+          {/* Download Button */}
+          <Button
+            id="download-button"
+            variant="contained"
+            onClick={handleDownloadDialogOpen}
+            fullWidth
+            sx={{
+              mt: 1,
+              bgcolor: themeColor,
+              boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+              '&:hover': {
+                bgcolor: themeColor,
+                opacity: 0.9,
+                boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+              },
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.875rem',
+              textTransform: 'none'
+            }}
+          >
+            Download
+          </Button>
+
+          {/* Download Dialog */}
+          <Dialog 
+            open={downloadDialogOpen} 
+            onClose={handleDownloadDialogClose}
+            maxWidth="sm"
+            fullWidth
+            PaperProps={{
+              sx: {
+                bgcolor: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(15px)',
+                borderRadius: 3
+              }
+            }}
+          >
+            <DialogTitle sx={{ 
+              fontFamily: 'Tourney, sans-serif', 
+              fontWeight: 500,
+              letterSpacing: 1,
+              textAlign: 'left',
+              pb: 1,
+              position: 'relative'
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" style={{paddingRight: '8px', verticalAlign: 'middle', marginTop:"-2px"}}><polygon points="12,1 22,7 22,17 12,23 2,17 2,7" stroke="currentColor" strokeWidth="1px" fill="none" /></svg>
+              TESSELLATIONS
+              <IconButton
+                onClick={handleDownloadDialogClose}
+                sx={{
+                  position: 'absolute',
+                  right: 8,
+                  top: 8,
+                  color: 'text.secondary'
+                }}
+                size="small"
+              >
+                <Close />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent sx={{ pt: 2 }}>
+              {/* Share URL First */}
+              <Box sx={{ mb: 3, mt: 2 }}>
+                <Typography variant="caption" sx={{ 
+                  fontFamily: 'Inter, sans-serif', 
+                  fontWeight: 500,
+                  mb: 1,
+                  display: 'block'
+                }}>
+                  Share this URL
+                </Typography>
+                <TextField
+                  fullWidth
+                  size="small"
+                  value={generateCurrentUrl()}
+                  InputProps={{
+                    readOnly: true,
+                    sx: {
+                      fontFamily: 'monospace',
+                      fontSize: '0.75rem',
+                      bgcolor: 'rgba(255, 255, 255, 0.8)'
+                    }
+                  }}
+                  onClick={(e) => e.target.select()}
+                />
+              </Box>
+
+              {/* Download Options */}
+              <Typography variant="caption" sx={{ 
+                fontFamily: 'Inter, sans-serif', 
+                fontWeight: 500,
+                mb: 1,
+                display: 'block'
+              }}>
+                Download image
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1.5, mb: 0 }}>
+                <Button
+                  variant="contained"
+                  onClick={() => downloadImage('1920x1080')}
+                  sx={{
+                    flex: 1,
+                    bgcolor: themeColor,
+                    '&:hover': {
+                      bgcolor: themeColor,
+                      opacity: 0.9,
+                    },
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                    '&:hover': {
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+                    }
+                  }}
+                >
+                  1920×1080
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => downloadImage('1080x1080')}
+                  sx={{
+                    flex: 1,
+                    bgcolor: themeColor,
+                    '&:hover': {
+                      bgcolor: themeColor,
+                      opacity: 0.9,
+                    },
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                    '&:hover': {
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+                    }
+                  }}
+                >
+                  1080×1080
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => downloadImage('1024x768')}
+                  sx={{
+                    flex: 1,
+                    bgcolor: themeColor,
+                    '&:hover': {
+                      bgcolor: themeColor,
+                      opacity: 0.9,
+                    },
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                    '&:hover': {
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+                    }
+                  }}
+                >
+                  1024×768
+                </Button>
+              </Box>
+
+              {/* Current Settings Display - Hidden by default, shown with spacebar */}
+              {showSettings && (
+                <Paper sx={{ 
+                  p: 2, 
+                  bgcolor: 'rgba(248, 250, 252, 0.8)',
+                  border: '1px solid rgba(226, 232, 240, 0.5)'
+                }}>
+                  <Typography variant="subtitle2" sx={{ 
+                    fontFamily: 'Inter, sans-serif', 
+                    fontWeight: 600, 
+                    mb: 1.5,
+                    color: 'text.secondary'
+                  }}>
+                    Current Settings
+                  </Typography>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 1.5 }}>
+                    <Box>
+                      <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
+                        Pattern
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                        {selectedPattern.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
+                        Theme
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                        {selectedTheme.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
+                        Size
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                        {tileSize}px
+                      </Typography>
+                    </Box>
+                    {useGradient && (
+                      <Box>
+                        <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
+                          Gradient
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                          Enabled
+                        </Typography>
+                      </Box>
+                    )}
+                    {textureKey && (
+                      <Box>
+                        <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
+                          Texture
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                          {textureKey}
+                        </Typography>
+                      </Box>
+                    )}
+                    {(tileXAdjust.raw && tileXAdjust.raw !== '0') && (
+                      <Box>
+                        <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
+                          X Adjust
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                          {tileXAdjust.raw}
+                        </Typography>
+                      </Box>
+                    )}
+                    {(tileYAdjust.raw && tileYAdjust.raw !== '0') && (
+                      <Box>
+                        <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
+                          Y Adjust
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                          {tileYAdjust.raw}
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
+                </Paper>
+              )}
+
+            </DialogContent>
+          </Dialog>
         </Paper>
       </Collapse>
     </Box>

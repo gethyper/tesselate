@@ -141,6 +141,10 @@ function TessellationPage() {
           onPatternChange={updatePattern}
           onThemeChange={updateTheme}
           onSizeChange={updateSize}
+          useGradient={useGradient}
+          textureKey={textureKey}
+          tileXAdjust={tileXAdjust}
+          tileYAdjust={tileYAdjust}
         />
       )}
     </>
