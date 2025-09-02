@@ -134,12 +134,22 @@ const Showcase = {
   },
 
   "faded_cc_wave": {
-    title: "Faded CC Wave",
+    title: "Faded CC Wave", 
     description: "Claude Code pattern in retro robot colors with hypnotic wave distortions",
     tilePattern: "CC",
     colorTheme: "Faded Robot",
     tileSize: 24,
     tileXAdjust: "wave:30:6",
+    featured: true
+  },
+
+  "mega_wave_hex": {
+    title: "Mega Wave Hex",
+    description: "Dramatic hexagonal waves with massive vertical distortions create oceanic motion",
+    tilePattern: "flatTop3x3",
+    colorTheme: "basicBee",
+    tileSize: 18,
+    tileYAdjust: "wave:100:20",
     featured: true
   }
 };

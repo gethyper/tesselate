@@ -99,36 +99,9 @@ function TessellationPage() {
     };
   };
 
-  // Handle tile adjustments from URL or showcase defaults
-  const getTileAdjustments = () => {
-    const urlXAdjust = searchParams.get('tile_x_adjust');
-    const urlYAdjust = searchParams.get('tile_y_adjust');
-    
-    if (urlXAdjust || urlYAdjust) {
-      return {
-        x: parseAdjustment(urlXAdjust),
-        y: parseAdjustment(urlYAdjust)
-      };
-    }
-    
-    // Check if current pattern/theme combo matches a showcase entry with adjustments
-    const defaultShowcase = getDefaultShowcase();
-    if (defaultShowcase) {
-      return {
-        x: parseAdjustment(defaultShowcase.tileXAdjust),
-        y: parseAdjustment(defaultShowcase.tileYAdjust)
-      };
-    }
-    
-    return {
-      x: parseAdjustment(null),
-      y: parseAdjustment(null)
-    };
-  };
-  
-  const adjustments = getTileAdjustments();
-  const tileXAdjust = adjustments.x;
-  const tileYAdjust = adjustments.y;
+  // Handle tile adjustments - only from URL parameters, don't interfere with user selections
+  const tileXAdjust = parseAdjustment(searchParams.get('tile_x_adjust'));
+  const tileYAdjust = parseAdjustment(searchParams.get('tile_y_adjust'));
 
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
