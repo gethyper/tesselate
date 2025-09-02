@@ -572,6 +572,7 @@ const getTileYOffset = (tile_shape, r) => {
  * @param {number} tile_x_offset - Horizontal offset between tiles
  * @returns {number} Total width of the mosaic
  */
+// eslint-disable-next-line no-unused-vars
 const getMosaicWidth = (tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_offset) => {
   // Handle single tile case
   if (tiles_in_mosaic_wide === 1) {
@@ -599,6 +600,7 @@ const getMosaicWidth = (tile_shape, tile_width, tiles_in_mosaic_wide, tile_x_off
  * @param {number} tile_y_offset - Vertical offset between tiles
  * @returns {number} Total height of the mosaic
  */
+// eslint-disable-next-line no-unused-vars
 const getMosaicHeight = (tile_shape, tile_height, tiles_in_mosaic_high, tile_y_offset) => {
   // Handle single tile case
   if (tiles_in_mosaic_high === 1) {

@@ -77,7 +77,8 @@ const Tesselate = ({
     p5InstanceRef.current = p5Instance;
 
     return () => {
-      console.log(`🗑️ [COMPONENT ${componentId.current}] CLEANING UP P5 INSTANCE`);
+      const currentComponentId = componentId.current;
+      console.log(`🗑️ [COMPONENT ${currentComponentId}] CLEANING UP P5 INSTANCE`);
       if (p5InstanceRef.current) {
         p5InstanceRef.current.remove();
         p5InstanceRef.current = null;

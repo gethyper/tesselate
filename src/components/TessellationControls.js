@@ -879,14 +879,12 @@ const TessellationControls = ({
                     '&:hover': {
                       bgcolor: themeColor,
                       opacity: 0.9,
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
                     },
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: 500,
                     textTransform: 'none',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                    '&:hover': {
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-                    }
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                   }}
                 >
                   1920×1080
@@ -900,14 +898,12 @@ const TessellationControls = ({
                     '&:hover': {
                       bgcolor: themeColor,
                       opacity: 0.9,
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
                     },
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: 500,
                     textTransform: 'none',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                    '&:hover': {
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-                    }
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                   }}
                 >
                   1080×1080
@@ -921,14 +917,12 @@ const TessellationControls = ({
                     '&:hover': {
                       bgcolor: themeColor,
                       opacity: 0.9,
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
                     },
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: 500,
                     textTransform: 'none',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                    '&:hover': {
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-                    }
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                   }}
                 >
                   1024×768
