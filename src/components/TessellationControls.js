@@ -13,13 +13,9 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  DialogContent,
-  DialogActions,
-  Card,
-  CardContent,
-  CardActions
+  DialogContent
 } from '@mui/material';
-import { Menu, Close, Download, Instagram, Web, Monitor, Tablet } from '@mui/icons-material';
+import { Menu, Close } from '@mui/icons-material';
 import TileDesigns from './TileDesigns';
 import ColorThemes from './ColorThemes';
 

@@ -6,7 +6,7 @@ import Gallery from './components/Gallery';
 import TileDesigns from './components/TileDesigns';
 import ColorThemes from './components/ColorThemes';
 import PresentationPage from './components/PresentationPage';
-import { getFeaturedShowcase, getRandomShowcase } from './components/Showcase';
+import { getFeaturedShowcase } from './components/Showcase';
 
 // Tessellation page component
 function TessellationPage() {
