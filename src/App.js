@@ -12,14 +12,14 @@ import { getFeaturedShowcase } from './components/Showcase';
 function TessellationPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Get a random featured showcase for defaults
-  const getDefaultShowcase = () => {
+  // Get a stable random featured showcase for initial defaults (only called once)
+  const getInitialShowcase = React.useMemo(() => {
     const featured = getFeaturedShowcase();
     const keys = Object.keys(featured);
     if (keys.length === 0) return null;
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
     return featured[randomKey];
-  };
+  }, []); // Empty dependency array ensures this only runs once
 
   // State management with URL and localStorage persistence
   const [selectedPattern, setSelectedPattern] = useState(() => {
@@ -31,8 +31,7 @@ function TessellationPage() {
     }
     
     // If no URL or storage pattern, use random featured showcase
-    const defaultShowcase = getDefaultShowcase();
-    return defaultShowcase ? defaultShowcase.tilePattern : 'shadowBoxes';
+    return getInitialShowcase ? getInitialShowcase.tilePattern : 'shadowBoxes';
   });
 
   const [selectedTheme, setSelectedTheme] = useState(() => {
@@ -44,8 +43,7 @@ function TessellationPage() {
     }
     
     // If no URL or storage theme, use random featured showcase
-    const defaultShowcase = getDefaultShowcase();
-    return defaultShowcase ? defaultShowcase.colorTheme : 'basicBee';
+    return getInitialShowcase ? getInitialShowcase.colorTheme : 'basicBee';
   });
 
   const [tileSize, setTileSize] = useState(() => {
@@ -57,8 +55,7 @@ function TessellationPage() {
     }
     
     // If no URL or storage size, use random featured showcase
-    const defaultShowcase = getDefaultShowcase();
-    return defaultShowcase ? defaultShowcase.tileSize : 20;
+    return getInitialShowcase ? getInitialShowcase.tileSize : 20;
   });
 
   // Check for secret parameter to hide controls
@@ -99,9 +96,15 @@ function TessellationPage() {
     };
   };
 
-  // Handle tile adjustments - only from URL parameters, don't interfere with user selections
-  const tileXAdjust = parseAdjustment(searchParams.get('tile_x_adjust'));
-  const tileYAdjust = parseAdjustment(searchParams.get('tile_y_adjust'));
+  // Handle tile adjustments - URL parameters first, then initial showcase defaults
+  const tileXAdjust = parseAdjustment(
+    searchParams.get('tile_x_adjust') || 
+    (getInitialShowcase && !searchParams.get('pattern') && !localStorage.getItem('tessellation-pattern') ? getInitialShowcase.tileXAdjust : null)
+  );
+  const tileYAdjust = parseAdjustment(
+    searchParams.get('tile_y_adjust') || 
+    (getInitialShowcase && !searchParams.get('pattern') && !localStorage.getItem('tessellation-pattern') ? getInitialShowcase.tileYAdjust : null)
+  );
 
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
