@@ -99,6 +99,48 @@ const Showcase = {
     colorTheme: "End-century Modern",
     tileSize: 18,
     featured: true
+  },
+
+  "coily_wave_boxes": {
+    title: "Coily Wave Boxes",
+    description: "Teal and purple shadow boxes with mesmerizing wave distortions",
+    tilePattern: "shadowBoxes",
+    colorTheme: "Coily Cubes",
+    tileSize: 23,
+    tileXAdjust: "wave:20:4",
+    tileYAdjust: "wave:20:4",
+    featured: true
+  },
+
+  "micro_flat_modern": {
+    title: "Micro Flat Modern",
+    description: "Ultra-fine flat-top hexagons with shifted positioning create intricate mid-century patterns",
+    tilePattern: "flatTop3x3",
+    colorTheme: "End-century Modern",
+    tileSize: 10,
+    tileXAdjust: "10",
+    featured: true
+  },
+
+  "scarlet_cc_chaos": {
+    title: "Scarlet CC Chaos",
+    description: "Claude Code pattern in academic scarlet with chaotic random positioning",
+    tilePattern: "CC",
+    colorTheme: "Scarlet A+",
+    tileSize: 20,
+    tileXAdjust: "random:60:0",
+    tileYAdjust: "random:60:0",
+    featured: true
+  },
+
+  "faded_cc_wave": {
+    title: "Faded CC Wave",
+    description: "Claude Code pattern in retro robot colors with hypnotic wave distortions",
+    tilePattern: "CC",
+    colorTheme: "Faded Robot",
+    tileSize: 24,
+    tileXAdjust: "wave:30:6",
+    featured: true
   }
 };
 

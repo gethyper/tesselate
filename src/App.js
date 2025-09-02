@@ -5,28 +5,60 @@ import TessellationControls from './components/TessellationControls';
 import Gallery from './components/Gallery';
 import TileDesigns from './components/TileDesigns';
 import ColorThemes from './components/ColorThemes';
+import PresentationPage from './components/PresentationPage';
+import { getFeaturedShowcase, getRandomShowcase } from './components/Showcase';
 
 // Tessellation page component
 function TessellationPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // Get a random featured showcase for defaults
+  const getDefaultShowcase = () => {
+    const featured = getFeaturedShowcase();
+    const keys = Object.keys(featured);
+    if (keys.length === 0) return null;
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    return featured[randomKey];
+  };
+
   // State management with URL and localStorage persistence
   const [selectedPattern, setSelectedPattern] = useState(() => {
-    return searchParams.get('pattern') || 
-           localStorage.getItem('tessellation-pattern') || 
-           'shadowBoxes';
+    const urlPattern = searchParams.get('pattern');
+    const storagePattern = localStorage.getItem('tessellation-pattern');
+    
+    if (urlPattern || storagePattern) {
+      return urlPattern || storagePattern;
+    }
+    
+    // If no URL or storage pattern, use random featured showcase
+    const defaultShowcase = getDefaultShowcase();
+    return defaultShowcase ? defaultShowcase.tilePattern : 'shadowBoxes';
   });
 
   const [selectedTheme, setSelectedTheme] = useState(() => {
-    return searchParams.get('theme') || 
-           localStorage.getItem('tessellation-theme') || 
-           'basicBee';
+    const urlTheme = searchParams.get('theme');
+    const storageTheme = localStorage.getItem('tessellation-theme');
+    
+    if (urlTheme || storageTheme) {
+      return urlTheme || storageTheme;
+    }
+    
+    // If no URL or storage theme, use random featured showcase
+    const defaultShowcase = getDefaultShowcase();
+    return defaultShowcase ? defaultShowcase.colorTheme : 'basicBee';
   });
 
   const [tileSize, setTileSize] = useState(() => {
     const urlSize = searchParams.get('size');
     const storageSize = localStorage.getItem('tessellation-size');
-    return Number(urlSize) || Number(storageSize) || 20;
+    
+    if (urlSize || storageSize) {
+      return Number(urlSize) || Number(storageSize);
+    }
+    
+    // If no URL or storage size, use random featured showcase
+    const defaultShowcase = getDefaultShowcase();
+    return defaultShowcase ? defaultShowcase.tileSize : 20;
   });
 
   // Check for secret parameter to hide controls
@@ -46,7 +78,10 @@ function TessellationPage() {
     if (param.includes(':')) {
       const parts = param.split(':');
       const effectType = parts[0];
-      const values = parts.slice(1).map(Number);
+      const values = parts.slice(1).map(val => {
+        const num = Number(val);
+        return isNaN(num) ? 0 : num;
+      });
       
       return {
         type: effectType,
@@ -56,15 +91,44 @@ function TessellationPage() {
     }
     
     // Plain numeric value
+    const numValue = Number(param);
     return {
       type: 'numeric',
-      value: Number(param),
+      value: isNaN(numValue) ? 0 : numValue,
       raw: param
     };
   };
 
-  const tileXAdjust = parseAdjustment(searchParams.get('tile_x_adjust'));
-  const tileYAdjust = parseAdjustment(searchParams.get('tile_y_adjust'));
+  // Handle tile adjustments from URL or showcase defaults
+  const getTileAdjustments = () => {
+    const urlXAdjust = searchParams.get('tile_x_adjust');
+    const urlYAdjust = searchParams.get('tile_y_adjust');
+    
+    if (urlXAdjust || urlYAdjust) {
+      return {
+        x: parseAdjustment(urlXAdjust),
+        y: parseAdjustment(urlYAdjust)
+      };
+    }
+    
+    // Check if current pattern/theme combo matches a showcase entry with adjustments
+    const defaultShowcase = getDefaultShowcase();
+    if (defaultShowcase) {
+      return {
+        x: parseAdjustment(defaultShowcase.tileXAdjust),
+        y: parseAdjustment(defaultShowcase.tileYAdjust)
+      };
+    }
+    
+    return {
+      x: parseAdjustment(null),
+      y: parseAdjustment(null)
+    };
+  };
+  
+  const adjustments = getTileAdjustments();
+  const tileXAdjust = adjustments.x;
+  const tileYAdjust = adjustments.y;
 
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
@@ -170,7 +234,7 @@ function TessellationPage() {
   );
 }
 
-// Main App component with routing
+// Main App component with routing 
 function App() {
   return (
     <BrowserRouter>
@@ -178,6 +242,7 @@ function App() {
         <Route path="/" element={<TessellationPage />} />
         <Route path="/tesselate" element={<TessellationPage />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/presentation" element={<PresentationPage />} />
       </Routes>
     </BrowserRouter>
   );

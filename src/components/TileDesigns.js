@@ -20,6 +20,36 @@ const TileDesigns= {
     'tilePattern': [
       [
         [{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}],
+        [{c:"light", sa:"dark", sw:"2"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light"},{c:"light"},{c:"light", sc:"dark", sw:"2"}],
+        [{c:"light", sb:"dark", sw:"2"},{c:"light", sc:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark", sw:"2"}],
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sb:"dark"},{c:"light", sc:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"}],
+      ],
+      [
+        [{c:"light", sb:"dark", sw:"2"},{c:"light", sc:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark", sw:"2"}],
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sb:"dark"},{c:"light", sc:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"}],
+        [{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}],
+        [{c:"light", sa:"dark", sw:"2"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light"},{c:"light", sc:"dark", sw:"2"}],
+      ],
+      [
+        [{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}],
+        [{c:"light", sa:"dark", sw:"2"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light"},{c:"light"},{c:"light", sc:"dark", sw:"2"}],
+        [{c:"light", sb:"dark", sw:"2"},{c:"light", sc:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark", sw:"2"}],
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sb:"dark"},{c:"light", sc:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"}],
+      ],
+      [
+        [{c:"light", sb:"dark", sw:"2"},{c:"light", sc:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark", sw:"2"}],
+        [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sb:"dark"},{c:"light", sc:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"}],
+        [{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}],
+        [{c:"light", sa:"dark", sw:"2"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light"},{c:"light", sc:"dark", sw:"2"}],
+      ],
+    ]
+  },
+
+  'snowCaps': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"},{c:"medium", sa:"dark"}],
         [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}],
         [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}],
         [{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"dark"},{c:"light", sa:"light"},{c:"light", sa:"dark"}]
@@ -459,8 +489,39 @@ const TileDesigns= {
       ]
     ]
   },
+  
 
-
+  'CC': {
+    'tileShape': "pointyTopHexatile",
+    'tileOffset': 0,
+    'tileStroke': "",
+    'tilePattern': [
+      [
+        [{c:"dark"}, {c:"medium"}, {c:"light"}, {c:"accent"}, {c:"medium"}, {c:"dark"}],
+        [{c:"medium"}, {c:"light"}, {c:"accent"}, {c:"light"}, {c:"accent"}, {c:"medium"}],
+        [{c:"light"}, {c:"accent"}, {c:"medium"}, {c:"dark"}, {c:"light"}, {c:"accent"}],
+        [{c:"accent"}, {c:"light"}, {c:"dark"}, {c:"medium"}, {c:"dark"}, {c:"light"}]
+      ],
+      [
+        [{c:"medium"}, {c:"accent"}, {c:"dark"}, {c:"light"}, {c:"dark"}, {c:"accent"}],
+        [{c:"accent"}, {c:"dark"}, {c:"medium"}, {c:"accent"}, {c:"medium"}, {c:"dark"}],
+        [{c:"dark"}, {c:"medium"}, {c:"light"}, {c:"dark"}, {c:"light"}, {c:"medium"}],
+        [{c:"light"}, {c:"dark"}, {c:"accent"}, {c:"medium"}, {c:"accent"}, {c:"dark"}]
+      ],
+      [
+        [{c:"accent"}, {c:"light"}, {c:"medium"}, {c:"dark"}, {c:"medium"}, {c:"light"}],
+        [{c:"light"}, {c:"medium"}, {c:"dark"}, {c:"medium"}, {c:"dark"}, {c:"medium"}],
+        [{c:"medium"}, {c:"dark"}, {c:"accent"}, {c:"light"}, {c:"accent"}, {c:"dark"}],
+        [{c:"dark"}, {c:"accent"}, {c:"light"}, {c:"accent"}, {c:"light"}, {c:"accent"}]
+      ],
+      [
+        [{c:"light"}, {c:"dark"}, {c:"accent"}, {c:"medium"}, {c:"accent"}, {c:"dark"}],
+        [{c:"dark"}, {c:"accent"}, {c:"medium"}, {c:"light"}, {c:"medium"}, {c:"accent"}],
+        [{c:"accent"}, {c:"medium"}, {c:"light"}, {c:"accent"}, {c:"light"}, {c:"medium"}],
+        [{c:"medium"}, {c:"light"}, {c:"dark"}, {c:"medium"}, {c:"dark"}, {c:"light"}]
+      ]
+    ]
+  },
 
 
   'egyptianHexatile': {
@@ -549,6 +610,9 @@ export default TileDesigns;
       ]
     ]
   },
+
+
   
+  /*
   
   */

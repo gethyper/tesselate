@@ -168,7 +168,10 @@ const TessellationControls = ({
     { label: 'Shift X', value: 'shift_x', baseX: '5', baseY: '0' },
     { label: 'Shift Y', value: 'shift_y', baseX: '0', baseY: '5' },
     { label: 'Shift X & Y', value: 'shift_xy', baseX: '5', baseY: '5' },
-    { label: 'Wave X', value: 'wave_x', baseX: 'wave:10:0.1', baseY: '0' },
+    { label: 'Wave X', value: 'wave_x', baseX: 'wave:10:2', baseY: '0' },
+    { label: 'Wave Y', value: 'wave_y', baseX: '0', baseY: 'wave:10:2' },
+    { label: 'Wave X & Y', value: 'wave_xy', baseX: 'wave:10:2', baseY: 'wave:10:2' },
+    { label: 'Wobble', value: 'wobble', baseX: 'random:3', baseY: 'random:3' }
     /*
     { label: 'Wave Y', value: 'wave_y', baseX: '0', baseY: 'wave:10:0.1' },
     { label: 'Wave X & Y', value: 'wave_xy', baseX: 'wave:10:0.1', baseY: 'wave:10:0.1' },
