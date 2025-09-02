@@ -54,9 +54,9 @@ const Tesselate = ({
   });
   
   // Create p5 instance once on mount
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    console.log(`🔄 [COMPONENT ${componentId.current}] CREATING P5 INSTANCE (MOUNT)`);
+    const currentComponentId = componentId.current;
+    console.log(`🔄 [COMPONENT ${currentComponentId}] CREATING P5 INSTANCE (MOUNT)`);
     const sketch = (p) => {
       p.setup = () => {
         setup(p);
@@ -78,8 +78,6 @@ const Tesselate = ({
     p5InstanceRef.current = p5Instance;
 
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      const currentComponentId = componentId.current;
       console.log(`🗑️ [COMPONENT ${currentComponentId}] CLEANING UP P5 INSTANCE`);
       if (p5InstanceRef.current) {
         p5InstanceRef.current.remove();
