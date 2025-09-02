@@ -54,6 +54,7 @@ const Tesselate = ({
   });
   
   // Create p5 instance once on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     console.log(`🔄 [COMPONENT ${componentId.current}] CREATING P5 INSTANCE (MOUNT)`);
     const sketch = (p) => {
