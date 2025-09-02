@@ -78,6 +78,7 @@ const Tesselate = ({
     p5InstanceRef.current = p5Instance;
 
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       const currentComponentId = componentId.current;
       console.log(`🗑️ [COMPONENT ${currentComponentId}] CLEANING UP P5 INSTANCE`);
       if (p5InstanceRef.current) {
