@@ -122,10 +122,10 @@ const Showcase = {
     featured: true
   },
 
-  "scarlet_cc_chaos": {
-    title: "Scarlet CC Chaos",
-    description: "Claude Code pattern in academic scarlet with chaotic random positioning",
-    tilePattern: "CC",
+  "scarlet_castle_chaos": {
+    title: "Scarlet Castle Chaos",
+    description: "Cat Castle pattern in academic scarlet with chaotic random positioning",
+    tilePattern: "Cat Castle",
     colorTheme: "Scarlet A+",
     tileSize: 20,
     tileXAdjust: "random:60:0",
@@ -133,10 +133,10 @@ const Showcase = {
     featured: true
   },
 
-  "faded_cc_wave": {
-    title: "Faded CC Wave", 
-    description: "Claude Code pattern in retro robot colors with hypnotic wave distortions",
-    tilePattern: "CC",
+  "faded_castle_wave": {
+    title: "Faded Castle Wave", 
+    description: "Cat Castle pattern in retro robot colors with hypnotic wave distortions",
+    tilePattern: "Cat Castle",
     colorTheme: "Faded Robot",
     tileSize: 24,
     tileXAdjust: "wave:30:6",

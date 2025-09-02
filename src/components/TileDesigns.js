@@ -504,7 +504,7 @@ const TileDesigns= {
   },
   
 
-  'CC': {
+  'Cat Castle': {
     'tileShape': "pointyTopHexatile",
     'tileOffset': 0,
     'tileStroke': "",
