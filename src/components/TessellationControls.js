@@ -194,10 +194,16 @@ const TessellationControls = ({
         const effectType = parts[0];
         const param1 = parseFloat(parts[1]) * multiplier;
         const param2 = parseFloat(parts[2]) * multiplier;
-        return `${effectType}:${param1}:${param2}`;
+        
+        // Check for NaN values and fallback to defaults
+        const safeParam1 = isNaN(param1) ? 0 : param1;
+        const safeParam2 = isNaN(param2) ? 0 : param2;
+        
+        return `${effectType}:${safeParam1}:${safeParam2}`;
       } else {
         // Handle simple numeric values
-        return (parseFloat(value) * multiplier).toString();
+        const numValue = parseFloat(value) * multiplier;
+        return isNaN(numValue) ? '0' : numValue.toString();
       }
     };
 
@@ -214,7 +220,7 @@ const TessellationControls = ({
     
     // Check if current values match any option at any multiplier level
     for (const option of adjustOptions) {
-      for (const mult of [1, 2, 3, 5, 10, 20]) {
+      for (const mult of [1, 2, 3, 5, 10, 20, -1, -2, -5, -10]) {
         // Calculate adjusted values using the specific multiplier being tested
         const applyTestMultiplier = (value) => {
           if (value === '0') return '0';
@@ -708,9 +714,15 @@ const TessellationControls = ({
                           const effectType = parts[0];
                           const param1 = parseFloat(parts[1]) * multiplier;
                           const param2 = parseFloat(parts[2]) * multiplier;
-                          return `${effectType}:${param1}:${param2}`;
+                          
+                          // Check for NaN values and fallback to defaults
+                          const safeParam1 = isNaN(param1) ? 0 : param1;
+                          const safeParam2 = isNaN(param2) ? 0 : param2;
+                          
+                          return `${effectType}:${safeParam1}:${safeParam2}`;
                         } else {
-                          return (parseFloat(value) * multiplier).toString();
+                          const numValue = parseFloat(value) * multiplier;
+                          return isNaN(numValue) ? '0' : numValue.toString();
                         }
                       };
 
@@ -767,6 +779,26 @@ const TessellationControls = ({
                 <MenuItem value="20x">
                   <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
                     20x
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="-1x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    -1x
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="-2x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    -2x
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="-5x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    -5x
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="-10x">
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                    -10x
                   </Typography>
                 </MenuItem>
               </Select>

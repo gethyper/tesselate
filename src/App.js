@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useSearchParams } from 'react-router-dom';
 import Tesselate from './components/Tesselate';
 import TessellationControls from './components/TessellationControls';
@@ -6,55 +6,68 @@ import Gallery from './components/Gallery';
 import TileDesigns from './components/TileDesigns';
 import ColorThemes from './components/ColorThemes';
 import PresentationPage from './components/PresentationPage';
+import LearningPage from './components/LearningPage';
 import { getFeaturedShowcase } from './components/Showcase';
 
 // Tessellation page component
 function TessellationPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Get a stable random featured showcase for initial defaults (only called once)
-  const getInitialShowcase = React.useMemo(() => {
+  // Get a fresh random featured showcase on every page load/refresh
+  const getInitialShowcase = (() => {
     const featured = getFeaturedShowcase();
     const keys = Object.keys(featured);
     if (keys.length === 0) return null;
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
     return featured[randomKey];
-  }, []); // Empty dependency array ensures this only runs once
+  })();
+
+  // State to track if user has manually interacted with controls
+  const [userHasInteracted, setUserHasInteracted] = useState(false);
+  
+  // Auto-rotation state
+  const autoRotationTimer = useRef(null);
+  const lastAutoRotationTime = useRef(Date.now());
 
   // State management with URL and localStorage persistence
   const [selectedPattern, setSelectedPattern] = useState(() => {
     const urlPattern = searchParams.get('pattern');
-    const storagePattern = localStorage.getItem('tessellation-pattern');
     
-    if (urlPattern || storagePattern) {
-      return urlPattern || storagePattern;
+    // If URL pattern exists, use it (we'll mark user interaction in useEffect)
+    if (urlPattern) {
+      return urlPattern;
     }
     
-    // If no URL or storage pattern, use random featured showcase
+    // If no URL pattern, always use random featured showcase for fresh experience
     return getInitialShowcase ? getInitialShowcase.tilePattern : 'shadowBoxes';
   });
 
   const [selectedTheme, setSelectedTheme] = useState(() => {
     const urlTheme = searchParams.get('theme');
-    const storageTheme = localStorage.getItem('tessellation-theme');
     
-    if (urlTheme || storageTheme) {
-      return urlTheme || storageTheme;
+    // If URL theme exists, use it (we'll mark user interaction in useEffect)
+    if (urlTheme) {
+      return urlTheme;
     }
     
-    // If no URL or storage theme, use random featured showcase
+    // If no URL theme, always use random featured showcase for fresh experience
     return getInitialShowcase ? getInitialShowcase.colorTheme : 'basicBee';
   });
 
   const [tileSize, setTileSize] = useState(() => {
     const urlSize = searchParams.get('size');
-    const storageSize = localStorage.getItem('tessellation-size');
     
-    if (urlSize || storageSize) {
-      return Number(urlSize) || Number(storageSize);
+    // If URL size exists, parse it safely (we'll mark user interaction in useEffect)
+    if (urlSize) {
+      const parsedSize = parseFloat(urlSize);
+      // Validate the parsed size is a reasonable number
+      if (!isNaN(parsedSize) && isFinite(parsedSize) && parsedSize > 0 && parsedSize <= 200) {
+        return parsedSize;
+      }
+      console.warn(`Invalid size parameter in URL: ${urlSize}, using default`);
     }
     
-    // If no URL or storage size, use random featured showcase
+    // If no URL size or invalid size, use random featured showcase for fresh experience
     return getInitialShowcase ? getInitialShowcase.tileSize : 20;
   });
 
@@ -69,15 +82,32 @@ function TessellationPage() {
 
   // Parse tile adjustment parameters (support both numeric and effect patterns)
   const parseAdjustment = (param) => {
-    if (!param) return { type: 'numeric', value: 0 };
+    if (!param || param === 'null' || param === 'undefined') {
+      return { type: 'numeric', value: 0 };
+    }
+    
+    // Decode URL encoding if present
+    let decodedParam;
+    try {
+      decodedParam = decodeURIComponent(param);
+    } catch (e) {
+      console.warn(`Failed to decode URL parameter: ${param}, using raw value`);
+      decodedParam = param;
+    }
     
     // Check if it's an effect pattern (contains colons)
-    if (param.includes(':')) {
-      const parts = param.split(':');
-      const effectType = parts[0];
+    if (decodedParam.includes(':')) {
+      const parts = decodedParam.split(':');
+      const effectType = parts[0].toLowerCase(); // Normalize effect type
       const values = parts.slice(1).map(val => {
-        const num = Number(val);
-        return isNaN(num) ? 0 : num;
+        const num = parseFloat(val);
+        // More strict validation for effect parameters
+        if (isNaN(num) || !isFinite(num)) {
+          console.warn(`Invalid effect parameter: ${val} in ${decodedParam}`);
+          return 0;
+        }
+        // Cap extreme values to prevent calculation issues
+        return Math.max(-1000, Math.min(1000, num));
       });
       
       return {
@@ -88,10 +118,17 @@ function TessellationPage() {
     }
     
     // Plain numeric value
-    const numValue = Number(param);
+    const numValue = parseFloat(decodedParam);
+    if (isNaN(numValue) || !isFinite(numValue)) {
+      console.warn(`Invalid numeric adjustment parameter: ${decodedParam}`);
+      return { type: 'numeric', value: 0, raw: param };
+    }
+    
+    // Cap extreme values
+    const clampedValue = Math.max(-1000, Math.min(1000, numValue));
     return {
       type: 'numeric',
-      value: isNaN(numValue) ? 0 : numValue,
+      value: clampedValue,
       raw: param
     };
   };
@@ -99,15 +136,91 @@ function TessellationPage() {
   // Handle tile adjustments - URL parameters first, then initial showcase defaults
   const tileXAdjust = parseAdjustment(
     searchParams.get('tile_x_adjust') || 
-    (getInitialShowcase && !searchParams.get('pattern') && !localStorage.getItem('tessellation-pattern') ? getInitialShowcase.tileXAdjust : null)
+    (getInitialShowcase && !searchParams.get('pattern') ? getInitialShowcase.tileXAdjust : null)
   );
   const tileYAdjust = parseAdjustment(
     searchParams.get('tile_y_adjust') || 
-    (getInitialShowcase && !searchParams.get('pattern') && !localStorage.getItem('tessellation-pattern') ? getInitialShowcase.tileYAdjust : null)
+    (getInitialShowcase && !searchParams.get('pattern') ? getInitialShowcase.tileYAdjust : null)
   );
+
+  // Function to rotate to the next featured design
+  const rotateToNextDesign = () => {
+    const featured = getFeaturedShowcase();
+    const featuredKeys = Object.keys(featured);
+    if (featuredKeys.length === 0) return;
+    
+    const randomKey = featuredKeys[Math.floor(Math.random() * featuredKeys.length)];
+    const nextDesign = featured[randomKey];
+    
+    // Update all states without marking as user interaction
+    setSelectedPattern(nextDesign.tilePattern);
+    setSelectedTheme(nextDesign.colorTheme);
+    setTileSize(nextDesign.tileSize);
+    
+    // Update URL without marking as user interaction
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('pattern', nextDesign.tilePattern);
+    newParams.set('theme', nextDesign.colorTheme);
+    newParams.set('size', nextDesign.tileSize.toString());
+    
+    // Handle tile adjustments if they exist
+    if (nextDesign.tileXAdjust) {
+      newParams.set('tile_x_adjust', nextDesign.tileXAdjust);
+    } else {
+      newParams.delete('tile_x_adjust');
+    }
+    
+    if (nextDesign.tileYAdjust) {
+      newParams.set('tile_y_adjust', nextDesign.tileYAdjust);
+    } else {
+      newParams.delete('tile_y_adjust');
+    }
+    
+    setSearchParams(newParams);
+    lastAutoRotationTime.current = Date.now();
+  };
+
+  // Effect to detect if URL has parameters indicating user interaction
+  useEffect(() => {
+    const hasUrlParams = searchParams.get('pattern') || 
+                         searchParams.get('theme') || 
+                         searchParams.get('size') || 
+                         searchParams.get('tile_x_adjust') || 
+                         searchParams.get('tile_y_adjust') ||
+                         searchParams.get('gradient') ||
+                         searchParams.get('texture');
+    
+    if (hasUrlParams && !userHasInteracted) {
+      setUserHasInteracted(true);
+    }
+  }, []); // Run once on mount
+
+  // Auto-rotation effect
+  useEffect(() => {
+    if (userHasInteracted || hideControls) {
+      // Clear any existing timer if user has interacted
+      if (autoRotationTimer.current) {
+        clearInterval(autoRotationTimer.current);
+        autoRotationTimer.current = null;
+      }
+      return;
+    }
+
+    // Start auto-rotation timer
+    autoRotationTimer.current = setInterval(rotateToNextDesign, 10000); // 10 seconds
+
+    // Cleanup on unmount or when dependencies change
+    return () => {
+      if (autoRotationTimer.current) {
+        clearInterval(autoRotationTimer.current);
+        autoRotationTimer.current = null;
+      }
+    };
+  }, [userHasInteracted, hideControls]);
 
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
+    setUserHasInteracted(true); // Mark user interaction
     setSelectedPattern(pattern);
     const newParams = new URLSearchParams(searchParams);
     newParams.set('pattern', pattern);
@@ -116,6 +229,7 @@ function TessellationPage() {
   };
 
   const updateTheme = (theme) => {
+    setUserHasInteracted(true); // Mark user interaction
     setSelectedTheme(theme);
     const newParams = new URLSearchParams(searchParams);
     newParams.set('theme', theme);
@@ -126,6 +240,7 @@ function TessellationPage() {
   const debounceTimerRef = useRef(null);
   
   const updateSize = (size) => {
+    setUserHasInteracted(true); // Mark user interaction
     // Update the UI immediately for responsiveness
     setTileSize(size);
     
@@ -143,17 +258,22 @@ function TessellationPage() {
   };
 
   const updateAdjustments = (xValue, yValue) => {
+    setUserHasInteracted(true); // Mark user interaction
+    // Sanitize values to prevent NaN in URL
+    const safeXValue = (xValue && xValue !== 'NaN' && !xValue.includes('NaN')) ? xValue : '0';
+    const safeYValue = (yValue && yValue !== 'NaN' && !yValue.includes('NaN')) ? yValue : '0';
+    
     const newParams = new URLSearchParams(searchParams);
     
-    if (xValue === '0' && yValue === '0') {
+    if (safeXValue === '0' && safeYValue === '0') {
       // Remove adjustment parameters when set to none
       newParams.delete('tile_x_adjust');
       newParams.delete('tile_y_adjust');
     } else {
-      if (xValue !== '0') newParams.set('tile_x_adjust', xValue);
+      if (safeXValue !== '0') newParams.set('tile_x_adjust', safeXValue);
       else newParams.delete('tile_x_adjust');
       
-      if (yValue !== '0') newParams.set('tile_y_adjust', yValue);
+      if (safeYValue !== '0') newParams.set('tile_y_adjust', safeYValue);
       else newParams.delete('tile_y_adjust');
     }
     
@@ -219,6 +339,8 @@ function App() {
         <Route path="/tesselate" element={<TessellationPage />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/presentation" element={<PresentationPage />} />
+        <Route path="/claude-code-learning.html" element={<LearningPage />} />
+        <Route path="/learning" element={<LearningPage />} />
       </Routes>
     </BrowserRouter>
   );

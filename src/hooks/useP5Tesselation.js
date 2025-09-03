@@ -57,12 +57,30 @@ export const legacyDrawPolygon = (p5, centerX, centerY, radius, numSides) => {
  * @returns {Array<Array<number>>} Array of [x, y] coordinate pairs representing the vertices
  */
 export const generateHexVertices = (p5, centerX, centerY, radius, isPointyTop = false) => {
+  // Validate input parameters
+  if (typeof centerX !== 'number' || isNaN(centerX) || !isFinite(centerX) ||
+      typeof centerY !== 'number' || isNaN(centerY) || !isFinite(centerY) ||
+      typeof radius !== 'number' || isNaN(radius) || !isFinite(radius) || radius <= 0) {
+    console.error(`generateHexVertices called with invalid parameters: centerX=${centerX}, centerY=${centerY}, radius=${radius}`);
+    console.error('Vertex generation call stack:', new Error().stack);
+    return []; // Return empty vertices array
+  }
+  
   const vertices = [];
   const startAngle = isPointyTop ? p5.TAU / 12 : 0;
   const endAngle = isPointyTop ? p5.TAU + p5.TAU / 12 : p5.TAU;
   
   for (let a = startAngle; a < endAngle; a += p5.TAU / 6) {
-    vertices.push([centerX + radius * p5.cos(a), centerY + radius * p5.sin(a)]);
+    const x = centerX + radius * p5.cos(a);
+    const y = centerY + radius * p5.sin(a);
+    
+    // Validate each vertex
+    if (isNaN(x) || isNaN(y) || !isFinite(x) || !isFinite(y)) {
+      console.error(`Generated NaN vertex: x=${x}, y=${y}, angle=${a}, centerX=${centerX}, centerY=${centerY}, radius=${radius}`);
+      continue; // Skip this vertex
+    }
+    
+    vertices.push([x, y]);
   }
   return vertices;
 };
@@ -175,9 +193,23 @@ export const createGradientFill = (p5, x1, y1, x2, y2, x3, y3, baseColor, useGra
  * @param {boolean} isPointyTop - Whether to draw pointy-top (true) or flat-top (false) outline
  */
 export const drawHexagonOutline = (p5, centerX, centerY, radius, isPointyTop = false) => {
+    // Validate center coordinates and radius
+    if (typeof centerX !== 'number' || isNaN(centerX) || !isFinite(centerX) ||
+        typeof centerY !== 'number' || isNaN(centerY) || !isFinite(centerY) ||
+        typeof radius !== 'number' || isNaN(radius) || !isFinite(radius)) {
+      // Add stack trace to see exactly where this is being called from
+      console.error(`Invalid hexagon parameters: centerX=${centerX}, centerY=${centerY}, radius=${radius}`);
+      console.error('Call stack:', new Error().stack);
+      return; // Skip drawing this hexagon
+    }
+
     const vertices = generateHexVertices(p5, centerX, centerY, radius, isPointyTop);
     p5.beginShape();
-    vertices.forEach(([x, y]) => p5.vertex(x, y));
+    vertices.forEach(([x, y]) => {
+      if (typeof x === 'number' && typeof y === 'number' && isFinite(x) && isFinite(y)) {
+        p5.vertex(x, y);
+      }
+    });
     p5.endShape(p5.CLOSE);
 };
 
@@ -211,6 +243,14 @@ export const drawPointyTopHexagonOutline = (p5, centerX, centerY, radius) => {
  * @param {boolean} isPointyTop - Whether to draw pointy-top (true) or flat-top (false) hexagon
  */
 export const drawHexatile = (p5, centerX, centerY, radius, tile_components, color_theme, tile_options = {}, enableGradient = false, isPointyTop = false) => {
+  // Validate input parameters
+  if (typeof centerX !== 'number' || isNaN(centerX) || !isFinite(centerX) ||
+      typeof centerY !== 'number' || isNaN(centerY) || !isFinite(centerY) ||
+      typeof radius !== 'number' || isNaN(radius) || !isFinite(radius) || radius <= 0) {
+    console.warn(`drawHexatile called with invalid parameters: centerX=${centerX}, centerY=${centerY}, radius=${radius}`);
+    return; // Skip drawing this tile
+  }
+  
   // Generate hexagon vertices using unified function
   const vertices = generateHexVertices(p5, centerX, centerY, radius, isPointyTop);
   
@@ -360,6 +400,15 @@ export const drawTexturedTriangle = (p5, x1, y1, x2, y2, x3, y3, color, textureI
  * @param {HTMLImageElement|null} textureImg - Optional texture image
  */
 export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = EMPTY_STROKE_OPTIONS, useGradient = false, textureImg = null) => {
+  // Validate all coordinates are valid numbers
+  const coords = [x1, y1, x2, y2, x3, y3];
+  for (let i = 0; i < coords.length; i++) {
+    if (typeof coords[i] !== 'number' || isNaN(coords[i]) || !isFinite(coords[i])) {
+      console.warn(`Invalid coordinate at position ${i}: ${coords[i]}, skipping triangle`);
+      return; // Skip drawing this triangle
+    }
+  }
+
   // Destructure once to avoid repeated property access
   const {
     stroke_color = null,
@@ -472,6 +521,17 @@ export const drawMultiHexatiles = (
         const tileX = baseX + horizontalOffset + tile_x_adjust;
         const tileY = startY + ((tileHeight - tileYOffset) * row) + tile_y_adjust;
 
+        // Validate coordinates before drawing
+        if (isNaN(tileX) || isNaN(tileY) || !isFinite(tileX) || !isFinite(tileY)) {
+          console.error(`🚨 WOBBLE DEBUG v3.0 - drawMultiHexatiles POINTY-TOP FAILED: column=${column}, row=${row}`);
+          console.error(`  tileX = ${baseX} + ${horizontalOffset} + ${tile_x_adjust} = ${tileX}`);
+          console.error(`  tileY = ${startY} + ${((tileHeight - tileYOffset) * row)} + ${tile_y_adjust} = ${tileY}`);
+          console.error(`  Components: baseX=${baseX}, horizontalOffset=${horizontalOffset}, tile_x_adjust=${tile_x_adjust}`);
+          console.error(`  Tile dimensions: tileWidth=${tileWidth}, tileHeight=${tileHeight}, tileXOffset=${tileXOffset}, tileYOffset=${tileYOffset}`);
+          console.error(`  Position: startX=${startX}, startY=${startY}, column=${column}, row=${row}`);
+          continue;
+        }
+
         drawPointyTopHexatile(p5, tileX, tileY, radius, tile_pattern[column][row], color_theme, tile_options, useGradient);
       }
     }
@@ -488,6 +548,16 @@ export const drawMultiHexatiles = (
       
       for (let row = 0; row < tilesHigh; row++) {
         const tileY = startY + verticalOffset + (verticalSpacing * row);
+        
+        // Validate coordinates before drawing
+        if (isNaN(tileX) || isNaN(tileY) || !isFinite(tileX) || !isFinite(tileY)) {
+          console.error(`🚨 WOBBLE DEBUG v3.0 - drawMultiHexatiles FLAT-TOP FAILED: column=${column}, row=${row}`);
+          console.error(`  tileX = ${tileX}`);
+          console.error(`  tileY = ${startY} + ${verticalOffset} + ${(verticalSpacing * row)} = ${tileY}`);
+          console.error(`  Components: startX=${startX}, startY=${startY}, horizontalSpacing=${horizontalSpacing}, verticalSpacing=${verticalSpacing}`);
+          console.error(`  verticalOffset=${verticalOffset}, column=${column}, row=${row}`);
+          continue;
+        }
         
         drawFlatTopHexatile(p5, tileX, tileY, radius, tile_pattern[column][row], color_theme, tile_options, useGradient);
       }
@@ -620,11 +690,43 @@ const getMosaicHeight = (tile_shape, tile_height, tiles_in_mosaic_high, tile_y_o
 };
 
 const getTilesWide = (p5, tile_width, tile_x_offset, tile_x_adjust = 0 ) => {
-  return Math.round(p5.width / (tile_width - tile_x_offset + tile_x_adjust)) + 1;
+  const divisor = tile_width - tile_x_offset + tile_x_adjust;
+  
+  // Prevent division by zero or negative divisor
+  if (divisor <= 0 || !isFinite(divisor) || isNaN(divisor)) {
+    console.warn(`Invalid divisor in getTilesWide: ${divisor} (tile_width=${tile_width}, tile_x_offset=${tile_x_offset}, tile_x_adjust=${tile_x_adjust})`);
+    return Math.ceil(p5.width / Math.max(tile_width, 10)) + 1; // Fallback to basic tile width
+  }
+  
+  const result = Math.round(p5.width / divisor) + 1;
+  
+  // Cap at reasonable maximum to prevent memory issues
+  if (result > 500) {
+    console.warn(`getTilesWide calculated excessive tiles: ${result}, capping at 100`);
+    return 100;
+  }
+  
+  return result;
 };
 
 const getTilesHigh = (p5, tile_height, tile_y_offset, tile_y_adjust = 0) => {
-  return Math.round(p5.height / (tile_height - tile_y_offset + tile_y_adjust)) + 1;
+  const divisor = tile_height - tile_y_offset + tile_y_adjust;
+  
+  // Prevent division by zero or negative divisor
+  if (divisor <= 0 || !isFinite(divisor) || isNaN(divisor)) {
+    console.warn(`Invalid divisor in getTilesHigh: ${divisor} (tile_height=${tile_height}, tile_y_offset=${tile_y_offset}, tile_y_adjust=${tile_y_adjust})`);
+    return Math.ceil(p5.height / Math.max(tile_height, 10)) + 1; // Fallback to basic tile height
+  }
+  
+  const result = Math.round(p5.height / divisor) + 1;
+  
+  // Cap at reasonable maximum to prevent memory issues
+  if (result > 500) {
+    console.warn(`getTilesHigh calculated excessive tiles: ${result}, capping at 100`);
+    return 100;
+  }
+  
+  return result;
 };
 
 
@@ -642,21 +744,79 @@ const calculateTileAdjustment = (adjustment, i, j, r) => {
     return adjustment?.value || 0;
   }
 
+  // Debug logging for troubleshooting
+  if (adjustment.type === 'random' && (isNaN(i) || isNaN(j) || isNaN(r))) {
+    console.warn(`Invalid parameters for random adjustment: i=${i}, j=${j}, r=${r}, adjustment=`, adjustment);
+    return 0;
+  }
+
   switch (adjustment.type) {
     case 'wave':
     case 'sine':
-      // wave:amplitude:frequency
+      // wave:amplitude:frequency (optimized calculation with safety checks)
       const amplitude = adjustment.values[0] || 10;
       const frequency = adjustment.values[1] || 1;
-      return amplitude * Math.sin((i + j) * frequency * 0.1);
+      
+      // Validate wave parameters
+      if (!isFinite(amplitude) || isNaN(amplitude) || !isFinite(frequency) || isNaN(frequency)) {
+        return 0;
+      }
+      
+      const waveInput = (i + j) * frequency * 0.1;
+      const waveResult = amplitude * Math.sin(waveInput);
+      return isFinite(waveResult) && !isNaN(waveResult) ? waveResult : 0;
     
     case 'random':
-      // random:intensity
+      // random:intensity (optimized deterministic random with safety checks)
       const intensity = adjustment.values[0] || 5;
-      // Use deterministic random based on position for consistency
-      const seed = i * 1000 + j;
-      const pseudoRandom = Math.sin(seed) * 10000;
-      return (pseudoRandom - Math.floor(pseudoRandom) - 0.5) * intensity * 2;
+      
+      // Validate intensity parameter
+      if (!isFinite(intensity) || isNaN(intensity)) {
+        console.warn(`Invalid intensity in random adjustment: ${intensity}`);
+        return 0;
+      }
+      
+      // Validate input parameters
+      if (!isFinite(i) || isNaN(i) || !isFinite(j) || isNaN(j)) {
+        console.warn(`Invalid i,j parameters in random adjustment: i=${i}, j=${j}`);
+        return 0;
+      }
+      
+      // Use faster deterministic random based on position
+      const seed = i * 1009 + j * 1013; // Use prime numbers for better distribution
+      
+      // Check for overflow in seed calculation
+      if (!isFinite(seed) || isNaN(seed)) {
+        console.warn(`Seed calculation overflow: i=${i}, j=${j}, seed=${seed}`);
+        return 0;
+      }
+      
+      const modResult = (seed * 16807) % 2147483647;
+      const pseudoRandom = modResult / 2147483647; // Linear congruential generator
+      
+      // Debug random calculation for problematic positions
+      if ((i === 43 && j === 19) || (i > 40 && isNaN(pseudoRandom))) {
+        console.error(`🎲 Random calculation debug at i=${i}, j=${j}:`);
+        console.error(`  seed = ${i} * 1009 + ${j} * 1013 = ${seed}`);
+        console.error(`  modResult = (${seed} * 16807) % 2147483647 = ${modResult}`);
+        console.error(`  pseudoRandom = ${modResult} / 2147483647 = ${pseudoRandom}`);
+        console.error(`  intensity = ${intensity}`);
+      }
+      
+      // Validate the random calculation result
+      if (!isFinite(pseudoRandom) || isNaN(pseudoRandom)) {
+        console.warn(`Pseudorandom calculation failed: seed=${seed}, modResult=${modResult}, pseudoRandom=${pseudoRandom}`);
+        return 0;
+      }
+      
+      const finalResult = (pseudoRandom - 0.5) * intensity * 2;
+      const safeResult = isFinite(finalResult) && !isNaN(finalResult) ? finalResult : 0;
+      
+      if (safeResult !== finalResult) {
+        console.warn(`Final result validation failed: finalResult=${finalResult}, returning 0`);
+      }
+      
+      return safeResult;
     
     case 'alt':
       // alt:value1:value2
@@ -678,7 +838,7 @@ const calculateTileAdjustment = (adjustment, i, j, r) => {
 const getNumericValue = (adjustment) => typeof adjustment === 'object' ? adjustment.value : adjustment;
 
 /**
- * Creates adjustment function for X or Y coordinate
+ * Creates optimized adjustment function for X or Y coordinate with memoization
  * 
  * @param {number|Object} adjustment - X or Y adjustment value/object
  * @param {number} r - Tile radius
@@ -686,13 +846,46 @@ const getNumericValue = (adjustment) => typeof adjustment === 'object' ? adjustm
  * @returns {Function} Function that takes (i, j) and returns adjustment value
  */
 const createAdjustmentFunction = (adjustment, r, axis) => {
-  return (i, j) => {
-    if (typeof adjustment === 'object' && adjustment.type !== 'numeric') {
-      return calculateTileAdjustment(adjustment, i, j, r);
-    }
+  // For numeric adjustments, no need to cache
+  if (typeof adjustment !== 'object' || adjustment.type === 'numeric') {
     const numericValue = getNumericValue(adjustment);
-    // Legacy numeric behavior: X uses i, Y uses j
-    return numericValue * (axis === 'x' ? i : j);
+    return (i, j) => numericValue * (axis === 'x' ? i : j);
+  }
+
+  // For complex adjustments (wave, wobble, random), use memoization
+  const cache = new Map();
+  const maxCacheSize = 5000; // Limit cache size to prevent memory issues
+  
+  return (i, j) => {
+    const key = `${i},${j}`;
+    
+    // Check cache first
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    
+    // Calculate new value
+    const value = calculateTileAdjustment(adjustment, i, j, r);
+    
+    // Validate the calculated value with extra safety
+    const safeValue = (typeof value === 'number' && isFinite(value) && !isNaN(value)) ? value : 0;
+    
+    // Debug specific problematic cases
+    if ((value !== safeValue && i > 40) || (i === 43 && j === 19)) {
+      console.error(`🚨 Adjustment calculation issue at i=${i}, j=${j}:`);
+      console.error(`  Raw calculated value: ${value}`);
+      console.error(`  Safe value used: ${safeValue}`);
+      console.error(`  Adjustment object:`, adjustment);
+      console.error(`  Cache key: ${key}`);
+      console.error(`  Cache size: ${cache.size}`);
+    }
+    
+    // Add to cache if under limit
+    if (cache.size < maxCacheSize) {
+      cache.set(key, safeValue);
+    }
+    
+    return safeValue;
   };
 };
 
@@ -765,6 +958,12 @@ export const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile
  * @param {boolean} useGradient - Whether to apply gradient effects
  */
 const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}, useGradient = false) => {
+  // Check if radius is valid
+  if (isNaN(r) || !isFinite(r) || r <= 0) {
+    console.error(`Invalid radius parameter in tileUnified: r=${r}`);
+    return;
+  }
+  
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
   const tile_y_adjust = tile_options.tile_y_adjust || 0;
   console.log(tile_x_adjust, tile_y_adjust)
@@ -780,6 +979,11 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
   const tile_x_offset = getTileXOffset(tile_shape, r);
   const tile_y_offset = getTileYOffset(tile_shape, r);
   
+  // Debug tile dimensions
+  if (isNaN(tile_width) || isNaN(tile_height) || isNaN(tile_x_offset) || isNaN(tile_y_offset)) {
+    console.error(`Invalid tile dimensions: width=${tile_width}, height=${tile_height}, x_offset=${tile_x_offset}, y_offset=${tile_y_offset}, r=${r}, shape=${tile_shape}`);
+  }
+  
   // Get mosaic dimensions
   const tiles_in_mosaic_wide = tile_pattern.length;
   const tiles_in_mosaic_high = tile_pattern[0].length;
@@ -792,11 +996,36 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
   const tiles_wide = tile_options.showSingleMosaic ? tiles_in_mosaic_wide : getTilesWide(p5, tile_width, tile_x_offset, xAdjustForTiling);
   const tiles_high = tile_options.showSingleMosaic ? tiles_in_mosaic_high : getTilesHigh(p5, tile_height, tile_y_offset, yAdjustForTiling);
   
+  // Debug tiles calculation
+  if (isNaN(tiles_wide) || isNaN(tiles_high) || tiles_wide > 200 || tiles_high > 200) {
+    console.error(`Suspicious tiles calculation: tiles_wide=${tiles_wide}, tiles_high=${tiles_high}`);
+    console.error(`  tile_width=${tile_width}, tile_height=${tile_height}`);
+    console.error(`  canvas size: ${p5.width}x${p5.height}`);
+  }
+  
+  // Test specific problematic position if we're dealing with wobble
+  if (tile_x_adjust && typeof tile_x_adjust === 'object' && tile_x_adjust.type === 'random') {
+    console.log(`🧪 Testing wobble calculation at i=43, j=19:`);
+    const testXAdjust = getXAdjustment(43, 19);
+    console.log(`  Result: ${testXAdjust}`);
+  }
+  
   const isPointyTop = tile_shape === 'pointyTopHexatile';
   
   for (let i = 0; i < tiles_wide; i++) {
     // Calculate base X position based on orientation
-    const x_pos = (i === 0) ? 0 : (isPointyTop ? (tile_width * i) : ((tile_width - tile_x_offset) * i));
+    let x_pos = (i === 0) ? 0 : (isPointyTop ? (tile_width * i) : ((tile_width - tile_x_offset) * i));
+    
+    // Debug x_pos calculation for problematic tiles and provide fallback
+    if (isNaN(x_pos) || (i > 40 && isNaN(x_pos))) {
+      console.error(`x_pos calculation failed at i=${i}:`);
+      console.error(`  Original calculation: ${i === 0 ? '0' : (isPointyTop ? `(${tile_width} * ${i})` : `((${tile_width} - ${tile_x_offset}) * ${i})`)}`);
+      console.error(`  tile_width=${tile_width}, tile_x_offset=${tile_x_offset}, isPointyTop=${isPointyTop}`);
+      console.error(`  Result: ${x_pos}`);
+      // Fallback: Use a simple linear progression
+      x_pos = i * 50; // Use a default tile spacing
+      console.error(`  Using fallback x_pos=${x_pos}`);
+    }
     const tile_column = (i % tiles_in_mosaic_wide);
     
     // Calculate vertical offset for flat-top (alternates by column)
@@ -809,10 +1038,41 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
       const offset_x = (isPointyTop && (j % 2 !== 0)) ? tile_x_offset + tile_x_y_normalize + extraOffset : 0;
       
       // Calculate final positions based on orientation
-      const x_loc = x_pos + offset_x + getXAdjustment(i, j);
+      const xAdjust = getXAdjustment(i, j);
+      const yAdjust = getYAdjustment(i, j);
+      
+      // Debug xAdjust specifically at problematic positions
+      if ((i === 43 && j === 19) || (i > 40 && (isNaN(xAdjust) || !isFinite(xAdjust)))) {
+        console.error(`🔍 Debugging xAdjust at i=${i}, j=${j}:`);
+        console.error(`  xAdjust result: ${xAdjust}`);
+        console.error(`  tile_x_adjust:`, tile_x_adjust);
+        console.error(`  r (radius): ${r}`);
+      }
+      
+      // Debug NaN issues - only log when we have problems at high i values (like i=49)
+      if ((isNaN(x_pos) || isNaN(offset_x) || isNaN(xAdjust)) && i > 40) {
+        console.error(`NaN detected in x_loc calculation at i=${i}, j=${j}:`);
+        console.error(`  x_pos=${x_pos} (calculated from: i=${i}, tile_width=${tile_width}, tile_x_offset=${tile_x_offset}, isPointyTop=${isPointyTop})`);
+        console.error(`  offset_x=${offset_x} (calculated from: j=${j}, tile_x_offset=${tile_x_offset}, tile_x_y_normalize=${tile_x_y_normalize}, extraOffset=${extraOffset})`);
+        console.error(`  xAdjust=${xAdjust} (from getXAdjustment function)`);
+        console.error(`  Call stack:`, new Error().stack);
+      }
+      
+      const x_loc = x_pos + offset_x + xAdjust;
       const y_loc = isPointyTop ? 
-        ((tile_height - tile_y_offset) * j + getYAdjustment(i, j)) :
-        ((tile_height * j) + offset_y + getYAdjustment(i, j));
+        ((tile_height - tile_y_offset) * j + yAdjust) :
+        ((tile_height * j) + offset_y + yAdjust);
+
+      // Validate final coordinates before drawing
+      if (isNaN(x_loc) || isNaN(y_loc) || !isFinite(x_loc) || !isFinite(y_loc)) {
+        console.error(`🚨 WOBBLE DEBUG v2.0 - FINAL COORDINATE VALIDATION FAILED at i=${i}, j=${j}:`);
+        console.error(`  x_loc = ${x_pos} + ${offset_x} + ${xAdjust} = ${x_loc}`);
+        console.error(`  y_loc = ${y_loc}`);
+        console.error(`  Components: x_pos=${x_pos}, offset_x=${offset_x}, xAdjust=${xAdjust}, yAdjust=${yAdjust}`);
+        console.error(`  Tile dimensions: width=${tile_width}, height=${tile_height}, x_offset=${tile_x_offset}, y_offset=${tile_y_offset}`);
+        console.error(`  Adjustments: tile_x_adjust=`, tile_x_adjust, `tile_y_adjust=`, tile_y_adjust);
+        continue; // Skip this tile rather than crashing
+      }
 
       // Draw the appropriate tile type
       if (isPointyTop) {

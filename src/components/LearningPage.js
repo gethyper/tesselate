@@ -1,19 +1,27 @@
-# How I learned to stop worrying and let the agent drive
+import React from 'react';
+
+const LearningPage = () => {
+  const markdownContent = `# How I learned to stop worrying and let the agent drive
 
 
-> Tip: Start with small features or bug fixes, tell Claude to propose a plan, and verify its suggested edits
+> Tip: Start with small features or bug fixes, tell Claude to propose a plan, and verify its suggested edits*
 
-###Intent-first creation
+### Intent-first creation
 *Note: While this article is about building a web app with an agent, there is nothing here that would not apply to multi-turn image generation, building an intricate design file, or even creating a presentation. Anything that requires complex set of changes and visual refinements*
 
 Recently I built my first React-based web app called [Tesselations](https://gethyper.github.io/tesselate/). As a former UX Engineer, I've built dozens of web apps, but over the years my front-end skills fell way behind. Complex frameworks and quickly changing front-end practices became challenging gaps for me. Increasingly I felt like front-end development had passed me by even though I was just as good at the core skills: separating content from presentation, componentization, visual polish, etc. Getting back to the day-to-day maintenance of a web app was a non-trivial and kept me from prototyping my ideas at home and at work. 
+
 This situation is not dissimilar to a customer interacting with a new version of an application. Every time we push a software update or change a feature, we potentially leave someone behind. In the past our software design process took great pains to extend software in a friendly way that carried users forward. This is a huge challenge to software development and can even make removing a feature or just simplifying an experience a difficult challenge for an end user. 
- I've started building this web app a few times over the years including writing raw JavaScript during Covid, asking ChatGPT for advice when i tried to start the project back up and then using Cursor over the holidays. The former approaches had their merits: raw JS was easy to manipulate, ChatGPT gave me a lot of pointers in modernizing my code, Cursor has a hyper intelligent auto-complete that made me moderately faster at typing. But I still didn't really lean into the assistive powers of an agent. I was using better tools and maybe going 10% faster but wasn't actually creating something in a better way or getting any closer to building the thing I wanted to build. 
+
+I've started building this web app a few times over the years including writing raw JavaScript during Covid, asking ChatGPT for advice when i tried to start the project back up and then using Cursor over the holidays. The former approaches had their merits: raw JS was easy to manipulate, ChatGPT gave me a lot of pointers in modernizing my code, Cursor has a hyper intelligent auto-complete that made me moderately faster at typing. But I still didn't really lean into the assistive powers of an agent. I was using better tools and maybe going 10% faster but wasn't actually creating something in a better way or getting any closer to building the thing I wanted to build. 
+
 Claude Code was an absolute game changer for me. Within a single coding session, I went from fighting the tools to leaning into an agentic-approach and really embracing the model. In one day, I made more progress on my app than on any other previous day of coding. There were several issues that I'd hit around that were holding me back including performance of P5 (my drawing library), quirks with MUI (my component library), and a limited understanding of React routing. To make it more complicated, these issues all affecting each other and it was hard to debug each individually since solving one problem often made another problem worse. 
-Over the process of working with Claude, I went from trying to debug things myself, to simply asking for the outcome Iwanted. This led me to try things I wouldn't have initially thought of doing from building a [public repo](https://github.com/gethyper/tesselate/) to attempting more [complex tessellations](https://gethyper.github.io/tesselate/?theme=Hydrant+Spin&tile_x_adjust=wave%3A10%3A2&tile_y_adjust=wave%3A10%3A2&size=10&pattern=snowCaps). What were more complicated hurdles such as workflow build errors became easy to overcome with AI assistance. Often, I just feed the error messages to Claude, ask for a plan, make a few refinements, and move forward. 
+
+Over the process of working with Claude, I went from trying to debug things myself, to simply asking for the outcome I wanted. This led me to try things I wouldn't have initially thought of doing from building a [public repo](https://github.com/gethyper/tesselate/) to attempting more [complex tessellations](https://gethyper.github.io/tesselate/?theme=Hydrant+Spin&tile_x_adjust=wave%3A10%3A2&tile_y_adjust=wave%3A10%3A2&size=10&pattern=snowCaps). What were more complicated hurdles such as workflow build errors became easy to overcome with AI assistance. Often, I just feed the error messages to Claude, ask for a plan, make a few refinements, and move forward. 
+
 AI will unlock many new features for customers and at the same time can actually them easier to use. The key will be moving from designing a full-featured workspace to designing a conversation where users express their intent in clear commands. This is a fundamental shift in how we think about UX, and I didn't fully grasp it until I really sat down to really build something that complex and visually intricate. It really took me some time. 
+
 Intent-first creation will be a shift for many of our customers. Early adopters are embracing this way of working, but many of our customers will need to be led through the process. Here are my insights from learning to trust an agent and think intent-first:
- 
 
 ## 1. Small and successful edits build trust
 - Making incremental, focused changes helps customers understand and verify each step. Once customers see successful changes with AI, they feel much more comfortable making more changes. Recommending a small change off the bat is a great trust builder.
@@ -30,17 +38,90 @@ Intent-first creation will be a shift for many of our customers. Early adopters 
 When making more complex visual changes, I wanted to verify every change. When it was just me coding, I would often make two variants of a design change so I could assess how well it worked. My thought process went roughly like this: 
 - Let me see it before I know if I want it
 - Then, let me see a different version before I commit
+
 When using AI, I got with my design changes. It was easier to try multiple versions of a design. I found myself playing out three or more options regularly. Even if I knew what I wanted, it was easy enough to make variants and feel confident in my choices. 
 
 One of my big breakthroughs was when I asked Claude to try a visual option that I hadn't thought of before. While this didn't always yield great results, there were some unexpected surprises that I did adopt. The "download feature" in the Tesselations app was partially "designed" by Claude although it required a bit of refinement to simplify. Additionally, I asked Claude to "think" of some color themes for the app. Again, most were pretty bad, but sometimes the results were entertaining. Both "That's Bananas" color theme and the "Electric Sheep" color theme were generated by AI. 
 
 ## 4. Solve problems together
-- There is magic when you combine the agent’s speed and breadth of knowledge with your own intuition and domain expertise. I found that the best solutions came from a back-and-forth. Sometimes I’d spot an edge case the agent missed, or the agent would suggest an approach I hadn’t considered. Sometimes it really felt like we were solving a problem together. 
-- Customers bring domain knowledge and context that agents will lack no matter how advanced the model, it doesn’t know your project history, your design intent, or the quirks of your codebase unless you tell it. Sharing that context up front (or as you go) makes the agent much more effective. 
+- There is magic when you combine the agent's speed and breadth of knowledge with your own intuition and domain expertise. I found that the best solutions came from a back-and-forth. Sometimes I'd spot an edge case the agent missed, or the agent would suggest an approach I hadn't considered. Sometimes it really felt like we were solving a problem together. 
+- Customers bring domain knowledge and context that agents will lack no matter how advanced the model, it doesn't know your project history, your design intent, or the quirks of your codebase unless you tell it. Sharing that context up front (or as you go) makes the agent much more effective. 
 - There were things the agent just did much better than me such as recommending best-practices with JavaScript. My code improved dramatically, by me asking Claude for a review and then working through the changes. Claude was also helpful when optimizing code to make it more performant. 
-- Joint problem-solving creates learning opportunities for both parties. I learned a lot of new techniques and shortcuts from Claude, and in turn, the agent “learned” my preferences and constraints as I clarified requirements or corrected its assumptions. There was a point when we were trying to solve a particuarly thorny issue where React caused P5 to generate a duplicate canvas. It really blew my mind when as part of the debugging solution, Claude inserted console logging without prompting and then asked me directly what the console errors were. In this moment, I think I was actually the agent...
+- Joint problem-solving creates learning opportunities for both parties. I learned a lot of new techniques and shortcuts from Claude, and in turn, the agent "learned" my preferences and constraints as I clarified requirements or corrected its assumptions. There was a point when we were trying to solve a particuarly thorny issue where React caused P5 to generate a duplicate canvas. It really blew my mind when as part of the debugging solution, Claude inserted console logging without prompting and then asked me directly what the console errors were. In this moment, I think I was actually the agent...
 
 ## 5. Autonomy leads to greater autonomy
-- Working asynchronously takes some time. Letting the agent run in the background or tackle tasks while I focused elsewhere was a new way of working for me. It took a bit to get used to, but once I did, I found myself getting more done overall. There’s a learning curve to trusting the agent to work independently. Claude Code has a nice reminder system so that you don't forget about your changes. 
+- Working asynchronously takes some time. Letting the agent run in the background or tackle tasks while I focused elsewhere was a new way of working for me. It took a bit to get used to, but once I did, I found myself getting more done overall. There's a learning curve to trusting the agent to work independently. Claude Code has a nice reminder system so that you don't forget about your changes. 
 - After a few days of collaborative coding, I realized that approving every little change was a bottleneck, especially when working asynchronously. Over time, I let Claude Code approve more of the changes. There is a nice UI where the user can determine how hands-on they want to be during a particular session which lets me test drive more autonomy.
-- Eventually I let Claude rewrite my tiling code. It was a combination of me wanting to add new parameters and optimize for efficiency. I still reviewed everything but was able to take a back seat when I really trused the LLM to produce a better result than I could on my own. I still had to visually review all the changes, but the result was I was much more focused on outcomes and getting to the right design rather than the mechanics of the code. 
+- Eventually I let Claude rewrite my tiling code. It was a combination of me wanting to add new parameters and optimize for efficiency. I still reviewed everything but was able to take a back seat when I really trused the LLM to produce a better result than I could on my own. I still had to visually review all the changes, but the result was I was much more focused on outcomes and getting to the right design rather than the mechanics of the code. `;
+
+  // Convert markdown to basic HTML (simplified conversion for key elements)
+  const htmlContent = markdownContent
+    .replace(/^# (.+$)/gim, '<h1>$1</h1>')
+    .replace(/^## (.+$)/gim, '<h2>$1</h2>')
+    .replace(/^### (.+$)/gim, '<h3>$1</h3>')
+    .replace(/^> (.+$)/gim, '<blockquote>$1</blockquote>')
+    .replace(/\*\*(.+?)\*\*/gim, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/gim, '<em>$1</em>')
+    .replace(/\[(.+?)\]\((.+?)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    .replace(/^- (.+$)/gim, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gims, '<ul>$1</ul>')
+    .replace(/\n/gim, '<br />');
+
+  return (
+    <div style={{
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      lineHeight: '1.6',
+      maxWidth: '900px',
+      margin: '0 auto',
+      padding: '2rem',
+      color: '#333',
+      background: '#fff'
+    }}>
+
+      <div 
+        dangerouslySetInnerHTML={{ __html: htmlContent }}
+        style={{
+          '& h2': {
+            color: '#34495e',
+            marginTop: '2rem',
+            borderLeft: '4px solid #3498db',
+            paddingLeft: '1rem'
+          },
+          '& blockquote': {
+            borderLeft: '4px solid #3498db',
+            paddingLeft: '1rem',
+            margin: '1rem 0',
+            fontStyle: 'italic',
+            color: '#555',
+            background: '#f8f9fa',
+            padding: '1rem',
+            borderRadius: '4px'
+          },
+          '& ul': {
+            paddingLeft: '1.5rem'
+          },
+          '& a': {
+            color: '#3498db',
+            textDecoration: 'none'
+          },
+          '& a:hover': {
+            textDecoration: 'underline'
+          }
+        }}
+      />
+
+      <div style={{
+        marginTop: '3rem',
+        paddingTop: '2rem',
+        borderTop: '1px solid #eee',
+        textAlign: 'center',
+        color: '#666',
+        fontSize: '0.9em'
+      }}>
+        <p>Written by <strong>Alex Cook</strong></p>
+      </div>
+    </div>
+  );
+};
+
+export default LearningPage;

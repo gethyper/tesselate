@@ -146,10 +146,41 @@ const Showcase = {
   "mega_wave_hex": {
     title: "Mega Wave Hex",
     description: "Dramatic hexagonal waves with massive vertical distortions create oceanic motion",
-    tilePattern: "flatTop3x3",
+    tilePattern: "flatTop+3x3",
     colorTheme: "basicBee",
     tileSize: 18,
     tileYAdjust: "wave:100:20",
+    featured: true
+  },
+
+  "micro_snow_ripples": {
+    title: "Micro Snow Ripples",
+    description: "Tiny snowcap patterns with subtle wave distortions create delicate winter textures",
+    tilePattern: "snowCaps",
+    colorTheme: "Scarlet A+",
+    tileSize: 10,
+    tileXAdjust: "wave:10:2",
+    tileYAdjust: "wave:10:2",
+    featured: true
+  },
+
+  "ginger_wave_grid": {
+    title: "Ginger Wave Grid",
+    description: "Flat-top 4x4 grid in warm ginger tones with dramatic horizontal wave distortions",
+    tilePattern: "flatTop 4x4",
+    colorTheme: "Ginger Neutral",
+    tileSize: 17,
+    tileXAdjust: "wave:100:20",
+    featured: true
+  },
+
+  "cyberpunk_tsunami": {
+    title: "Cyberpunk Tsunami",
+    description: "Intense neon colors with massive wave distortions create a digital ocean effect",
+    tilePattern: "flatTop+3x3",
+    colorTheme: "Nanobeast",
+    tileSize: 18,
+    tileXAdjust: "wave:200:40",
     featured: true
   }
 };
