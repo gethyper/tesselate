@@ -615,9 +615,17 @@ const getTileHeight = (tile_shape, r) => {
  * @returns {number} Horizontal offset for tessellation
  */
 const getTileXOffset = (tile_shape, r) => {
+  // Validate radius input
+  if (!isFinite(r) || isNaN(r) || r <= 0) {
+    console.warn(`Invalid radius in getTileXOffset: ${r}, using default 25`);
+    r = 25;
+  }
+  
   const isPointyTop = tile_shape === 'pointyTopHexatile';
   const baseOffset = isPointyTop ? r * 0.8666 : r / 2;
-  return baseOffset;
+  
+  // Ensure result is finite
+  return (isFinite(baseOffset) && !isNaN(baseOffset)) ? baseOffset : 25;
 };
 
 /**
@@ -628,9 +636,17 @@ const getTileXOffset = (tile_shape, r) => {
  * @returns {number} Vertical offset for tessellation
  */
 const getTileYOffset = (tile_shape, r) => {
+  // Validate radius input
+  if (!isFinite(r) || isNaN(r) || r <= 0) {
+    console.warn(`Invalid radius in getTileYOffset: ${r}, using default 25`);
+    r = 25;
+  }
+  
   const isPointyTop = tile_shape === 'pointyTopHexatile';
   const baseOffset = isPointyTop ? r / 2 : r * 0.8666;
-  return baseOffset;
+  
+  // Ensure result is finite
+  return (isFinite(baseOffset) && !isNaN(baseOffset)) ? baseOffset : 25;
 };
 
 /**
@@ -851,9 +867,19 @@ const calculateTileAdjustment = (adjustment, i, j, r) => {
  * Extracts numeric value from adjustment parameter (object or primitive)
  * 
  * @param {number|Object} adjustment - Adjustment value or object
- * @returns {number} Numeric value
+ * @returns {number} Numeric value (guaranteed to be finite)
  */
-const getNumericValue = (adjustment) => typeof adjustment === 'object' ? adjustment.value : adjustment;
+const getNumericValue = (adjustment) => {
+  let value;
+  if (typeof adjustment === 'object') {
+    value = adjustment?.value || 0;
+  } else {
+    value = adjustment || 0;
+  }
+  
+  // Ensure we return a finite number
+  return (isFinite(value) && !isNaN(value)) ? value : 0;
+};
 
 /**
  * Creates optimized adjustment function for X or Y coordinate with memoization
@@ -924,7 +950,14 @@ const calculateAdjustmentOffsets = (tile_x_adjust, tile_y_adjust) => {
   // Extra operation when tile_x_adjust and tile_y_adjust are the same
   const extraOffset = (xNumeric === yNumeric) ? yNumeric/2 : 0;
   
-  return { tile_x_y_normalize, extraOffset };
+  // Validate results and provide fallbacks
+  const safeTileXYNormalize = (isFinite(tile_x_y_normalize) && !isNaN(tile_x_y_normalize)) ? tile_x_y_normalize : 0;
+  const safeExtraOffset = (isFinite(extraOffset) && !isNaN(extraOffset)) ? extraOffset : 0;
+  
+  return { 
+    tile_x_y_normalize: safeTileXYNormalize, 
+    extraOffset: safeExtraOffset 
+  };
 };
 
 /**
@@ -1053,14 +1086,22 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
     }
     const tile_column = (i % tiles_in_mosaic_wide);
     
-    // Calculate vertical offset for flat-top (alternates by column)
-    const offset_y = (!isPointyTop && (i % 2 !== 0)) ? tile_y_offset + tile_x_y_normalize + extraOffset : 0;
+    // Calculate vertical offset for flat-top (alternates by column) with validation
+    let offset_y = 0;
+    if (!isPointyTop && (i % 2 !== 0)) {
+      const calculated = tile_y_offset + tile_x_y_normalize + extraOffset;
+      offset_y = (isFinite(calculated) && !isNaN(calculated)) ? calculated : 0;
+    }
   
     for (let j = 0; j < tiles_high; j++) {
       const tile_row = (j % tiles_in_mosaic_high);
       
-      // Calculate horizontal offset for pointy-top (alternates by row)
-      const offset_x = (isPointyTop && (j % 2 !== 0)) ? tile_x_offset + tile_x_y_normalize + extraOffset : 0;
+      // Calculate horizontal offset for pointy-top (alternates by row) with validation
+      let offset_x = 0;
+      if (isPointyTop && (j % 2 !== 0)) {
+        const calculated = tile_x_offset + tile_x_y_normalize + extraOffset;
+        offset_x = (isFinite(calculated) && !isNaN(calculated)) ? calculated : 0;
+      }
       
       // Calculate final positions based on orientation with validation
       let xAdjust = getXAdjustment(i, j);
@@ -1076,15 +1117,8 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
         yAdjust = 0;
       }
       
-      // Validate offset_x calculation
-      let safeOffsetX = offset_x;
-      if (!isFinite(offset_x) || isNaN(offset_x)) {
-        console.warn(`Invalid offset_x at i=${i}, j=${j}: ${offset_x}, using 0`);
-        safeOffsetX = 0;
-      }
-      
-      // Calculate final coordinates with safe values
-      const x_loc = x_pos + safeOffsetX + xAdjust;
+      // Calculate final coordinates with validated values
+      const x_loc = x_pos + offset_x + xAdjust;
       
       let y_loc;
       if (isPointyTop) {

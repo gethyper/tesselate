@@ -95,7 +95,7 @@ const Showcase = {
   "modern_hex_grid": {
     title: "Modern Hex Grid",
     description: "Clean geometric pattern with mid-century modern colors",
-    tilePattern: "pointyTop3x3",
+    tilePattern: "pointyTop 3x3",
     colorTheme: "End-century Modern",
     tileSize: 18,
     featured: true
