@@ -80,6 +80,9 @@ function TessellationPage() {
   // Check for texture parameter
   const textureKey = searchParams.get('texture') || null;
 
+  // Check for settings parameter to auto-open settings pane
+  const autoOpenSettings = searchParams.get('settings') === 'true';
+
   // Parse tile adjustment parameters (support both numeric and effect patterns)
   const parseAdjustment = (param) => {
     if (!param || param === 'null' || param === 'undefined') {
@@ -188,7 +191,8 @@ function TessellationPage() {
                          searchParams.get('tile_x_adjust') || 
                          searchParams.get('tile_y_adjust') ||
                          searchParams.get('gradient') ||
-                         searchParams.get('texture');
+                         searchParams.get('texture') ||
+                         searchParams.get('settings');
     
     if (hasUrlParams && !userHasInteracted) {
       setUserHasInteracted(true);
@@ -324,6 +328,7 @@ function TessellationPage() {
           tileXAdjust={tileXAdjust}
           tileYAdjust={tileYAdjust}
           onAdjustChange={updateAdjustments}
+          autoOpenSettings={autoOpenSettings}
         />
       )}
     </>

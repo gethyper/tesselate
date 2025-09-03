@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Hexagon background -->
+  <polygon points="50,15 85,35 85,65 50,85 15,65 15,35" 
+           fill="#3498db" 
+           stroke="#2c3e50" 
+           stroke-width="2"/>
+  
+  <!-- Inner tessellation pattern -->
+  <g stroke="#ffffff" stroke-width="1" fill="none" opacity="0.8">
+    <!-- Center hexagon -->
+    <polygon points="50,30 65,40 65,60 50,70 35,60 35,40"/>
+    
+    <!-- Radiating lines -->
+    <line x1="50" y1="15" x2="50" y2="30"/>
+    <line x1="85" y1="35" x2="65" y2="40"/>
+    <line x1="85" y1="65" x2="65" y2="60"/>
+    <line x1="50" y1="85" x2="50" y2="70"/>
+    <line x1="15" y1="65" x2="35" y2="60"/>
+    <line x1="15" y1="35" x2="35" y2="40"/>
+  </g>
+  
+  <!-- Small accent triangles -->
+  <g fill="#ffffff" opacity="0.6">
+    <polygon points="50,15 42,25 58,25"/>
+    <polygon points="75,27.5 70,35 80,35"/>
+    <polygon points="80,65 75,72.5 70,65"/>
+    <polygon points="50,85 58,75 42,75"/>
+    <polygon points="25,72.5 30,65 20,65"/>
+    <polygon points="20,35 25,27.5 30,35"/>
+  </g>
+</svg>

@@ -690,43 +690,57 @@ const getMosaicHeight = (tile_shape, tile_height, tiles_in_mosaic_high, tile_y_o
 };
 
 const getTilesWide = (p5, tile_width, tile_x_offset, tile_x_adjust = 0 ) => {
-  const divisor = tile_width - tile_x_offset + tile_x_adjust;
+  // Ensure all inputs are finite numbers
+  const safeWidth = (isFinite(tile_width) && !isNaN(tile_width)) ? tile_width : 50;
+  const safeXOffset = (isFinite(tile_x_offset) && !isNaN(tile_x_offset)) ? tile_x_offset : 0;
+  const safeXAdjust = (isFinite(tile_x_adjust) && !isNaN(tile_x_adjust)) ? tile_x_adjust : 0;
   
-  // Prevent division by zero or negative divisor
-  if (divisor <= 0 || !isFinite(divisor) || isNaN(divisor)) {
-    console.warn(`Invalid divisor in getTilesWide: ${divisor} (tile_width=${tile_width}, tile_x_offset=${tile_x_offset}, tile_x_adjust=${tile_x_adjust})`);
-    return Math.ceil(p5.width / Math.max(tile_width, 10)) + 1; // Fallback to basic tile width
+  const divisor = safeWidth - safeXOffset + safeXAdjust;
+  
+  // Prevent division by zero or negative divisor with more robust fallback
+  if (divisor <= 1 || !isFinite(divisor) || isNaN(divisor)) {
+    console.warn(`Invalid divisor in getTilesWide: ${divisor} (tile_width=${tile_width}, tile_x_offset=${tile_x_offset}, tile_x_adjust=${tile_x_adjust}), using fallback`);
+    // Use a safe minimum divisor based on tile width
+    const fallbackDivisor = Math.max(safeWidth * 0.8, 10);
+    return Math.ceil(p5.width / fallbackDivisor) + 1;
   }
   
   const result = Math.round(p5.width / divisor) + 1;
   
   // Cap at reasonable maximum to prevent memory issues
-  if (result > 500) {
-    console.warn(`getTilesWide calculated excessive tiles: ${result}, capping at 100`);
-    return 100;
+  if (!isFinite(result) || isNaN(result) || result > 500) {
+    console.warn(`getTilesWide calculated invalid/excessive tiles: ${result}, using fallback`);
+    return Math.min(Math.ceil(p5.width / Math.max(safeWidth, 10)) + 1, 100);
   }
   
-  return result;
+  return Math.max(1, result); // Ensure at least 1 tile
 };
 
 const getTilesHigh = (p5, tile_height, tile_y_offset, tile_y_adjust = 0) => {
-  const divisor = tile_height - tile_y_offset + tile_y_adjust;
+  // Ensure all inputs are finite numbers
+  const safeHeight = (isFinite(tile_height) && !isNaN(tile_height)) ? tile_height : 50;
+  const safeYOffset = (isFinite(tile_y_offset) && !isNaN(tile_y_offset)) ? tile_y_offset : 0;
+  const safeYAdjust = (isFinite(tile_y_adjust) && !isNaN(tile_y_adjust)) ? tile_y_adjust : 0;
   
-  // Prevent division by zero or negative divisor
-  if (divisor <= 0 || !isFinite(divisor) || isNaN(divisor)) {
-    console.warn(`Invalid divisor in getTilesHigh: ${divisor} (tile_height=${tile_height}, tile_y_offset=${tile_y_offset}, tile_y_adjust=${tile_y_adjust})`);
-    return Math.ceil(p5.height / Math.max(tile_height, 10)) + 1; // Fallback to basic tile height
+  const divisor = safeHeight - safeYOffset + safeYAdjust;
+  
+  // Prevent division by zero or negative divisor with more robust fallback
+  if (divisor <= 1 || !isFinite(divisor) || isNaN(divisor)) {
+    console.warn(`Invalid divisor in getTilesHigh: ${divisor} (tile_height=${tile_height}, tile_y_offset=${tile_y_offset}, tile_y_adjust=${tile_y_adjust}), using fallback`);
+    // Use a safe minimum divisor based on tile height
+    const fallbackDivisor = Math.max(safeHeight * 0.8, 10);
+    return Math.ceil(p5.height / fallbackDivisor) + 1;
   }
   
   const result = Math.round(p5.height / divisor) + 1;
   
   // Cap at reasonable maximum to prevent memory issues
-  if (result > 500) {
-    console.warn(`getTilesHigh calculated excessive tiles: ${result}, capping at 100`);
-    return 100;
+  if (!isFinite(result) || isNaN(result) || result > 500) {
+    console.warn(`getTilesHigh calculated invalid/excessive tiles: ${result}, using fallback`);
+    return Math.min(Math.ceil(p5.height / Math.max(safeHeight, 10)) + 1, 100);
   }
   
-  return result;
+  return Math.max(1, result); // Ensure at least 1 tile
 };
 
 
@@ -782,16 +796,20 @@ const calculateTileAdjustment = (adjustment, i, j, r) => {
         return 0;
       }
       
-      // Use faster deterministic random based on position
-      const seed = i * 1009 + j * 1013; // Use prime numbers for better distribution
+      // Use safer deterministic random based on position with overflow protection
+      // Keep values smaller to prevent overflow
+      const safeI = Math.abs(i % 1000); // Cap i to prevent overflow
+      const safeJ = Math.abs(j % 1000); // Cap j to prevent overflow
+      const seed = (safeI * 73 + safeJ * 79) % 2147483647; // Use smaller primes, mod early
       
       // Check for overflow in seed calculation
-      if (!isFinite(seed) || isNaN(seed)) {
-        console.warn(`Seed calculation overflow: i=${i}, j=${j}, seed=${seed}`);
+      if (!isFinite(seed) || isNaN(seed) || seed < 0) {
+        console.warn(`Seed calculation overflow: i=${i}, j=${j}, safeI=${safeI}, safeJ=${safeJ}, seed=${seed}`);
         return 0;
       }
       
-      const modResult = (seed * 16807) % 2147483647;
+      // Use safer calculation to prevent overflow in multiplication
+      const modResult = Math.abs((seed * 16807) % 2147483647);
       const pseudoRandom = modResult / 2147483647; // Linear congruential generator
       
       // Debug random calculation for problematic positions
@@ -1013,17 +1031,24 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
   const isPointyTop = tile_shape === 'pointyTopHexatile';
   
   for (let i = 0; i < tiles_wide; i++) {
-    // Calculate base X position based on orientation
-    let x_pos = (i === 0) ? 0 : (isPointyTop ? (tile_width * i) : ((tile_width - tile_x_offset) * i));
+    // Calculate base X position based on orientation with validation
+    let x_pos;
+    if (i === 0) {
+      x_pos = 0;
+    } else if (isPointyTop) {
+      x_pos = tile_width * i;
+    } else {
+      x_pos = (tile_width - tile_x_offset) * i;
+    }
     
-    // Debug x_pos calculation for problematic tiles and provide fallback
-    if (isNaN(x_pos) || (i > 40 && isNaN(x_pos))) {
+    // Validate and provide fallback for x_pos
+    if (!isFinite(x_pos) || isNaN(x_pos)) {
       console.error(`x_pos calculation failed at i=${i}:`);
-      console.error(`  Original calculation: ${i === 0 ? '0' : (isPointyTop ? `(${tile_width} * ${i})` : `((${tile_width} - ${tile_x_offset}) * ${i})`)}`);
       console.error(`  tile_width=${tile_width}, tile_x_offset=${tile_x_offset}, isPointyTop=${isPointyTop}`);
-      console.error(`  Result: ${x_pos}`);
-      // Fallback: Use a simple linear progression
-      x_pos = i * 50; // Use a default tile spacing
+      console.error(`  Invalid result: ${x_pos}`);
+      // Use safe fallback based on available values
+      const safeTileWidth = (isFinite(tile_width) && !isNaN(tile_width)) ? tile_width : 50;
+      x_pos = i * safeTileWidth;
       console.error(`  Using fallback x_pos=${x_pos}`);
     }
     const tile_column = (i % tiles_in_mosaic_wide);
@@ -1037,48 +1062,58 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
       // Calculate horizontal offset for pointy-top (alternates by row)
       const offset_x = (isPointyTop && (j % 2 !== 0)) ? tile_x_offset + tile_x_y_normalize + extraOffset : 0;
       
-      // Calculate final positions based on orientation
-      const xAdjust = getXAdjustment(i, j);
-      const yAdjust = getYAdjustment(i, j);
+      // Calculate final positions based on orientation with validation
+      let xAdjust = getXAdjustment(i, j);
+      let yAdjust = getYAdjustment(i, j);
       
-      // Debug xAdjust specifically at problematic positions
-      if ((i === 43 && j === 19) || (i > 40 && (isNaN(xAdjust) || !isFinite(xAdjust)))) {
-        console.error(`🔍 Debugging xAdjust at i=${i}, j=${j}:`);
-        console.error(`  xAdjust result: ${xAdjust}`);
-        console.error(`  tile_x_adjust:`, tile_x_adjust);
-        console.error(`  r (radius): ${r}`);
+      // Validate adjustments and provide safe fallbacks
+      if (!isFinite(xAdjust) || isNaN(xAdjust)) {
+        console.warn(`Invalid xAdjust at i=${i}, j=${j}: ${xAdjust}, using 0`);
+        xAdjust = 0;
+      }
+      if (!isFinite(yAdjust) || isNaN(yAdjust)) {
+        console.warn(`Invalid yAdjust at i=${i}, j=${j}: ${yAdjust}, using 0`);
+        yAdjust = 0;
       }
       
-      // Debug NaN issues - only log when we have problems at high i values (like i=49)
-      if ((isNaN(x_pos) || isNaN(offset_x) || isNaN(xAdjust)) && i > 40) {
-        console.error(`NaN detected in x_loc calculation at i=${i}, j=${j}:`);
-        console.error(`  x_pos=${x_pos} (calculated from: i=${i}, tile_width=${tile_width}, tile_x_offset=${tile_x_offset}, isPointyTop=${isPointyTop})`);
-        console.error(`  offset_x=${offset_x} (calculated from: j=${j}, tile_x_offset=${tile_x_offset}, tile_x_y_normalize=${tile_x_y_normalize}, extraOffset=${extraOffset})`);
-        console.error(`  xAdjust=${xAdjust} (from getXAdjustment function)`);
-        console.error(`  Call stack:`, new Error().stack);
+      // Validate offset_x calculation
+      let safeOffsetX = offset_x;
+      if (!isFinite(offset_x) || isNaN(offset_x)) {
+        console.warn(`Invalid offset_x at i=${i}, j=${j}: ${offset_x}, using 0`);
+        safeOffsetX = 0;
       }
       
-      const x_loc = x_pos + offset_x + xAdjust;
-      const y_loc = isPointyTop ? 
-        ((tile_height - tile_y_offset) * j + yAdjust) :
-        ((tile_height * j) + offset_y + yAdjust);
-
-      // Validate final coordinates before drawing
-      if (isNaN(x_loc) || isNaN(y_loc) || !isFinite(x_loc) || !isFinite(y_loc)) {
-        console.error(`🚨 WOBBLE DEBUG v2.0 - FINAL COORDINATE VALIDATION FAILED at i=${i}, j=${j}:`);
-        console.error(`  x_loc = ${x_pos} + ${offset_x} + ${xAdjust} = ${x_loc}`);
-        console.error(`  y_loc = ${y_loc}`);
-        console.error(`  Components: x_pos=${x_pos}, offset_x=${offset_x}, xAdjust=${xAdjust}, yAdjust=${yAdjust}`);
-        console.error(`  Tile dimensions: width=${tile_width}, height=${tile_height}, x_offset=${tile_x_offset}, y_offset=${tile_y_offset}`);
-        console.error(`  Adjustments: tile_x_adjust=`, tile_x_adjust, `tile_y_adjust=`, tile_y_adjust);
-        continue; // Skip this tile rather than crashing
-      }
-
-      // Draw the appropriate tile type
+      // Calculate final coordinates with safe values
+      const x_loc = x_pos + safeOffsetX + xAdjust;
+      
+      let y_loc;
       if (isPointyTop) {
-        drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient);
+        const yBase = (tile_height - tile_y_offset) * j;
+        y_loc = (isFinite(yBase) && !isNaN(yBase)) ? yBase + yAdjust : j * 50 + yAdjust;
       } else {
-        drawFlatTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient);
+        const yBase = tile_height * j + offset_y;
+        y_loc = (isFinite(yBase) && !isNaN(yBase)) ? yBase + yAdjust : j * 50 + yAdjust;
+      }
+
+      // Final validation and fallback for coordinates
+      let finalX = x_loc;
+      let finalY = y_loc;
+      
+      if (!isFinite(finalX) || isNaN(finalX)) {
+        console.warn(`Invalid final x_loc at i=${i}, j=${j}: ${finalX}, using fallback`);
+        finalX = i * 50; // Simple fallback positioning
+      }
+      
+      if (!isFinite(finalY) || isNaN(finalY)) {
+        console.warn(`Invalid final y_loc at i=${i}, j=${j}: ${finalY}, using fallback`);
+        finalY = j * 50; // Simple fallback positioning
+      }
+
+      // Draw the appropriate tile type with validated coordinates
+      if (isPointyTop) {
+        drawPointyTopHexatile(p5, finalX, finalY, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient);
+      } else {
+        drawFlatTopHexatile(p5, finalX, finalY, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient);
       }
     }
   }

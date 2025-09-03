@@ -182,6 +182,16 @@ const Showcase = {
     tileSize: 18,
     tileXAdjust: "wave:200:40",
     featured: true
+  },
+  
+  "shadow_boxes_shift": {
+    title: "Shadow Boxes Shift",
+    description: "Clean geometric shadow boxes with subtle horizontal offset",
+    tilePattern: "shadowBoxes",
+    colorTheme: "basicBee",
+    tileSize: 10,
+    tileXAdjust: "10",
+    featured: true
   }
 };
 

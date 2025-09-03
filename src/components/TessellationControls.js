@@ -30,13 +30,14 @@ const TessellationControls = ({
   textureKey = null,
   tileXAdjust = { type: 'numeric', value: 0 },
   tileYAdjust = { type: 'numeric', value: 0 },
-  onAdjustChange
+  onAdjustChange,
+  autoOpenSettings = false
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(autoOpenSettings);
   const [previewSize, setPreviewSize] = useState(tileSize);
   const [sizeTimeout, setSizeTimeout] = useState(null);
   const [downloadDialogOpen, setDownloadDialogOpen] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [showSettings, setShowSettings] = useState(autoOpenSettings);
   const [adjustAmount, setAdjustAmount] = useState('1x');
 
   // Download functions
