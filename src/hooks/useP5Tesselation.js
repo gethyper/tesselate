@@ -779,60 +779,14 @@ const calculateTileAdjustment = (adjustment, i, j, r) => {
       return isFinite(waveResult) && !isNaN(waveResult) ? waveResult : 0;
     
     case 'random':
-      // random:intensity (optimized deterministic random with safety checks)
+      // Simplified random calculation - much faster
       const intensity = adjustment.values[0] || 5;
       
-      // Validate intensity parameter
-      if (!isFinite(intensity) || isNaN(intensity)) {
-        console.warn(`Invalid intensity in random adjustment: ${intensity}`);
-        return 0;
-      }
+      // Fast hash-based pseudorandom (no overflow concerns)
+      const hash = ((i * 73) ^ (j * 79)) & 0x7fffffff; // Keep positive with bitwise AND
+      const pseudoRandom = (hash % 10000) / 10000; // Normalize to 0-1
       
-      // Validate input parameters
-      if (!isFinite(i) || isNaN(i) || !isFinite(j) || isNaN(j)) {
-        console.warn(`Invalid i,j parameters in random adjustment: i=${i}, j=${j}`);
-        return 0;
-      }
-      
-      // Use safer deterministic random based on position with overflow protection
-      // Keep values smaller to prevent overflow
-      const safeI = Math.abs(i % 1000); // Cap i to prevent overflow
-      const safeJ = Math.abs(j % 1000); // Cap j to prevent overflow
-      const seed = (safeI * 73 + safeJ * 79) % 2147483647; // Use smaller primes, mod early
-      
-      // Check for overflow in seed calculation
-      if (!isFinite(seed) || isNaN(seed) || seed < 0) {
-        console.warn(`Seed calculation overflow: i=${i}, j=${j}, safeI=${safeI}, safeJ=${safeJ}, seed=${seed}`);
-        return 0;
-      }
-      
-      // Use safer calculation to prevent overflow in multiplication
-      const modResult = Math.abs((seed * 16807) % 2147483647);
-      const pseudoRandom = modResult / 2147483647; // Linear congruential generator
-      
-      // Debug random calculation for problematic positions
-      if ((i === 43 && j === 19) || (i > 40 && isNaN(pseudoRandom))) {
-        console.error(`🎲 Random calculation debug at i=${i}, j=${j}:`);
-        console.error(`  seed = ${i} * 1009 + ${j} * 1013 = ${seed}`);
-        console.error(`  modResult = (${seed} * 16807) % 2147483647 = ${modResult}`);
-        console.error(`  pseudoRandom = ${modResult} / 2147483647 = ${pseudoRandom}`);
-        console.error(`  intensity = ${intensity}`);
-      }
-      
-      // Validate the random calculation result
-      if (!isFinite(pseudoRandom) || isNaN(pseudoRandom)) {
-        console.warn(`Pseudorandom calculation failed: seed=${seed}, modResult=${modResult}, pseudoRandom=${pseudoRandom}`);
-        return 0;
-      }
-      
-      const finalResult = (pseudoRandom - 0.5) * intensity * 2;
-      const safeResult = isFinite(finalResult) && !isNaN(finalResult) ? finalResult : 0;
-      
-      if (safeResult !== finalResult) {
-        console.warn(`Final result validation failed: finalResult=${finalResult}, returning 0`);
-      }
-      
-      return safeResult;
+      return (pseudoRandom - 0.5) * intensity * 2;
     
     case 'alt':
       // alt:value1:value2
@@ -864,7 +818,8 @@ const getNumericValue = (adjustment) => {
 };
 
 /**
- * Creates optimized adjustment function for X or Y coordinate with memoization
+ * Creates optimized adjustment function for X or Y coordinate without caching
+ * Direct calculation is faster than Map lookups for most use cases
  * 
  * @param {number|Object} adjustment - X or Y adjustment value/object
  * @param {number} r - Tile radius
@@ -872,47 +827,14 @@ const getNumericValue = (adjustment) => {
  * @returns {Function} Function that takes (i, j) and returns adjustment value
  */
 const createAdjustmentFunction = (adjustment, r, axis) => {
-  // For numeric adjustments, no need to cache
+  // For numeric adjustments
   if (typeof adjustment !== 'object' || adjustment.type === 'numeric') {
     const numericValue = getNumericValue(adjustment);
     return (i, j) => numericValue * (axis === 'x' ? i : j);
   }
 
-  // For complex adjustments (wave, wobble, random), use memoization
-  const cache = new Map();
-  const maxCacheSize = 5000; // Limit cache size to prevent memory issues
-  
-  return (i, j) => {
-    const key = `${i},${j}`;
-    
-    // Check cache first
-    if (cache.has(key)) {
-      return cache.get(key);
-    }
-    
-    // Calculate new value
-    const value = calculateTileAdjustment(adjustment, i, j, r);
-    
-    // Validate the calculated value with extra safety
-    const safeValue = (typeof value === 'number' && isFinite(value) && !isNaN(value)) ? value : 0;
-    
-    // Debug specific problematic cases
-    if ((value !== safeValue && i > 40) || (i === 43 && j === 19)) {
-      console.error(`🚨 Adjustment calculation issue at i=${i}, j=${j}:`);
-      console.error(`  Raw calculated value: ${value}`);
-      console.error(`  Safe value used: ${safeValue}`);
-      console.error(`  Adjustment object:`, adjustment);
-      console.error(`  Cache key: ${key}`);
-      console.error(`  Cache size: ${cache.size}`);
-    }
-    
-    // Add to cache if under limit
-    if (cache.size < maxCacheSize) {
-      cache.set(key, safeValue);
-    }
-    
-    return safeValue;
-  };
+  // For complex adjustments, calculate directly (faster than caching)
+  return (i, j) => calculateTileAdjustment(adjustment, i, j, r);
 };
 
 /**
@@ -987,86 +909,65 @@ export const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile
  * @param {boolean} useGradient - Whether to apply gradient effects
  */
 const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}, useGradient = false) => {
-  // Check if radius is valid
-  if (isNaN(r) || !isFinite(r) || r <= 0) {
-    console.error(`Invalid radius parameter in tileUnified: r=${r}`);
-    return;
-  }
-  
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
   const tile_y_adjust = tile_options.tile_y_adjust || 0;
   
-  // Use shared adjustment helpers
-  const getXAdjustment = createAdjustmentFunction(tile_x_adjust, r, 'x');
-  const getYAdjustment = createAdjustmentFunction(tile_y_adjust, r, 'y');
-  const { tile_x_y_normalize, extraOffset } = calculateAdjustmentOffsets(tile_x_adjust, tile_y_adjust);
-
-  // Calculate tile dimensions and offsets
+  // PRE-CALCULATE ALL TILE PARAMETERS ONCE (major optimization)
+  const isPointyTop = tile_shape === 'pointyTopHexatile';
   const tile_width = getTileWidth(tile_shape, r);
   const tile_height = getTileHeight(tile_shape, r);
   const tile_x_offset = getTileXOffset(tile_shape, r);
   const tile_y_offset = getTileYOffset(tile_shape, r);
   
-  
-  // Get mosaic dimensions
+  // Pre-calculate adjustment functions and offsets
+  const getXAdjustment = createAdjustmentFunction(tile_x_adjust, r, 'x');
+  const getYAdjustment = createAdjustmentFunction(tile_y_adjust, r, 'y');
+  const { tile_x_y_normalize, extraOffset } = calculateAdjustmentOffsets(tile_x_adjust, tile_y_adjust);
+
+  // Get pattern dimensions
   const tiles_in_mosaic_wide = tile_pattern.length;
   const tiles_in_mosaic_high = tile_pattern[0].length;
   
-  // Pre-calculate adjustment values once (performance optimization)
+  // Pre-calculate adjustment values for tiling calculations
   const xAdjustForTiling = typeof tile_x_adjust === 'object' ? tile_x_adjust.value || 0 : tile_x_adjust;
   const yAdjustForTiling = typeof tile_y_adjust === 'object' ? tile_y_adjust.value || 0 : tile_y_adjust;
   
-  // Use single mosaic dimensions if requested, otherwise fill canvas
+  // Calculate grid size
   const tiles_wide = tile_options.showSingleMosaic ? tiles_in_mosaic_wide : getTilesWide(p5, tile_width, tile_x_offset, xAdjustForTiling);
   const tiles_high = tile_options.showSingleMosaic ? tiles_in_mosaic_high : getTilesHigh(p5, tile_height, tile_y_offset, yAdjustForTiling);
   
+  // PRE-CALCULATE TESSELLATION CONSTANTS (avoid repeated calculations)
+  const pointyTop_tileWidth = tile_width;
+  const pointyTop_tileHeight = tile_height - tile_y_offset;
+  const flatTop_horizontalSpacing = tile_width - tile_x_offset;
+  const flatTop_verticalSpacing = tile_height;
+  const flatTop_verticalOffset = tile_y_offset + tile_x_y_normalize + extraOffset;
+  const pointyTop_horizontalOffset = tile_x_offset + tile_x_y_normalize + extraOffset;
   
-  
-  const isPointyTop = tile_shape === 'pointyTopHexatile';
-  
+  // OPTIMIZED TESSELLATION LOOPS (using pre-calculated constants)
   for (let i = 0; i < tiles_wide; i++) {
-    // Calculate base X position based on orientation with validation
-    let x_pos;
-    if (i === 0) {
-      x_pos = 0;
-    } else if (isPointyTop) {
-      x_pos = tile_width * i;
-    } else {
-      x_pos = (tile_width - tile_x_offset) * i;
-    }
+    // Calculate base X position using pre-calculated constants
+    const x_pos = i === 0 ? 0 : (isPointyTop ? pointyTop_tileWidth * i : flatTop_horizontalSpacing * i);
+    const tile_column = i % tiles_in_mosaic_wide;
     
-    const tile_column = (i % tiles_in_mosaic_wide);
-    
-    // Calculate vertical offset for flat-top (alternates by column)
-    let offset_y = 0;
-    if (!isPointyTop && (i % 2 !== 0)) {
-      offset_y = tile_y_offset + tile_x_y_normalize + extraOffset;
-    }
+    // Pre-calculate column-based offset for flat-top
+    const columnOffset_y = (!isPointyTop && (i % 2 !== 0)) ? flatTop_verticalOffset : 0;
   
     for (let j = 0; j < tiles_high; j++) {
-      const tile_row = (j % tiles_in_mosaic_high);
+      const tile_row = j % tiles_in_mosaic_high;
       
-      // Calculate horizontal offset for pointy-top (alternates by row)
-      let offset_x = 0;
-      if (isPointyTop && (j % 2 !== 0)) {
-        offset_x = tile_x_offset + tile_x_y_normalize + extraOffset;
-      }
+      // Pre-calculate row-based offset for pointy-top
+      const rowOffset_x = (isPointyTop && (j % 2 !== 0)) ? pointyTop_horizontalOffset : 0;
       
-      // Calculate final positions based on orientation
+      // Get adjustments (now using direct calculation instead of caching)
       const xAdjust = getXAdjustment(i, j);
       const yAdjust = getYAdjustment(i, j);
       
-      // Calculate final coordinates
-      const x_loc = x_pos + offset_x + xAdjust;
-      
-      let y_loc;
-      if (isPointyTop) {
-        y_loc = (tile_height - tile_y_offset) * j + yAdjust;
-      } else {
-        y_loc = tile_height * j + offset_y + yAdjust;
-      }
+      // Calculate final coordinates using pre-calculated constants
+      const x_loc = x_pos + rowOffset_x + xAdjust;
+      const y_loc = (isPointyTop ? pointyTop_tileHeight * j : flatTop_verticalSpacing * j + columnOffset_y) + yAdjust;
 
-      // Draw the appropriate tile type
+      // Draw tile (unified call)
       if (isPointyTop) {
         drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient);
       } else {
