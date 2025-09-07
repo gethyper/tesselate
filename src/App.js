@@ -8,6 +8,7 @@ import ColorThemes from './components/ColorThemes';
 import PresentationPage from './components/PresentationPage';
 import LearningPage from './components/LearningPage';
 import { getFeaturedShowcase } from './components/Showcase';
+import { initGA, trackPageView, trackTessellationEvent } from './utils/analytics';
 
 // Tessellation page component
 function TessellationPage() {
@@ -82,6 +83,18 @@ function TessellationPage() {
 
   // Check for settings parameter to auto-open settings pane
   const autoOpenSettings = searchParams.get('settings') === 'true';
+  
+  // Check for shadow parameter
+  const useShadow = searchParams.get('shadow') === 'true';
+  
+  // Parse shadow options - fixed values when enabled
+  const shadowOptions = useShadow ? {
+    offsetX: 2,
+    offsetY: 2,
+    blur: 4,
+    color: '#000000',
+    alpha: 0.3
+  } : null;
 
   // Parse tile adjustment parameters (support both numeric and effect patterns)
   const parseAdjustment = (param) => {
@@ -230,6 +243,9 @@ function TessellationPage() {
     newParams.set('pattern', pattern);
     setSearchParams(newParams);
     localStorage.setItem('tessellation-pattern', pattern);
+    
+    // Track pattern change
+    trackTessellationEvent('pattern_change', { label: pattern });
   };
 
   const updateTheme = (theme) => {
@@ -239,6 +255,9 @@ function TessellationPage() {
     newParams.set('theme', theme);
     setSearchParams(newParams);
     localStorage.setItem('tessellation-theme', theme);
+    
+    // Track theme change
+    trackTessellationEvent('theme_change', { label: theme });
   };
 
   const debounceTimerRef = useRef(null);
@@ -258,6 +277,9 @@ function TessellationPage() {
       newParams.set('size', size.toString());
       setSearchParams(newParams);
       localStorage.setItem('tessellation-size', size.toString());
+      
+      // Track size change
+      trackTessellationEvent('size_change', { label: `${size}px`, value: size });
     }, 300); // 300ms delay
   };
 
@@ -282,6 +304,11 @@ function TessellationPage() {
     }
     
     setSearchParams(newParams);
+    
+    // Track tile adjustments
+    trackTessellationEvent('tile_adjustment', { 
+      label: `x:${safeXValue},y:${safeYValue}` 
+    });
   };
 
   // This useEffect was causing the bounce - we already sync from localStorage on mount
@@ -293,6 +320,11 @@ function TessellationPage() {
   // Fallback to defaults if selected items are invalid
   const safeDesign = currentDesign || TileDesigns['shadowBoxes'];
   const safeTheme = currentTheme || ColorThemes['basicBee'];
+
+  // Track page view on component mount
+  useEffect(() => {
+    trackPageView(window.location.pathname);
+  }, []);
 
   return (
     <>
@@ -306,6 +338,7 @@ function TessellationPage() {
         textureKey={textureKey}
         tile_x_adjust={tileXAdjust}
         tile_y_adjust={tileYAdjust}
+        shadowOptions={shadowOptions}
         width="100vw"
         height="100vh"
         position="fixed"
@@ -328,6 +361,21 @@ function TessellationPage() {
           tileXAdjust={tileXAdjust}
           tileYAdjust={tileYAdjust}
           onAdjustChange={updateAdjustments}
+          shadowOptions={shadowOptions}
+          onShadowChange={(newShadowOptions) => {
+            setUserHasInteracted(true);
+            const newParams = new URLSearchParams(searchParams);
+            
+            if (newShadowOptions) {
+              newParams.set('shadow', 'true');
+              trackTessellationEvent('shadow_change', { label: 'enabled' });
+            } else {
+              newParams.delete('shadow');
+              trackTessellationEvent('shadow_change', { label: 'disabled' });
+            }
+            
+            setSearchParams(newParams);
+          }}
           autoOpenSettings={autoOpenSettings}
         />
       )}
@@ -337,6 +385,14 @@ function TessellationPage() {
 
 // Main App component with routing 
 function App() {
+  // Initialize Google Analytics
+  useEffect(() => {
+    const measurementId = process.env.REACT_APP_GA_MEASUREMENT_ID;
+    if (measurementId) {
+      initGA(measurementId);
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

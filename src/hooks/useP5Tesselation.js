@@ -301,7 +301,7 @@ export const drawHexatile = (p5, centerX, centerY, radius, tile_components, colo
       stroke_options = EMPTY_STROKE_OPTIONS;
     }
 
-    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, enableGradient, tile_options.textureImg);
+    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, enableGradient, tile_options.textureImg, tile_options.shadowOptions);
   }
 };
 
@@ -385,7 +385,7 @@ export const drawTexturedTriangle = (p5, x1, y1, x2, y2, x3, y3, color, textureI
 
 
 /**
- * Draws a triangle with optional gradient, texture, and stroke customization
+ * Draws a triangle with optional gradient, texture, stroke customization, and shadow
  * 
  * @param {Object} p5 - The p5.js instance
  * @param {number} x1 - X coordinate of first vertex
@@ -398,8 +398,9 @@ export const drawTexturedTriangle = (p5, x1, y1, x2, y2, x3, y3, color, textureI
  * @param {Object} stroke_options - Stroke configuration object
  * @param {boolean} useGradient - Whether to apply gradient fill
  * @param {HTMLImageElement|null} textureImg - Optional texture image
+ * @param {Object} shadow_options - Shadow configuration object with offsetX, offsetY, blur, color, alpha
  */
-export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = EMPTY_STROKE_OPTIONS, useGradient = false, textureImg = null) => {
+export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = EMPTY_STROKE_OPTIONS, useGradient = false, textureImg = null, shadow_options = null) => {
   // Validate all coordinates are valid numbers
   const coords = [x1, y1, x2, y2, x3, y3];
   for (let i = 0; i < coords.length; i++) {
@@ -417,6 +418,49 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
     stroke_b = null,
     stroke_c = null
   } = stroke_options;
+
+  // Draw shadow if shadow options are provided
+  if (shadow_options) {
+    const {
+      offsetX = 2,
+      offsetY = 2, 
+      blur = 4,
+      color: shadowColor = '#000000',
+      alpha = 0.3
+    } = shadow_options;
+
+    // Save current drawing context state
+    p5.push();
+    
+    // Apply shadow settings to the canvas context
+    const ctx = p5.drawingContext;
+    ctx.shadowOffsetX = offsetX;
+    ctx.shadowOffsetY = offsetY;
+    ctx.shadowBlur = blur;
+    
+    // Parse shadow color and apply alpha
+    const shadowColorWithAlpha = p5.color(shadowColor);
+    shadowColorWithAlpha.setAlpha(Math.floor(alpha * 255));
+    ctx.shadowColor = shadowColorWithAlpha.toString();
+    
+    // Draw a "dummy" shape to create the shadow effect
+    // We'll draw the actual shape again without shadow below
+    p5.noStroke();
+    p5.fill(color);
+    p5.beginShape();
+    p5.vertex(x1, y1);
+    p5.vertex(x2, y2);
+    p5.vertex(x3, y3);
+    p5.endShape(p5.CLOSE);
+    
+    // Reset shadow settings for the main shape
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+    
+    p5.pop();
+  }
 
   if (textureImg) {
     // Draw texture with color tinting

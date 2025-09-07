@@ -31,6 +31,8 @@ const TessellationControls = ({
   tileXAdjust = { type: 'numeric', value: 0 },
   tileYAdjust = { type: 'numeric', value: 0 },
   onAdjustChange,
+  shadowOptions = null,
+  onShadowChange,
   autoOpenSettings = false
 }) => {
   const [isOpen, setIsOpen] = useState(autoOpenSettings);
@@ -190,17 +192,22 @@ const TessellationControls = ({
       if (value === '0') return '0';
       
       if (value.includes(':')) {
-        // Handle effect patterns like "wave:10:0.1"
+        // Handle effect patterns like "wave:10:0.1" or "random:3"
         const parts = value.split(':');
         const effectType = parts[0];
         const param1 = parseFloat(parts[1]) * multiplier;
-        const param2 = parseFloat(parts[2]) * multiplier;
         
         // Check for NaN values and fallback to defaults
         const safeParam1 = isNaN(param1) ? 0 : param1;
-        const safeParam2 = isNaN(param2) ? 0 : param2;
         
-        return `${effectType}:${safeParam1}:${safeParam2}`;
+        // Handle random effects (single parameter) vs wave effects (two parameters)
+        if (effectType === 'random') {
+          return `${effectType}:${safeParam1}`;
+        } else {
+          const param2 = parseFloat(parts[2]) * multiplier;
+          const safeParam2 = isNaN(param2) ? 0 : param2;
+          return `${effectType}:${safeParam1}:${safeParam2}`;
+        }
       } else {
         // Handle simple numeric values
         const numValue = parseFloat(value) * multiplier;
@@ -230,8 +237,14 @@ const TessellationControls = ({
             const parts = value.split(':');
             const effectType = parts[0];
             const param1 = parseFloat(parts[1]) * mult;
-            const param2 = parseFloat(parts[2]) * mult;
-            return `${effectType}:${param1}:${param2}`;
+            
+            // Handle random effects (single parameter) vs wave effects (two parameters)
+            if (effectType === 'random') {
+              return `${effectType}:${param1}`;
+            } else {
+              const param2 = parseFloat(parts[2]) * mult;
+              return `${effectType}:${param1}:${param2}`;
+            }
           } else {
             return (parseFloat(value) * mult).toString();
           }
@@ -265,6 +278,10 @@ const TessellationControls = ({
     if (textureKey) url.searchParams.set('texture', textureKey);
     if (tileXAdjust.raw && tileXAdjust.raw !== '0') url.searchParams.set('tile_x_adjust', tileXAdjust.raw);
     if (tileYAdjust.raw && tileYAdjust.raw !== '0') url.searchParams.set('tile_y_adjust', tileYAdjust.raw);
+    
+    if (shadowOptions) {
+      url.searchParams.set('shadow', 'true');
+    }
     
     return url.toString();
   };

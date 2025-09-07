@@ -13,6 +13,7 @@ const Tesselate = ({
   textureKey = null,
   tile_x_adjust = 0,
   tile_y_adjust = 0,
+  shadowOptions = null,
   width = '100vw',
   height = '100vh',
   position = 'fixed',
@@ -35,12 +36,14 @@ const Tesselate = ({
   const deferredTextureKey = useDeferredValue(textureKey);
   const deferredTileXAdjust = useDeferredValue(tile_x_adjust);
   const deferredTileYAdjust = useDeferredValue(tile_y_adjust);
+  const deferredShadowOptions = useDeferredValue(shadowOptions);
   
   // Memoize tile_options to prevent unnecessary re-renders
   const tile_options = React.useMemo(() => ({
     tile_x_adjust: deferredTileXAdjust,
     tile_y_adjust: deferredTileYAdjust,
-  }), [deferredTileXAdjust, deferredTileYAdjust]);
+    shadowOptions: deferredShadowOptions,
+  }), [deferredTileXAdjust, deferredTileYAdjust, deferredShadowOptions]);
 
   const { setup, draw } = useP5Tesselation({
     tile_shape: deferredTileShape,
