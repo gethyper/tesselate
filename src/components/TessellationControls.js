@@ -170,13 +170,13 @@ const TessellationControls = ({
     { label: 'Wave X', value: 'wave_x', baseX: 'wave:10:2', baseY: '0' },
     { label: 'Wave Y', value: 'wave_y', baseX: '0', baseY: 'wave:10:2' },
     { label: 'Wave X & Y', value: 'wave_xy', baseX: 'wave:10:2', baseY: 'wave:10:2' },
-    { label: 'Wobble', value: 'wobble', baseX: 'random:3', baseY: 'random:3' }
+    { label: 'Wobble', value: 'wobble', baseX: 'random:10', baseY: 'random:10' }
     /*
     { label: 'Wave Y', value: 'wave_y', baseX: '0', baseY: 'wave:10:0.1' },
     { label: 'Wave X & Y', value: 'wave_xy', baseX: 'wave:10:0.1', baseY: 'wave:10:0.1' },
     { label: 'Spiral', value: 'spiral', baseX: 'spiral:5:0.05', baseY: 'spiral:5:0.05' },
     { label: 'Ripple', value: 'ripple', baseX: 'ripple:15:0.08', baseY: 'ripple:15:0.08' },
-    { label: 'Wobble', value: 'wobble', baseX: 'random:3', baseY: 'random:3' }
+    { label: 'Wobble', value: 'wobble', baseX: 'random:10', baseY: 'random:10' }
      */
   ];
 
@@ -226,6 +226,9 @@ const TessellationControls = ({
     const xRaw = tileXAdjust.raw || '0';
     const yRaw = tileYAdjust.raw || '0';
     
+    // Debug: Log the raw values we're trying to match
+    console.log('Matching against raw values:', { xRaw, yRaw });
+    
     // Check if current values match any option at any multiplier level
     for (const option of adjustOptions) {
       for (const mult of [1, 2, 3, 5, 10, 20, -1, -2, -5, -10]) {
@@ -255,11 +258,17 @@ const TessellationControls = ({
           y: applyTestMultiplier(option.baseY)
         };
         
+        // Debug: Log test values for wobble option
+        if (option.value === 'wobble') {
+          console.log(`Testing wobble with ${mult}x:`, testValues, 'vs raw:', { xRaw, yRaw });
+        }
+        
         if (testValues.x === xRaw && testValues.y === yRaw) {
           // Update amount state to match the multiplier found
           if (adjustAmount !== `${mult}x`) {
             setAdjustAmount(`${mult}x`);
           }
+          console.log(`Matched ${option.value} with ${mult}x multiplier`);
           return option.value;
         }
       }
