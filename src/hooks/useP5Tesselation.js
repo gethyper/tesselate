@@ -37,6 +37,28 @@ const STROKE_OPTIONS_POOL = {
   }
 };
 
+// Shadow color cache for performance optimization
+const SHADOW_COLOR_CACHE = new Map();
+
+// Color object pool for performance optimization
+const COLOR_OBJECT_POOL = {
+  _pool: [],
+  _maxSize: 100,
+  
+  get(p5, colorValue) {
+    const key = colorValue.toString();
+    let colorObj = this._pool.find(c => c._key === key);
+    if (!colorObj) {
+      colorObj = p5.color(colorValue);
+      colorObj._key = key;
+      if (this._pool.length < this._maxSize) {
+        this._pool.push(colorObj);
+      }
+    }
+    return colorObj;
+  }
+};
+
 // Import tile pattern functions or define your pattern mapping
 
 /**
@@ -437,7 +459,7 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
     stroke_c = null
   } = stroke_options;
 
-  // Draw shadow if shadow options are provided
+  // Draw shadow if shadow options are provided (high-quality canvas shadow)
   if (shadow_options) {
     const {
       offsetX = 2,
@@ -450,19 +472,23 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
     // Save current drawing context state
     p5.push();
     
-    // Apply shadow settings to the canvas context
+    // Apply shadow settings to the canvas context for high-quality blur
     const ctx = p5.drawingContext;
     ctx.shadowOffsetX = offsetX;
     ctx.shadowOffsetY = offsetY;
     ctx.shadowBlur = blur;
     
-    // Parse shadow color and apply alpha
-    const shadowColorWithAlpha = p5.color(shadowColor);
-    shadowColorWithAlpha.setAlpha(Math.floor(alpha * 255));
+    // Use cached shadow color to avoid repeated p5.color() calls
+    const shadowKey = `${shadowColor}_${alpha}`;
+    let shadowColorWithAlpha = SHADOW_COLOR_CACHE.get(shadowKey);
+    if (!shadowColorWithAlpha) {
+      shadowColorWithAlpha = p5.color(shadowColor);
+      shadowColorWithAlpha.setAlpha(Math.floor(alpha * 255));
+      SHADOW_COLOR_CACHE.set(shadowKey, shadowColorWithAlpha);
+    }
     ctx.shadowColor = shadowColorWithAlpha.toString();
     
-    // Draw a "dummy" shape to create the shadow effect
-    // We'll draw the actual shape again without shadow below
+    // Draw shape with shadow
     p5.noStroke();
     p5.fill(color);
     p5.beginShape();
@@ -471,7 +497,7 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
     p5.vertex(x3, y3);
     p5.endShape(p5.CLOSE);
     
-    // Reset shadow settings for the main shape
+    // Reset shadow settings
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
     ctx.shadowBlur = 0;
@@ -1023,6 +1049,15 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
       // Calculate final coordinates using pre-calculated constants
       const x_loc = x_pos + rowOffset_x + xAdjust;
       const y_loc = (isPointyTop ? pointyTop_tileHeight * j : flatTop_verticalSpacing * j + columnOffset_y) + yAdjust;
+
+      // Viewport culling: Skip tiles that are completely off-screen (performance optimization)
+      const tileSize2x = r * 2; // Approximate tile size for culling
+      if (x_loc > p5.width + tileSize2x || 
+          x_loc < -tileSize2x || 
+          y_loc > p5.height + tileSize2x || 
+          y_loc < -tileSize2x) {
+        continue; // Skip off-screen tile
+      }
 
       // Draw tile (unified call)
       if (isPointyTop) {

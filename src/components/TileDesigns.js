@@ -15,6 +15,61 @@ const TileDesigns= {
     ]
   },
 
+  'quantumCoincidence': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],           
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],           
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],           
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],           
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],           
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"},{c:"medium"}]
+      ],
+            [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],           
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"medium"}]
+      ]
+    ]
+  },
+
   'persianTriangles': {
     'tileShape': "pointyTopHexatile",
     'tilePattern': [
@@ -504,37 +559,7 @@ const TileDesigns= {
   },
   
 
-  'Cat Castle': {
-    'tileShape': "pointyTopHexatile",
-    'tileOffset': 0,
-    'tileStroke': "",
-    'tilePattern': [
-      [
-        [{c:"dark"}, {c:"medium"}, {c:"light"}, {c:"accent"}, {c:"medium"}, {c:"dark"}],
-        [{c:"medium"}, {c:"light"}, {c:"accent"}, {c:"light"}, {c:"accent"}, {c:"medium"}],
-        [{c:"light"}, {c:"accent"}, {c:"medium"}, {c:"dark"}, {c:"light"}, {c:"accent"}],
-        [{c:"accent"}, {c:"light"}, {c:"dark"}, {c:"medium"}, {c:"dark"}, {c:"light"}]
-      ],
-      [
-        [{c:"medium"}, {c:"accent"}, {c:"dark"}, {c:"light"}, {c:"dark"}, {c:"accent"}],
-        [{c:"accent"}, {c:"dark"}, {c:"medium"}, {c:"accent"}, {c:"medium"}, {c:"dark"}],
-        [{c:"dark"}, {c:"medium"}, {c:"light"}, {c:"dark"}, {c:"light"}, {c:"medium"}],
-        [{c:"light"}, {c:"dark"}, {c:"accent"}, {c:"medium"}, {c:"accent"}, {c:"dark"}]
-      ],
-      [
-        [{c:"accent"}, {c:"light"}, {c:"medium"}, {c:"dark"}, {c:"medium"}, {c:"light"}],
-        [{c:"light"}, {c:"medium"}, {c:"dark"}, {c:"medium"}, {c:"dark"}, {c:"medium"}],
-        [{c:"medium"}, {c:"dark"}, {c:"accent"}, {c:"light"}, {c:"accent"}, {c:"dark"}],
-        [{c:"dark"}, {c:"accent"}, {c:"light"}, {c:"accent"}, {c:"light"}, {c:"accent"}]
-      ],
-      [
-        [{c:"light"}, {c:"dark"}, {c:"accent"}, {c:"medium"}, {c:"accent"}, {c:"dark"}],
-        [{c:"dark"}, {c:"accent"}, {c:"medium"}, {c:"light"}, {c:"medium"}, {c:"accent"}],
-        [{c:"accent"}, {c:"medium"}, {c:"light"}, {c:"accent"}, {c:"light"}, {c:"medium"}],
-        [{c:"medium"}, {c:"light"}, {c:"dark"}, {c:"medium"}, {c:"dark"}, {c:"light"}]
-      ]
-    ]
-  },
+
 
 
   'egyptianHexatile': {

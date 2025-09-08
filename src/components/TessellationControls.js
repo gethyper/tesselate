@@ -263,7 +263,11 @@ const TessellationControls = ({
           console.log(`Testing wobble with ${mult}x:`, testValues, 'vs raw:', { xRaw, yRaw });
         }
         
-        if (testValues.x === xRaw && testValues.y === yRaw) {
+        // More robust comparison that handles floating point precision
+        const valuesMatch = (testValues.x === xRaw && testValues.y === yRaw) ||
+                           (testValues.x.toString() === xRaw && testValues.y.toString() === yRaw);
+        
+        if (valuesMatch) {
           // Update amount state to match the multiplier found
           if (adjustAmount !== `${mult}x`) {
             setAdjustAmount(`${mult}x`);
