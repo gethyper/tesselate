@@ -1,5 +1,4 @@
 const ColorThemes = {
-    "basicBee": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"grey", bg:"#FFCC00"},
     "Basic Bee": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"grey", bg:"#FFCC00"},
     "Pink and Black": {light:"white", medium:"pink", dark:"black", accent:"navy", bg:"#cccccc"},
     "Fierce Sportsdrank": {light:"#D2A645", medium:"#A94135", dark:"#AEC057", accent:"#7654A8", bg:"#BBBDB8"},

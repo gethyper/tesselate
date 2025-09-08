@@ -52,7 +52,7 @@ function TessellationPage() {
     }
     
     // If no URL theme, always use random featured showcase for fresh experience
-    return getInitialShowcase ? getInitialShowcase.colorTheme : 'basicBee';
+    return getInitialShowcase ? getInitialShowcase.colorTheme : 'Basic Bee';
   });
 
   const [tileSize, setTileSize] = useState(() => {
@@ -320,7 +320,7 @@ function TessellationPage() {
 
   // Fallback to defaults if selected items are invalid
   const safeDesign = currentDesign || TileDesigns['shadowBoxes'];
-  const safeTheme = currentTheme || ColorThemes['basicBee'];
+  const safeTheme = currentTheme || ColorThemes['Basic Bee'];
 
   // Track page view on component mount
   useEffect(() => {

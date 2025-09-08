@@ -147,7 +147,7 @@ const Showcase = {
     title: "Mega Wave Hex",
     description: "Dramatic hexagonal waves with massive vertical distortions create oceanic motion",
     tilePattern: "flatTop+3x3",
-    colorTheme: "basicBee",
+    colorTheme: "Basic Bee",
     tileSize: 18,
     tileYAdjust: "wave:100:20",
     featured: true
@@ -188,7 +188,7 @@ const Showcase = {
     title: "Shadow Boxes Shift",
     description: "Clean geometric shadow boxes with subtle horizontal offset",
     tilePattern: "shadowBoxes",
-    colorTheme: "basicBee",
+    colorTheme: "Basic Bee",
     tileSize: 10,
     tileXAdjust: "10",
     featured: true
