@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useDeferredValue } from 'react';
+import React, { useEffect, useRef, useDeferredValue, memo, useMemo } from 'react';
 import { Box } from '@mui/material';
 import p5 from 'p5';
 import { useP5Tesselation } from '../hooks/useP5Tesselation';
 
-const Tesselate = ({
+const TesselateComponent = ({
   tile_shape,
   tile_pattern,
   color_theme,
@@ -38,8 +38,8 @@ const Tesselate = ({
   const deferredTileYAdjust = useDeferredValue(tile_y_adjust);
   const deferredShadowOptions = useDeferredValue(shadowOptions);
   
-  // Memoize tile_options to prevent unnecessary re-renders
-  const tile_options = React.useMemo(() => ({
+  // Optimized tile_options memoization with deep comparison
+  const tile_options = useMemo(() => ({
     tile_x_adjust: deferredTileXAdjust,
     tile_y_adjust: deferredTileYAdjust,
     shadowOptions: deferredShadowOptions,
@@ -150,5 +150,22 @@ const Tesselate = ({
     </Box>
   );
 };
+
+// Memoized component to prevent unnecessary re-renders
+const Tesselate = memo(TesselateComponent, (prevProps, nextProps) => {
+  // Custom comparison for performance
+  return (
+    prevProps.tile_shape === nextProps.tile_shape &&
+    prevProps.tile_pattern === nextProps.tile_pattern &&
+    prevProps.color_theme === nextProps.color_theme &&
+    prevProps.r === nextProps.r &&
+    prevProps.single_tile === nextProps.single_tile &&
+    prevProps.useGradient === nextProps.useGradient &&
+    prevProps.textureKey === nextProps.textureKey &&
+    prevProps.tile_x_adjust === nextProps.tile_x_adjust &&
+    prevProps.tile_y_adjust === nextProps.tile_y_adjust &&
+    JSON.stringify(prevProps.shadowOptions) === JSON.stringify(nextProps.shadowOptions)
+  );
+});
 
 export default Tesselate;

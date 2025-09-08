@@ -1,15 +1,41 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useMemo } from 'react';
 import TileDesigns from '../components/TileDesigns';
 import ColorThemes  from '../components/ColorThemes';
 import { textures } from '../components/textures';
 
-// Performance optimization: Reusable empty stroke options to avoid object creation
+// Performance optimization: Reusable stroke option objects to avoid allocation
 const EMPTY_STROKE_OPTIONS = Object.freeze({
   stroke_color: null,
   stroke_a: null,
   stroke_b: null,
   stroke_c: null
 });
+
+// Pre-allocated stroke options object pool for reuse
+const STROKE_OPTIONS_POOL = {
+  _pool: [],
+  _maxSize: 50,
+  
+  get() {
+    return this._pool.length > 0 ? this._pool.pop() : {
+      stroke_color: null,
+      stroke_a: null, 
+      stroke_b: null,
+      stroke_c: null
+    };
+  },
+  
+  release(obj) {
+    if (this._pool.length < this._maxSize) {
+      // Reset properties
+      obj.stroke_color = null;
+      obj.stroke_a = null;
+      obj.stroke_b = null;
+      obj.stroke_c = null;
+      this._pool.push(obj);
+    }
+  }
+};
 
 // Import tile pattern functions or define your pattern mapping
 
@@ -252,21 +278,28 @@ export const drawHexatile = (p5, centerX, centerY, radius, tile_components, colo
     const [x2, y2] = vertices[i + 1];
     const [x3, y3] = centerPoint;
 
-    // Create stroke options only when needed (avoid object creation for simple cases)
+    // Optimized stroke options with object pooling
     let stroke_options;
-    if (tri.stroke || tri.s || tri.stroke_a || tri.sa || tri.stroke_b || tri.sb || tri.stroke_c || tri.sc) {
-      stroke_options = {
-        stroke_color: tri.stroke ? color_theme[tri.stroke] : tri.s ? color_theme[tri.s] : null,
-        stroke_a: tri.stroke_a ? color_theme[tri.stroke_a] : tri.sa ? color_theme[tri.sa] : null,
-        stroke_b: tri.stroke_b ? color_theme[tri.stroke_b] : tri.sb ? color_theme[tri.sb] : null,
-        stroke_c: tri.stroke_c ? color_theme[tri.stroke_c] : tri.sc ? color_theme[tri.sc] : null
-      };
+    const hasStroke = tri.stroke || tri.s || tri.stroke_a || tri.sa || tri.stroke_b || tri.sb || tri.stroke_c || tri.sc;
+    
+    if (hasStroke) {
+      // Get object from pool to avoid allocation
+      stroke_options = STROKE_OPTIONS_POOL.get();
+      stroke_options.stroke_color = tri.stroke ? color_theme[tri.stroke] : tri.s ? color_theme[tri.s] : null;
+      stroke_options.stroke_a = tri.stroke_a ? color_theme[tri.stroke_a] : tri.sa ? color_theme[tri.sa] : null;
+      stroke_options.stroke_b = tri.stroke_b ? color_theme[tri.stroke_b] : tri.sb ? color_theme[tri.sb] : null;
+      stroke_options.stroke_c = tri.stroke_c ? color_theme[tri.stroke_c] : tri.sc ? color_theme[tri.sc] : null;
     } else {
       // Reuse empty object to avoid allocation
       stroke_options = EMPTY_STROKE_OPTIONS;
     }
 
     drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, enableGradient, tile_options.textureImg, tile_options.shadowOptions);
+    
+    // Return pooled object for reuse
+    if (hasStroke && stroke_options !== EMPTY_STROKE_OPTIONS) {
+      STROKE_OPTIONS_POOL.release(stroke_options);
+    }
   }
 };
 
@@ -349,6 +382,34 @@ export const drawTexturedTriangle = (p5, x1, y1, x2, y2, x3, y3, color, textureI
 };
 
 
+// Canvas context batching for performance
+let lastFillStyle = null;
+let lastStrokeStyle = null;
+let lastStrokeWeight = null;
+
+const setFillStyleBatched = (p5, color) => {
+  if (lastFillStyle !== color) {
+    p5.fill(color);
+    lastFillStyle = color;
+  }
+};
+
+const setStrokeStyleBatched = (p5, color, weight = 1) => {
+  if (lastStrokeStyle !== color) {
+    if (color) {
+      p5.stroke(color);
+      lastStrokeStyle = color;
+    } else {
+      p5.noStroke();
+      lastStrokeStyle = null;
+    }
+  }
+  if (color && lastStrokeWeight !== weight) {
+    p5.strokeWeight(weight);
+    lastStrokeWeight = weight;
+  }
+};
+
 /**
  * Draws a triangle with optional gradient, texture, stroke customization, and shadow
  * 
@@ -423,20 +484,17 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
     // Draw texture with color tinting
     drawTexturedTriangle(p5, x1, y1, x2, y2, x3, y3, color, textureImg);
   } else {
-    // Create and apply gradient fill or solid color
+    // Create and apply gradient fill or solid color with batching
     const fill = createGradientFill(p5, x1, y1, x2, y2, x3, y3, color, useGradient);
     if (typeof fill === 'string') {
-      p5.fill(fill);
+      setFillStyleBatched(p5, fill);
     } else {
       p5.drawingContext.fillStyle = fill;
+      lastFillStyle = null; // Reset cache for gradient
     }
     
-    if (stroke_color) {
-      p5.stroke(stroke_color);
-      p5.strokeWeight(stroke_weight);
-    } else {
-      p5.noStroke();
-    }
+    // Batch stroke operations
+    setStrokeStyleBatched(p5, stroke_color, stroke_weight);
     
     p5.beginShape();
     p5.vertex(x1, y1);
@@ -445,27 +503,26 @@ export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options =
     p5.endShape(p5.CLOSE);
   }
 
-  // Draw individual edge strokes if specified
+  // Draw individual edge strokes if specified with batching
   if (stroke_a || stroke_b || stroke_c) {
-    p5.strokeWeight(stroke_weight);
-    
     if (stroke_a) {
-      p5.stroke(stroke_a);
+      setStrokeStyleBatched(p5, stroke_a, stroke_weight);
       p5.line(x1, y1, x2, y2);
     }
     
     if (stroke_b) {
-      p5.stroke(stroke_b);
+      setStrokeStyleBatched(p5, stroke_b, stroke_weight);
       p5.line(x2, y2, x3, y3);
     }
     
     if (stroke_c) {
-      p5.stroke(stroke_c);
+      setStrokeStyleBatched(p5, stroke_c, stroke_weight);
       p5.line(x3, y3, x1, y1);
     }
   }
 
-  p5.noStroke();
+  // Reset stroke to avoid affecting subsequent draws
+  setStrokeStyleBatched(p5, null);
 }; 
 
 
@@ -1038,21 +1095,25 @@ export function useP5Tesselation({
   textureKey = null,
   tile_options = {},
 }) {
-  // Ensure we always have valid defaults
-  const safeTileShape = tile_shape || TileDesigns['tripleHex'].tileShape;
-  const safeTilePattern = tile_pattern || TileDesigns['tripleHex'].tilePattern;
-  const safeColorTheme = color_theme || ColorThemes['basic_b'];
+  // Memoized safe defaults to prevent recalculation
+  const safeTileShape = useMemo(() => tile_shape || TileDesigns['tripleHex'].tileShape, [tile_shape]);
+  const safeTilePattern = useMemo(() => tile_pattern || TileDesigns['tripleHex'].tilePattern, [tile_pattern]);
+  const safeColorTheme = useMemo(() => color_theme || ColorThemes['basic_b'], [color_theme]);
+  
   const p5InstanceRef = useRef(null);
   const textureImageRef = useRef(null);
   const paramsRef = useRef({ r, safeTileShape, safeTilePattern, safeColorTheme, tile_options, useGradient });
 
+  // Memoized texture loading to prevent reload on re-renders
+  const textureUrl = useMemo(() => textureKey && textures[textureKey] ? textures[textureKey] : null, [textureKey]);
+  
   const setup = useCallback((p5) => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
     p5.noStroke();
     p5InstanceRef.current = p5;
     
     // Load texture if specified
-    if (textureKey && textures[textureKey]) {
+    if (textureUrl) {
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.onload = () => {
@@ -1062,9 +1123,9 @@ export function useP5Tesselation({
       img.onerror = (error) => {
         console.error('Failed to load texture:', textureKey, error);
       };
-      img.src = textures[textureKey];
+      img.src = textureUrl;
     }
-  }, [textureKey]);
+  }, [textureUrl, textureKey]);
 
   // Update params ref when dependencies change  
   paramsRef.current = { r, safeTileShape, safeTilePattern, safeColorTheme, tile_options, useGradient };
@@ -1091,6 +1152,7 @@ export function useP5Tesselation({
     } catch (error) {
       console.error('Error in draw function:', error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // No dependencies - everything comes from refs!
 
   return { setup, draw };

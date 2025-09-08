@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, useSearchParams } from 'react-router-dom';
 import Tesselate from './components/Tesselate';
 import TessellationControls from './components/TessellationControls';
@@ -160,7 +160,7 @@ function TessellationPage() {
   );
 
   // Function to rotate to the next featured design
-  const rotateToNextDesign = () => {
+  const rotateToNextDesign = useCallback(() => {
     const featured = getFeaturedShowcase();
     const featuredKeys = Object.keys(featured);
     if (featuredKeys.length === 0) return;
@@ -194,7 +194,7 @@ function TessellationPage() {
     
     setSearchParams(newParams);
     lastAutoRotationTime.current = Date.now();
-  };
+  }, [searchParams, setSearchParams, setSelectedPattern, setSelectedTheme, setTileSize]);
 
   // Effect to detect if URL has parameters indicating user interaction
   useEffect(() => {
@@ -210,7 +210,8 @@ function TessellationPage() {
     if (hasUrlParams && !userHasInteracted) {
       setUserHasInteracted(true);
     }
-  }, []); // Run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run once on mount only
 
   // Auto-rotation effect
   useEffect(() => {
@@ -233,7 +234,7 @@ function TessellationPage() {
         autoRotationTimer.current = null;
       }
     };
-  }, [userHasInteracted, hideControls]);
+  }, [userHasInteracted, hideControls, rotateToNextDesign]);
 
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
