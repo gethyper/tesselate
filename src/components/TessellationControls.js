@@ -167,6 +167,9 @@ const TessellationControls = ({
     { label: 'Shift X', value: 'shift_x', baseX: '5', baseY: '0' },
     { label: 'Shift Y', value: 'shift_y', baseX: '0', baseY: '5' },
     { label: 'Shift X & Y', value: 'shift_xy', baseX: '5', baseY: '5' },
+    { label: 'Alt Columns', value: 'alt_columns', baseX: 'shiftx:10:2', baseY: '0' },
+    { label: 'Alt Rows', value: 'alt_rows', baseX: '0', baseY: 'shifty:10:2' },
+    { label: 'Alt Columns & Rows', value: 'alt_both', baseX: 'shiftx:10:2', baseY: 'shifty:10:2' },
     { label: 'Wave X', value: 'wave_x', baseX: 'wave:10:2', baseY: '0' },
     { label: 'Wave Y', value: 'wave_y', baseX: '0', baseY: 'wave:10:2' },
     { label: 'Wave X & Y', value: 'wave_xy', baseX: 'wave:10:2', baseY: 'wave:10:2' },
@@ -200,10 +203,17 @@ const TessellationControls = ({
         // Check for NaN values and fallback to defaults
         const safeParam1 = isNaN(param1) ? 0 : param1;
         
-        // Handle random effects (single parameter) vs wave effects (two parameters)
+        // Handle different effect types
         if (effectType === 'random') {
+          // Random effects use single parameter (intensity)
           return `${effectType}:${safeParam1}`;
+        } else if (effectType === 'shiftx' || effectType === 'shifty') {
+          // Shift effects use two parameters (offset:interval)
+          // For shift effects, only multiply the offset (first parameter), keep interval unchanged
+          const interval = parts[2] || 2; // Default interval of 2
+          return `${effectType}:${safeParam1}:${interval}`;
         } else {
+          // Wave and other effects use two parameters (both multiplied)
           const param2 = parseFloat(parts[2]) * multiplier;
           const safeParam2 = isNaN(param2) ? 0 : param2;
           return `${effectType}:${safeParam1}:${safeParam2}`;
@@ -717,14 +727,15 @@ const TessellationControls = ({
               </Select>
             </FormControl>
 
-            {/* Amount Selector - remaining width */}
-            <FormControl sx={{ flex: '1' }}>
-              <InputLabel id="amount-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Amount</InputLabel>
-              <Select
-                labelId="amount-label"
-                value={adjustAmount}
-                label="Amount"
-                size="small"
+            {/* Amount Selector - remaining width - hide when custom is selected */}
+            {getCurrentAdjustOption() !== 'custom' && (
+              <FormControl sx={{ flex: '1' }}>
+                <InputLabel id="amount-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Amount</InputLabel>
+                <Select
+                  labelId="amount-label"
+                  value={adjustAmount}
+                  label="Amount"
+                  size="small"
                 onChange={(e) => {
                   setAdjustAmount(e.target.value);
                   
@@ -744,13 +755,23 @@ const TessellationControls = ({
                           const parts = value.split(':');
                           const effectType = parts[0];
                           const param1 = parseFloat(parts[1]) * multiplier;
-                          const param2 = parseFloat(parts[2]) * multiplier;
                           
                           // Check for NaN values and fallback to defaults
                           const safeParam1 = isNaN(param1) ? 0 : param1;
-                          const safeParam2 = isNaN(param2) ? 0 : param2;
                           
-                          return `${effectType}:${safeParam1}:${safeParam2}`;
+                          // Handle different effect types (same logic as getAdjustedValues)
+                          if (effectType === 'random') {
+                            return `${effectType}:${safeParam1}`;
+                          } else if (effectType === 'shiftx' || effectType === 'shifty') {
+                            // For shift effects, only multiply the offset, keep interval unchanged
+                            const interval = parts[2] || 2;
+                            return `${effectType}:${safeParam1}:${interval}`;
+                          } else {
+                            // Wave and other effects use two parameters (both multiplied)
+                            const param2 = parseFloat(parts[2]) * multiplier;
+                            const safeParam2 = isNaN(param2) ? 0 : param2;
+                            return `${effectType}:${safeParam1}:${safeParam2}`;
+                          }
                         } else {
                           const numValue = parseFloat(value) * multiplier;
                           return isNaN(numValue) ? '0' : numValue.toString();
@@ -834,6 +855,7 @@ const TessellationControls = ({
                 </MenuItem>
               </Select>
             </FormControl>
+            )}
           </Box>
 
           {/* Download Button */}

@@ -877,6 +877,20 @@ const calculateTileAdjustment = (adjustment, i, j, r) => {
       const value2 = adjustment.values[1] || 0;
       return (i + j) % 2 === 0 ? value1 : value2;
     
+    case 'shiftx':
+      // shiftx:offset:interval - shift every Nth column by offset amount
+      // Example: shiftx:20:2 = shift every 2nd column by 20 pixels
+      const xOffset = adjustment.values[0] || 10;
+      const xInterval = Math.max(1, adjustment.values[1] || 2); // Default to every 2nd column, minimum 1
+      return (i % xInterval === 0) ? 0 : xOffset;
+    
+    case 'shifty':
+      // shifty:offset:interval - shift every Nth row by offset amount  
+      // Example: shifty:15:3 = shift every 3rd row by 15 pixels
+      const yOffset = adjustment.values[0] || 10;
+      const yInterval = Math.max(1, adjustment.values[1] || 2); // Default to every 2nd row, minimum 1
+      return (j % yInterval === 0) ? 0 : yOffset;
+    
     default:
       return 0;
   }

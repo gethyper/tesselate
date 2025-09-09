@@ -192,6 +192,47 @@ const Showcase = {
     tileSize: 10,
     tileXAdjust: "10",
     featured: true
+  },
+
+  "alternating_columns": {
+    title: "Alternating Column Shift",
+    description: "Every other column shifted horizontally creates a brick-like pattern",
+    tilePattern: "shadowBoxes",
+    colorTheme: "End-century Modern",
+    tileSize: 25,
+    tileXAdjust: "shiftx:20:2",
+    featured: true
+  },
+
+  "every_third_row": {
+    title: "Every Third Row Shift",
+    description: "Every third row shifted vertically creates rhythmic visual layers",
+    tilePattern: "persianKnots",
+    colorTheme: "Scarlet A+",
+    tileSize: 28,
+    tileYAdjust: "shifty:15:3",
+    featured: true
+  },
+
+  "double_shift_pattern": {
+    title: "Double Shift Pattern",
+    description: "Both column and row shifts combined create complex geometric patterns",
+    tilePattern: "flatTop3x3",
+    colorTheme: "Coily Cubes",
+    tileSize: 22,
+    tileXAdjust: "shiftx:12:2",
+    tileYAdjust: "shifty:8:4",
+    featured: true
+  },
+
+  "wide_column_shift": {
+    title: "Wide Column Shift",
+    description: "Every fourth column shifted creates wide stable columns",
+    tilePattern: "persianTriangles", 
+    colorTheme: "Ginger Neutral",
+    tileSize: 20,
+    tileXAdjust: "shiftx:30:4",
+    featured: false
   }
 };
 
