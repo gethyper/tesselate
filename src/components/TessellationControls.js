@@ -49,27 +49,31 @@ const TessellationControls = ({
 
     let filename, dataUrl, width, height;
     
+    // Clean pattern and theme names (replace spaces with underscores)
+    const cleanPattern = selectedPattern.replace(/\s+/g, '_');
+    const cleanTheme = selectedTheme.replace(/\s+/g, '_');
+    
     // Define format dimensions
     switch (format) {
       case '1920x1080':
         width = 1920;
         height = 1080;
-        filename = `tessellation_1920x1080_${selectedPattern}_${selectedTheme}.png`;
+        filename = `tessellation_1920x1080_${cleanPattern}_${cleanTheme}.png`;
         break;
       case '1024x768':
         width = 1024;
         height = 768;
-        filename = `tessellation_1024x768_${selectedPattern}_${selectedTheme}.png`;
+        filename = `tessellation_1024x768_${cleanPattern}_${cleanTheme}.png`;
         break;
       case '1080x1080':
         width = 1080;
         height = 1080;
-        filename = `tessellation_1080x1080_${selectedPattern}_${selectedTheme}.png`;
+        filename = `tessellation_1080x1080_${cleanPattern}_${cleanTheme}.png`;
         break;
       default:
         width = 1920;
         height = 1080;
-        filename = `tessellation_1920x1080_${selectedPattern}_${selectedTheme}.png`;
+        filename = `tessellation_1920x1080_${cleanPattern}_${cleanTheme}.png`;
     }
 
     // Create temporary canvas with specified dimensions
