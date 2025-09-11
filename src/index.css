@@ -1,4 +1,6 @@
-/* Tailwind directives temporarily disabled */
+/* Only import Tailwind components and utilities, skip base to preserve existing styles */
+@tailwind components;
+@tailwind utilities;
 
 body {
   margin: 0;

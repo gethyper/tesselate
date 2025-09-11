@@ -78,12 +78,8 @@ const TessellationControls = ({
     tempCanvas.height = height;
     const ctx = tempCanvas.getContext('2d');
     
-    // Fill with background color or white
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, width, height);
-    
-    // Calculate scaling to fit the original canvas within the target dimensions
-    const scale = Math.min(width / canvas.width, height / canvas.height);
+    // Scale to fill entire canvas while maintaining aspect ratio (like CSS background-size: cover)
+    const scale = Math.max(width / canvas.width, height / canvas.height);
     const scaledWidth = canvas.width * scale;
     const scaledHeight = canvas.height * scale;
     const x = (width - scaledWidth) / 2;

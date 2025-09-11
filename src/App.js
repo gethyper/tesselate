@@ -5,7 +5,7 @@ import TessellationControls from './components/TessellationControls';
 import Gallery from './components/Gallery';
 import TileDesigns from './components/TileDesigns';
 import ColorThemes from './components/ColorThemes';
-import PresentationPage from './components/PresentationPage';
+import Presentation from './components/Presentation';
 import LearningPage from './components/LearningPage';
 import { getFeaturedShowcase } from './components/Showcase';
 import { initGA, trackPageView, trackTessellationEvent } from './utils/analytics';
@@ -400,7 +400,7 @@ function App() {
         <Route path="/" element={<TessellationPage />} />
         <Route path="/tesselate" element={<TessellationPage />} />
         <Route path="/gallery" element={<Gallery />} />
-        <Route path="/presentation" element={<PresentationPage />} />
+        <Route path="/presentation" element={<Presentation />} />
         <Route path="/claude-code-learning.html" element={<LearningPage />} />
         <Route path="/learning" element={<LearningPage />} />
       </Routes>
