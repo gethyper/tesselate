@@ -2,7 +2,7 @@
   "name": "tesselate",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://gethyper.github.io/tesselate",
+  "homepage": "https://tesselations.design",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
