@@ -198,20 +198,68 @@ function TessellationPage() {
 
   // Effect to detect if URL has parameters indicating user interaction
   useEffect(() => {
-    const hasUrlParams = searchParams.get('pattern') || 
-                         searchParams.get('theme') || 
-                         searchParams.get('size') || 
-                         searchParams.get('tile_x_adjust') || 
+    const hasUrlParams = searchParams.get('pattern') ||
+                         searchParams.get('theme') ||
+                         searchParams.get('size') ||
+                         searchParams.get('tile_x_adjust') ||
                          searchParams.get('tile_y_adjust') ||
                          searchParams.get('gradient') ||
                          searchParams.get('texture') ||
                          searchParams.get('settings');
-    
+
     if (hasUrlParams && !userHasInteracted) {
       setUserHasInteracted(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run once on mount only
+
+  // Effect to sync URL with initial state when no URL params are present
+  useEffect(() => {
+    const hasExistingParams = searchParams.get('pattern') ||
+                             searchParams.get('theme') ||
+                             searchParams.get('size');
+
+    // If no URL params exist, sync URL with the randomly selected initial state
+    if (!hasExistingParams) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set('pattern', selectedPattern);
+      newParams.set('theme', selectedTheme);
+      newParams.set('size', tileSize.toString());
+
+      // Add tile adjustments if they exist and aren't default
+      if (tileXAdjust && tileXAdjust.raw && tileXAdjust.raw !== '0') {
+        newParams.set('tile_x_adjust', tileXAdjust.raw);
+      }
+      if (tileYAdjust && tileYAdjust.raw && tileYAdjust.raw !== '0') {
+        newParams.set('tile_y_adjust', tileYAdjust.raw);
+      }
+
+      setSearchParams(newParams);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run once on mount only
+
+  // Effect to sync state with URL params when URL changes (back/forward navigation)
+  useEffect(() => {
+    const urlPattern = searchParams.get('pattern');
+    const urlTheme = searchParams.get('theme');
+    const urlSize = searchParams.get('size');
+
+    // Update state if URL params exist and are different from current state
+    if (urlPattern && urlPattern !== selectedPattern) {
+      setSelectedPattern(urlPattern);
+    }
+    if (urlTheme && urlTheme !== selectedTheme) {
+      setSelectedTheme(urlTheme);
+    }
+    if (urlSize) {
+      const parsedSize = parseFloat(urlSize);
+      if (!isNaN(parsedSize) && isFinite(parsedSize) && parsedSize !== tileSize) {
+        setTileSize(parsedSize);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]); // Run when URL params change, ignoring state dependencies to prevent loops
 
   // Auto-rotation effect
   useEffect(() => {
