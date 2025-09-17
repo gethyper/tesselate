@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Carousel, CarouselItem } from './ui/carousel';
+import { imageListClasses } from '@mui/material/ImageList';
 
 // Presentation slides data
 const slidesData = [
@@ -45,28 +46,21 @@ const slidesData = [
     id: 5,
     title: "Quilting blocks",
     content: {
-      backgroundImage: `${process.env.PUBLIC_URL}/images/examples/tessellation_1920x1080_Cat_Castle_Faded_Robot.png`
+      image: `${process.env.PUBLIC_URL}/images/inspiration/quilt.avif`
     }
   },
   {
     id: 6,
     title: "Escher sketches",
     content: {
-      backgroundImage: `${process.env.PUBLIC_URL}/images/examples/tessellation_1920x1080_flatTop_2x1_Nanobeast.png`
+      image: `${process.env.PUBLIC_URL}/images/inspiration/escher.jpg`
     }
   },
   {
     id: 7,
     title: "Video games",
     content: {
-      backgroundImage: `${process.env.PUBLIC_URL}/images/examples/tessellation_1920x1080_flatTop+3x3_Basic_Bee.png`
-    }
-  },
-  {
-    id: 8,
-    title: "Islamic tiling",
-    content: {
-      backgroundImage: `${process.env.PUBLIC_URL}/images/examples/tessellation_1920x1080_mosaicMitres_Banned_in_'85.png`
+      imageListClasses: `${process.env.PUBLIC_URL}/images/insporation/qbert-archade-wide.webp`
     }
   },
   {
@@ -75,7 +69,7 @@ const slidesData = [
     content: {
       sectionTitle: true,
       heading: "Inspiration",
-      backgroundImage: `${process.env.PUBLIC_URL}/images/examples/tessellation_1920x1080_flatTop3x3_Coily Cubes.png`
+      image: `${process.env.PUBLIC_URL}/images/examples/tessellation_1920x1080_flatTop3x3_Coily Cubes.png`
     }
   },
   {
@@ -270,6 +264,24 @@ const Presentation = () => {
               </div>
             )}
           </div>
+        </div>
+      );
+      return elements;
+    }
+
+    // Centered image slide with border
+    if (content.image) {
+      elements.push(
+        <div key="centered-image" className="flex items-center justify-center h-full p-8">
+          <img 
+            src={content.image}
+            alt={content.title || "Inspiration image"}
+            className="max-w-full max-h-full object-contain rounded-lg border-8 border-gray-300 shadow-lg"
+            style={{ 
+              borderRadius: '8px',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)'
+            }}
+          />
         </div>
       );
       return elements;

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { BrowserRouter, Routes, Route, useSearchParams } from 'react-router-dom';
+import { HashRouter, Routes, Route, useSearchParams } from 'react-router-dom';
 import Tesselate from './components/Tesselate';
 import TessellationControls from './components/TessellationControls';
 import Gallery from './components/Gallery';
@@ -395,7 +395,7 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<TessellationPage />} />
         <Route path="/tesselate" element={<TessellationPage />} />
@@ -404,7 +404,7 @@ function App() {
         <Route path="/claude-code-learning.html" element={<LearningPage />} />
         <Route path="/learning" element={<LearningPage />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
