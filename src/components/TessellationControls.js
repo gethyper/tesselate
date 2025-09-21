@@ -467,6 +467,13 @@ const TessellationControls = ({
         bottom: 16,
         right: 16,
         zIndex: 1000,
+        // Center on mobile devices
+        '@media (max-width: 768px)': {
+          left: '50%',
+          right: 'auto',
+          transform: 'translateX(-50%)',
+          bottom: 20,
+        },
       }}
     >
       {!isOpen && (
@@ -517,6 +524,11 @@ const TessellationControls = ({
             p: 2,
             minWidth: 210,
             maxWidth: 300,
+            // Mobile responsive width
+            '@media (max-width: 768px)': {
+              minWidth: 280,
+              maxWidth: '90vw',
+            },
             background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(240, 240, 255, 0.75))',
             backdropFilter: 'blur(10px)',
             border: '1px solid white',
