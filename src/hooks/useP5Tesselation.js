@@ -40,25 +40,6 @@ const STROKE_OPTIONS_POOL = {
 // Shadow color cache for performance optimization
 const SHADOW_COLOR_CACHE = new Map();
 
-// Color object pool for performance optimization
-const COLOR_OBJECT_POOL = {
-  _pool: [],
-  _maxSize: 100,
-  
-  get(p5, colorValue) {
-    const key = colorValue.toString();
-    let colorObj = this._pool.find(c => c._key === key);
-    if (!colorObj) {
-      colorObj = p5.color(colorValue);
-      colorObj._key = key;
-      if (this._pool.length < this._maxSize) {
-        this._pool.push(colorObj);
-      }
-    }
-    return colorObj;
-  }
-};
-
 // Import tile pattern functions or define your pattern mapping
 
 /**

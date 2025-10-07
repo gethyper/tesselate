@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Carousel, CarouselItem } from './ui/carousel';
-import { imageListClasses } from '@mui/material/ImageList';
 
 // Presentation slides data
 const slidesData = [
