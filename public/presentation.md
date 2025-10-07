@@ -141,23 +141,6 @@ Let's explore the tessellation generator live
 
 ---
 
-## Future Roadmap
-
-### Planned Features
-- Additional pattern types
-- Animation capabilities
-- Batch export options
-- Community gallery
-- Mobile app version
-
-### Technical Improvements
-- WebGL acceleration
-- Advanced color mixing
-- Custom pattern editor
-- API integrations
-
----
-
 ## Open Source
 
 ### Available on GitHub
