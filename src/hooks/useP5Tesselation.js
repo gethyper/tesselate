@@ -37,9 +37,6 @@ const STROKE_OPTIONS_POOL = {
   }
 };
 
-// Shadow color cache for performance optimization
-const SHADOW_COLOR_CACHE = new Map();
-
 // Import tile pattern functions or define your pattern mapping
 
 /**
@@ -232,7 +229,7 @@ export const drawPointyTopHexagonOutline = (p5, centerX, centerY, radius) => {
 
 /**
  * Draws a single hexagonal tile composed of triangular segments (supports both orientations)
- * 
+ *
  * @param {Object} p5 - The p5.js instance
  * @param {number} centerX - X coordinate of the hexagon center
  * @param {number} centerY - Y coordinate of the hexagon center
@@ -242,8 +239,9 @@ export const drawPointyTopHexagonOutline = (p5, centerX, centerY, radius) => {
  * @param {Object} tile_options - Optional tile configuration including texture
  * @param {boolean} enableGradient - Whether to apply gradient effects to triangles
  * @param {boolean} isPointyTop - Whether to draw pointy-top (true) or flat-top (false) hexagon
+ * @param {number} opacity - Opacity value from 0 to 1 (default: 1)
  */
-export const drawHexatile = (p5, centerX, centerY, radius, tile_components, color_theme, tile_options = {}, enableGradient = false, isPointyTop = false) => {
+export const drawHexatile = (p5, centerX, centerY, radius, tile_components, color_theme, tile_options = {}, enableGradient = false, isPointyTop = false, opacity = 1) => {
   
   // Generate hexagon vertices using unified function
   const vertices = generateHexVertices(p5, centerX, centerY, radius, isPointyTop);
@@ -261,12 +259,17 @@ export const drawHexatile = (p5, centerX, centerY, radius, tile_components, colo
     p5.pop();
   }
   
-  // Draw the hexagon outline
+  // Draw the hexagon outline with opacity
+  p5.push();
+  const outlineAlpha = Math.floor(opacity * 255);
+  p5.fill(0, 0, 0, outlineAlpha); // Set fill with opacity
+  p5.noStroke(); // Remove stroke
   if (isPointyTop) {
     drawPointyTopHexagonOutline(p5, centerX, centerY, radius);
   } else {
     drawFlatTopHexagonOutline(p5, centerX, centerY, radius);
   }
+  p5.pop();
   
   // Pre-calculate center point to avoid repetitive access
   const centerPoint = [centerX, centerY];
@@ -297,7 +300,7 @@ export const drawHexatile = (p5, centerX, centerY, radius, tile_components, colo
       stroke_options = EMPTY_STROKE_OPTIONS;
     }
 
-    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, enableGradient, tile_options.textureImg, tile_options.shadowOptions);
+    drawTriangle(p5, x1, y1, x2, y2, x3, y3, tri_color, stroke_options, enableGradient, tile_options.textureImg, tile_options.shadowOptions, opacity);
     
     // Return pooled object for reuse
     if (hasStroke && stroke_options !== EMPTY_STROKE_OPTIONS) {
@@ -310,16 +313,16 @@ export const drawHexatile = (p5, centerX, centerY, radius, tile_components, colo
  * Legacy function - kept for compatibility
  * Draws a single flat-top hexagonal tile composed of triangular segments
  */
-export const drawFlatTopHexatile = (p5, centerX, centerY, radius, tile_components, color_theme, tile_options = {}, enableGradient = false) => {
-  drawHexatile(p5, centerX, centerY, radius, tile_components, color_theme, tile_options, enableGradient, false);
+export const drawFlatTopHexatile = (p5, centerX, centerY, radius, tile_components, color_theme, tile_options = {}, enableGradient = false, opacity = 1) => {
+  drawHexatile(p5, centerX, centerY, radius, tile_components, color_theme, tile_options, enableGradient, false, opacity);
 };
 
 /**
  * Legacy function - kept for compatibility
  * Draws a single pointy-top hexagonal tile composed of triangular segments
  */
-export const drawPointyTopHexatile = (p5, centerX, centerY, radius, tile_components, color_theme, tile_options = {}, enableGradient = false) => {
-  drawHexatile(p5, centerX, centerY, radius, tile_components, color_theme, tile_options, enableGradient, true);
+export const drawPointyTopHexatile = (p5, centerX, centerY, radius, tile_components, color_theme, tile_options = {}, enableGradient = false, opacity = 1) => {
+  drawHexatile(p5, centerX, centerY, radius, tile_components, color_theme, tile_options, enableGradient, true, opacity);
 };
 
 /**
@@ -386,16 +389,8 @@ export const drawTexturedTriangle = (p5, x1, y1, x2, y2, x3, y3, color, textureI
 
 
 // Canvas context batching for performance
-let lastFillStyle = null;
 let lastStrokeStyle = null;
 let lastStrokeWeight = null;
-
-const setFillStyleBatched = (p5, color) => {
-  if (lastFillStyle !== color) {
-    p5.fill(color);
-    lastFillStyle = color;
-  }
-};
 
 const setStrokeStyleBatched = (p5, color, weight = 1) => {
   if (lastStrokeStyle !== color) {
@@ -415,7 +410,7 @@ const setStrokeStyleBatched = (p5, color, weight = 1) => {
 
 /**
  * Draws a triangle with optional gradient, texture, stroke customization, and shadow
- * 
+ *
  * @param {Object} p5 - The p5.js instance
  * @param {number} x1 - X coordinate of first vertex
  * @param {number} y1 - Y coordinate of first vertex
@@ -428,104 +423,59 @@ const setStrokeStyleBatched = (p5, color, weight = 1) => {
  * @param {boolean} useGradient - Whether to apply gradient fill
  * @param {HTMLImageElement|null} textureImg - Optional texture image
  * @param {Object} shadow_options - Shadow configuration object with offsetX, offsetY, blur, color, alpha
+ * @param {number} opacity - Opacity value from 0 to 1 (default: 1)
  */
-export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = EMPTY_STROKE_OPTIONS, useGradient = false, textureImg = null, shadow_options = null) => {
+export const drawTriangle = (p5, x1, y1, x2, y2, x3, y3, color, stroke_options = EMPTY_STROKE_OPTIONS, useGradient = false, textureImg = null, shadow_options = null, opacity = 1) => {
 
   // Destructure once to avoid repeated property access
   const {
-    stroke_color = null,
-    stroke_weight = 1,
     stroke_a = null,
     stroke_b = null,
     stroke_c = null
   } = stroke_options;
 
   // Draw shadow if shadow options are provided (high-quality canvas shadow)
+  // Shadow drawing skipped - triangles are invisible
   if (shadow_options) {
-    const {
-      offsetX = 2,
-      offsetY = 2, 
-      blur = 4,
-      color: shadowColor = '#000000',
-      alpha = 0.3
-    } = shadow_options;
-
-    // Save current drawing context state
-    p5.push();
-    
-    // Apply shadow settings to the canvas context for high-quality blur
-    const ctx = p5.drawingContext;
-    ctx.shadowOffsetX = offsetX;
-    ctx.shadowOffsetY = offsetY;
-    ctx.shadowBlur = blur;
-    
-    // Use cached shadow color to avoid repeated p5.color() calls
-    const shadowKey = `${shadowColor}_${alpha}`;
-    let shadowColorWithAlpha = SHADOW_COLOR_CACHE.get(shadowKey);
-    if (!shadowColorWithAlpha) {
-      shadowColorWithAlpha = p5.color(shadowColor);
-      shadowColorWithAlpha.setAlpha(Math.floor(alpha * 255));
-      SHADOW_COLOR_CACHE.set(shadowKey, shadowColorWithAlpha);
-    }
-    ctx.shadowColor = shadowColorWithAlpha.toString();
-    
-    // Draw shape with shadow
-    p5.noStroke();
-    p5.fill(color);
-    p5.beginShape();
-    p5.vertex(x1, y1);
-    p5.vertex(x2, y2);
-    p5.vertex(x3, y3);
-    p5.endShape(p5.CLOSE);
-    
-    // Reset shadow settings
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-    ctx.shadowBlur = 0;
-    ctx.shadowColor = 'transparent';
-    
-    p5.pop();
+    // Skip shadow rendering since triangles are invisible
   }
+
+  // Convert opacity (0-1) to alpha (0-255)
+  const alpha = Math.floor(opacity * 255);
 
   if (textureImg) {
     // Draw texture with color tinting
-    drawTexturedTriangle(p5, x1, y1, x2, y2, x3, y3, color, textureImg);
-  } else {
-    // Create and apply gradient fill or solid color with batching
-    const fill = createGradientFill(p5, x1, y1, x2, y2, x3, y3, color, useGradient);
-    if (typeof fill === 'string') {
-      setFillStyleBatched(p5, fill);
-    } else {
-      p5.drawingContext.fillStyle = fill;
-      lastFillStyle = null; // Reset cache for gradient
-    }
-    
-    // Batch stroke operations
-    setStrokeStyleBatched(p5, stroke_color, stroke_weight);
-    
+    p5.push();
+    const colorObj = p5.color(color);
+    colorObj.setAlpha(alpha);
+    p5.fill(colorObj);
+    p5.noStroke();
     p5.beginShape();
     p5.vertex(x1, y1);
     p5.vertex(x2, y2);
     p5.vertex(x3, y3);
     p5.endShape(p5.CLOSE);
+    p5.pop();
+  } else {
+    // Apply color with opacity
+    p5.push();
+    const colorObj = p5.color(color);
+    colorObj.setAlpha(alpha);
+    p5.fill(colorObj);
+    p5.noStroke();
+
+    p5.beginShape();
+    p5.vertex(x1, y1);
+    p5.vertex(x2, y2);
+    p5.vertex(x3, y3);
+    p5.endShape(p5.CLOSE);
+    p5.pop();
   }
 
   // Draw individual edge strokes if specified with batching
+  // Edge strokes skipped - triangles are invisible
   if (stroke_a || stroke_b || stroke_c) {
-    if (stroke_a) {
-      setStrokeStyleBatched(p5, stroke_a, stroke_weight);
-      p5.line(x1, y1, x2, y2);
-    }
-    
-    if (stroke_b) {
-      setStrokeStyleBatched(p5, stroke_b, stroke_weight);
-      p5.line(x2, y2, x3, y3);
-    }
-    
-    if (stroke_c) {
-      setStrokeStyleBatched(p5, stroke_c, stroke_weight);
-      p5.line(x3, y3, x1, y1);
-    }
+    // Skip edge stroke rendering since triangles are invisible
   }
 
   // Reset stroke to avoid affecting subsequent draws
@@ -1047,18 +997,18 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
 
       // Viewport culling: Skip tiles that are completely off-screen (performance optimization)
       const tileSize2x = r * 2; // Approximate tile size for culling
-      if (x_loc > p5.width + tileSize2x || 
-          x_loc < -tileSize2x || 
-          y_loc > p5.height + tileSize2x || 
+      if (x_loc > p5.width + tileSize2x ||
+          x_loc < -tileSize2x ||
+          y_loc > p5.height + tileSize2x ||
           y_loc < -tileSize2x) {
         continue; // Skip off-screen tile
       }
 
-      // Draw tile (unified call)
+      // Draw tile (unified call) - animations disabled
       if (isPointyTop) {
-        drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient);
+        drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient, 1);
       } else {
-        drawFlatTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient);
+        drawFlatTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient, 1);
       }
     }
   }

@@ -63,17 +63,17 @@ const TesselateComponent = ({
     const sketch = (p) => {
       p.setup = () => {
         setup(p);
-        p.noLoop(); // Stop the draw loop after setup
+        p.noLoop(); // Animations disabled - draw only when needed
       };
       p.draw = () => draw(p);
       p.windowResized = () => {
-        console.log('🖼️ WINDOW RESIZE - TRIGGERING REDRAW', { 
-          width: p.windowWidth, 
+        console.log('🖼️ WINDOW RESIZE - TRIGGERING REDRAW', {
+          width: p.windowWidth,
           height: p.windowHeight,
           timestamp: Date.now()
         });
         p.resizeCanvas(p.windowWidth, p.windowHeight);
-        p.redraw(); // Redraw on window resize
+        p.redraw(); // Redraw after resize since animations are disabled
       };
     };
 
