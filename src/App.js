@@ -1,9 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { HashRouter, Routes, Route, useSearchParams } from 'react-router-dom';
 import Tesselate from './components/Tesselate';
+import SquareTesselate from './components/SquareTesselate';
 import TessellationControls from './components/TessellationControls';
+import SquareTessellationControls from './components/SquareTessellationControls';
 import Gallery from './components/Gallery';
 import TileDesigns from './components/TileDesigns';
+import SquareTileDesigns from './components/SquareTileDesigns';
 import ColorThemes from './components/ColorThemes';
 import Presentation from './components/Presentation';
 import LearningPage from './components/LearningPage';
@@ -432,7 +435,174 @@ function TessellationPage() {
   );
 }
 
-// Main App component with routing 
+// Square Tessellation page component
+function SquareTessellationPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Parse tile adjustment parameters (support both numeric and effect patterns)
+  const parseSquareAdjustment = (param) => {
+    if (!param || param === 'null' || param === 'undefined' || param === '0') {
+      return { type: 'numeric', value: 0, raw: '0' };
+    }
+
+    // Decode URL encoding if present
+    let decodedParam;
+    try {
+      decodedParam = decodeURIComponent(param);
+    } catch (e) {
+      decodedParam = param;
+    }
+
+    // Check if it's an effect pattern (contains colons)
+    if (decodedParam.includes(':')) {
+      const parts = decodedParam.split(':');
+      const effectType = parts[0].toLowerCase();
+      const values = parts.slice(1).map(val => {
+        const num = parseFloat(val);
+        if (isNaN(num) || !isFinite(num)) return 0;
+        return Math.max(-1000, Math.min(1000, num));
+      });
+
+      return {
+        type: effectType,
+        values: values,
+        raw: param
+      };
+    }
+
+    // Plain numeric value
+    const numValue = parseFloat(decodedParam);
+    if (isNaN(numValue) || !isFinite(numValue)) {
+      return { type: 'numeric', value: 0, raw: param };
+    }
+
+    return {
+      type: 'numeric',
+      value: Math.max(-1000, Math.min(1000, numValue)),
+      raw: param
+    };
+  };
+
+  // State management with URL persistence
+  const [selectedPattern, setSelectedPattern] = useState(() => {
+    return searchParams.get('pattern') || 'pinwheel';
+  });
+
+  const [selectedTheme, setSelectedTheme] = useState(() => {
+    return searchParams.get('theme') || 'Electric Sheep';
+  });
+
+  const [tileWidth, setTileWidth] = useState(() => {
+    return parseInt(searchParams.get('width') || '80', 10);
+  });
+
+  const [tileHeight, setTileHeight] = useState(() => {
+    return parseInt(searchParams.get('height') || '80', 10);
+  });
+
+  const [tileXAdjustRaw, setTileXAdjustRaw] = useState(() => {
+    return searchParams.get('tile_x_adjust') || '0';
+  });
+
+  const [tileYAdjustRaw, setTileYAdjustRaw] = useState(() => {
+    return searchParams.get('tile_y_adjust') || '0';
+  });
+
+  const [tileStyle, setTileStyle] = useState(() => {
+    return searchParams.get('style') || 'triangles';
+  });
+
+  // Parse adjustments into proper objects
+  const tileXAdjust = parseSquareAdjustment(tileXAdjustRaw);
+  const tileYAdjust = parseSquareAdjustment(tileYAdjustRaw);
+
+  const pattern = SquareTileDesigns[selectedPattern] || SquareTileDesigns['pinwheel'];
+  const theme = ColorThemes[selectedTheme] || ColorThemes['Electric Sheep'];
+
+  // Update URL and state handlers
+  const updatePattern = (newPattern) => {
+    setSelectedPattern(newPattern);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('pattern', newPattern);
+    setSearchParams(newParams);
+  };
+
+  const updateTheme = (newTheme) => {
+    setSelectedTheme(newTheme);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('theme', newTheme);
+    setSearchParams(newParams);
+  };
+
+  const updateSize = (newWidth, newHeight) => {
+    setTileWidth(newWidth);
+    setTileHeight(newHeight);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('width', newWidth.toString());
+    newParams.set('height', newHeight.toString());
+    setSearchParams(newParams);
+  };
+
+  const updateAdjustments = (newXAdjust, newYAdjust) => {
+    // Store raw string values
+    setTileXAdjustRaw(newXAdjust);
+    setTileYAdjustRaw(newYAdjust);
+    const newParams = new URLSearchParams(searchParams);
+    if (newXAdjust && newXAdjust !== '0') {
+      newParams.set('tile_x_adjust', newXAdjust);
+    } else {
+      newParams.delete('tile_x_adjust');
+    }
+    if (newYAdjust && newYAdjust !== '0') {
+      newParams.set('tile_y_adjust', newYAdjust);
+    } else {
+      newParams.delete('tile_y_adjust');
+    }
+    setSearchParams(newParams);
+  };
+
+  const updateTileStyle = (newStyle) => {
+    setTileStyle(newStyle);
+    const newParams = new URLSearchParams(searchParams);
+    if (newStyle !== 'triangles') {
+      newParams.set('style', newStyle);
+    } else {
+      newParams.delete('style');
+    }
+    setSearchParams(newParams);
+  };
+
+  return (
+    <>
+      <SquareTesselate
+        key={`${selectedPattern}-${selectedTheme}-${tileStyle}-${tileWidth}-${tileHeight}`}
+        tile_pattern={pattern.tilePattern}
+        color_theme={theme}
+        width={tileWidth}
+        height={tileHeight}
+        tile_x_adjust={tileXAdjust}
+        tile_y_adjust={tileYAdjust}
+        tileStyle={tileStyle}
+      />
+      <SquareTessellationControls
+        selectedPattern={selectedPattern}
+        selectedTheme={selectedTheme}
+        tileWidth={tileWidth}
+        tileHeight={tileHeight}
+        tileStyle={tileStyle}
+        onPatternChange={updatePattern}
+        onThemeChange={updateTheme}
+        onSizeChange={updateSize}
+        onTileStyleChange={updateTileStyle}
+        tileXAdjust={tileXAdjust}
+        tileYAdjust={tileYAdjust}
+        onAdjustChange={updateAdjustments}
+      />
+    </>
+  );
+}
+
+// Main App component with routing
 function App() {
   // Initialize Google Analytics
   useEffect(() => {
@@ -451,6 +621,7 @@ function App() {
         <Route path="/presentation" element={<Presentation />} />
         <Route path="/claude-code-learning.html" element={<LearningPage />} />
         <Route path="/learning" element={<LearningPage />} />
+        <Route path="/squares" element={<SquareTessellationPage />} />
       </Routes>
     </HashRouter>
   );

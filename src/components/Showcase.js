@@ -228,18 +228,92 @@ const Showcase = {
   "wide_column_shift": {
     title: "Wide Column Shift",
     description: "Every fourth column shifted creates wide stable columns",
-    tilePattern: "persianTriangles", 
+    tilePattern: "persianTriangles",
     colorTheme: "Ginger Neutral",
     tileSize: 20,
     tileXAdjust: "shiftx:30:4",
     featured: false
+  },
+
+  // ===== Square Tessellation Showcases =====
+
+  "electric_weave_wave": {
+    title: "Electric Weave Wave",
+    description: "Basketweave pattern in electric cyan and magenta with dramatic wave distortions",
+    tilePattern: "basketweave",
+    colorTheme: "Electric Sheep",
+    tileSize: 80,
+    tileYAdjust: "wave:200:40",
+    type: "square",
+    featured: true
+  },
+
+  "hydrant_starburst": {
+    title: "Hydrant Starburst Wave",
+    description: "Starburst triangles in fiery red and yellow with double wave distortions",
+    tilePattern: "starBurst",
+    colorTheme: "Hydrant Spin",
+    tileSize: 20,
+    tileStyle: "triangle-right",
+    tileXAdjust: "wave:200:40",
+    tileYAdjust: "wave:200:40",
+    type: "square",
+    featured: true
+  },
+
+  "decades_maze_wave": {
+    title: "Decades Maze Wave",
+    description: "Retro 80s maze pattern with triangle fills and hypnotic wave distortions",
+    tilePattern: "maze",
+    colorTheme: "Decades Menu",
+    tileSize: 20,
+    tileStyle: "triangle-up",
+    tileXAdjust: "wave:100:20",
+    tileYAdjust: "wave:100:20",
+    type: "square",
+    featured: true
+  },
+
+  "banned_starburst_chaos": {
+    title: "Banned Starburst Chaos",
+    description: "Retro 80s starburst with 3x3 grid fills and chaotic random positioning",
+    tilePattern: "starBurst",
+    colorTheme: "Banned in '85",
+    tileSize: 20,
+    tileStyle: "grid-3x3",
+    tileXAdjust: "random:-100",
+    tileYAdjust: "random:-100",
+    type: "square",
+    featured: true
+  },
+
+  "smores_confetti": {
+    title: "S'mores Confetti",
+    description: "Rainbow dots with circle fills scattered randomly in warm campfire colors",
+    tilePattern: "rainbowDots",
+    colorTheme: "Moar S'mores!",
+    tileSize: 20,
+    tileStyle: "circle",
+    tileXAdjust: "random:200",
+    tileYAdjust: "random:200",
+    type: "square",
+    featured: true
   }
 };
 
 // Helper functions for working with showcase data
 export const getFeaturedShowcase = () => {
   return Object.entries(Showcase)
-    .filter(([key, item]) => item.featured)
+    .filter(([key, item]) => item.featured && item.type !== 'square')
+    .reduce((acc, [key, item]) => {
+      acc[key] = item;
+      return acc;
+    }, {});
+};
+
+export const getFeaturedSquareShowcase = () => {
+  return Object.entries(Showcase)
+    .filter(([key, item]) => item.featured && item.type === 'square')
     .reduce((acc, [key, item]) => {
       acc[key] = item;
       return acc;
