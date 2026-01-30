@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { HashRouter, Routes, Route, useSearchParams } from 'react-router-dom';
 import Tesselate from './components/Tesselate';
-import SquareTesselate from './components/SquareTesselate';
+import GridTesselate from './components/GridTesselate';
+import ProgrammaticGridTesselate from './components/ProgrammaticGridTesselate';
 import TessellationControls from './components/TessellationControls';
-import SquareTessellationControls from './components/SquareTessellationControls';
+import GridTessellationControls from './components/GridTessellationControls';
+import ProgrammaticGridControls from './components/ProgrammaticGridControls';
 import Gallery from './components/Gallery';
 import TileDesigns from './components/TileDesigns';
-import SquareTileDesigns from './components/SquareTileDesigns';
+import GridTileDesigns from './components/GridTileDesigns';
 import ColorThemes from './components/ColorThemes';
 import Presentation from './components/Presentation';
 import LearningPage from './components/LearningPage';
@@ -435,12 +437,12 @@ function TessellationPage() {
   );
 }
 
-// Square Tessellation page component
-function SquareTessellationPage() {
+// Grid Tessellation page component
+function GridTessellationPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Parse tile adjustment parameters (support both numeric and effect patterns)
-  const parseSquareAdjustment = (param) => {
+  const parseGridAdjustment = (param) => {
     if (!param || param === 'null' || param === 'undefined' || param === '0') {
       return { type: 'numeric', value: 0, raw: '0' };
     }
@@ -512,12 +514,26 @@ function SquareTessellationPage() {
     return searchParams.get('style') || 'triangles';
   });
 
-  // Parse adjustments into proper objects
-  const tileXAdjust = parseSquareAdjustment(tileXAdjustRaw);
-  const tileYAdjust = parseSquareAdjustment(tileYAdjustRaw);
+  // Parse adjustments into proper objects - use useMemo to recompute when raw values change
+  const tileXAdjust = useMemo(() => parseGridAdjustment(tileXAdjustRaw), [tileXAdjustRaw]);
+  const tileYAdjust = useMemo(() => parseGridAdjustment(tileYAdjustRaw), [tileYAdjustRaw]);
 
-  const pattern = SquareTileDesigns[selectedPattern] || SquareTileDesigns['pinwheel'];
+  const pattern = GridTileDesigns[selectedPattern] || GridTileDesigns['pinwheel'];
   const theme = ColorThemes[selectedTheme] || ColorThemes['Electric Sheep'];
+
+  // Sync state with URL params when URL changes (back/forward navigation)
+  useEffect(() => {
+    const urlXAdjust = searchParams.get('tile_x_adjust') || '0';
+    const urlYAdjust = searchParams.get('tile_y_adjust') || '0';
+
+    if (urlXAdjust !== tileXAdjustRaw) {
+      setTileXAdjustRaw(urlXAdjust);
+    }
+    if (urlYAdjust !== tileYAdjustRaw) {
+      setTileYAdjustRaw(urlYAdjust);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // Update URL and state handlers
   const updatePattern = (newPattern) => {
@@ -574,7 +590,7 @@ function SquareTessellationPage() {
 
   return (
     <>
-      <SquareTesselate
+      <GridTesselate
         key={`${selectedPattern}-${selectedTheme}-${tileStyle}-${tileWidth}-${tileHeight}`}
         tile_pattern={pattern.tilePattern}
         color_theme={theme}
@@ -584,7 +600,7 @@ function SquareTessellationPage() {
         tile_y_adjust={tileYAdjust}
         tileStyle={tileStyle}
       />
-      <SquareTessellationControls
+      <GridTessellationControls
         selectedPattern={selectedPattern}
         selectedTheme={selectedTheme}
         tileWidth={tileWidth}
@@ -597,6 +613,166 @@ function SquareTessellationPage() {
         tileXAdjust={tileXAdjust}
         tileYAdjust={tileYAdjust}
         onAdjustChange={updateAdjustments}
+      />
+    </>
+  );
+}
+
+// Programmatic Grid Tessellation page component
+function ProgrammaticGridTessellationPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // State management with URL persistence
+  const [generatorName, setGeneratorName] = useState(() => {
+    return searchParams.get('generator') || 'perlinColors';
+  });
+
+  const [selectedTheme, setSelectedTheme] = useState(() => {
+    return searchParams.get('theme') || 'Chrome Dreams';
+  });
+
+  const [tileWidth, setTileWidth] = useState(() => {
+    return parseInt(searchParams.get('width') || '100', 10);
+  });
+
+  const [tileHeight, setTileHeight] = useState(() => {
+    return parseInt(searchParams.get('height') || '100', 10);
+  });
+
+  const [tileStyle, setTileStyle] = useState(() => {
+    return searchParams.get('style') || 'triangles';
+  });
+
+  const [generatorOptions, setGeneratorOptions] = useState(() => {
+    const optionsParam = searchParams.get('options');
+    if (optionsParam) {
+      try {
+        return JSON.parse(decodeURIComponent(optionsParam));
+      } catch (e) {
+        console.warn('Failed to parse generator options from URL:', e);
+        return {};
+      }
+    }
+    return {};
+  });
+
+  const theme = ColorThemes[selectedTheme] || ColorThemes['Chrome Dreams'];
+
+  // Sync state with URL params when URL changes (back/forward navigation)
+  useEffect(() => {
+    const urlGenerator = searchParams.get('generator');
+    const urlTheme = searchParams.get('theme');
+    const urlWidth = searchParams.get('width');
+    const urlHeight = searchParams.get('height');
+    const urlStyle = searchParams.get('style');
+    const urlOptions = searchParams.get('options');
+
+    if (urlGenerator && urlGenerator !== generatorName) {
+      setGeneratorName(urlGenerator);
+    }
+    if (urlTheme && urlTheme !== selectedTheme) {
+      setSelectedTheme(urlTheme);
+    }
+    if (urlWidth) {
+      const parsed = parseInt(urlWidth, 10);
+      if (!isNaN(parsed) && parsed !== tileWidth) {
+        setTileWidth(parsed);
+      }
+    }
+    if (urlHeight) {
+      const parsed = parseInt(urlHeight, 10);
+      if (!isNaN(parsed) && parsed !== tileHeight) {
+        setTileHeight(parsed);
+      }
+    }
+    if (urlStyle && urlStyle !== tileStyle) {
+      setTileStyle(urlStyle);
+    }
+    if (urlOptions) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(urlOptions));
+        setGeneratorOptions(parsed);
+      } catch (e) {
+        console.warn('Failed to parse generator options from URL:', e);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  // Update URL and state handlers
+  const updateGeneratorName = (newGenerator) => {
+    setGeneratorName(newGenerator);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('generator', newGenerator);
+    setSearchParams(newParams);
+    trackTessellationEvent('programmatic_generator_change', { label: newGenerator });
+  };
+
+  const updateTheme = (newTheme) => {
+    setSelectedTheme(newTheme);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('theme', newTheme);
+    setSearchParams(newParams);
+    trackTessellationEvent('programmatic_theme_change', { label: newTheme });
+  };
+
+  const updateSize = (newWidth, newHeight) => {
+    setTileWidth(newWidth);
+    setTileHeight(newHeight);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('width', newWidth.toString());
+    newParams.set('height', newHeight.toString());
+    setSearchParams(newParams);
+  };
+
+  const updateTileStyle = (newStyle) => {
+    setTileStyle(newStyle);
+    const newParams = new URLSearchParams(searchParams);
+    if (newStyle !== 'triangles') {
+      newParams.set('style', newStyle);
+    } else {
+      newParams.delete('style');
+    }
+    setSearchParams(newParams);
+  };
+
+  const updateGeneratorOptions = (newOptions) => {
+    setGeneratorOptions(newOptions);
+    const newParams = new URLSearchParams(searchParams);
+    if (Object.keys(newOptions).length > 0) {
+      newParams.set('options', encodeURIComponent(JSON.stringify(newOptions)));
+    } else {
+      newParams.delete('options');
+    }
+    setSearchParams(newParams);
+  };
+
+  // Track page view on component mount
+  useEffect(() => {
+    trackPageView('/programmatic');
+  }, []);
+
+  return (
+    <>
+      <ProgrammaticGridTesselate
+        generatorName={generatorName}
+        color_theme={theme}
+        width={tileWidth}
+        height={tileHeight}
+        tileStyle={tileStyle}
+        generatorOptions={generatorOptions}
+      />
+      <ProgrammaticGridControls
+        generatorName={generatorName}
+        setGeneratorName={updateGeneratorName}
+        generatorOptions={generatorOptions}
+        setGeneratorOptions={updateGeneratorOptions}
+        tileStyle={tileStyle}
+        setTileStyle={updateTileStyle}
+        width={tileWidth}
+        setWidth={(w) => updateSize(w, tileHeight)}
+        height={tileHeight}
+        setHeight={(h) => updateSize(tileWidth, h)}
       />
     </>
   );
@@ -621,7 +797,10 @@ function App() {
         <Route path="/presentation" element={<Presentation />} />
         <Route path="/claude-code-learning.html" element={<LearningPage />} />
         <Route path="/learning" element={<LearningPage />} />
-        <Route path="/squares" element={<SquareTessellationPage />} />
+        <Route path="/grid" element={<GridTessellationPage />} />
+        <Route path="/squares" element={<GridTessellationPage />} />
+        <Route path="/programmatic" element={<ProgrammaticGridTessellationPage />} />
+        <Route path="/generative" element={<ProgrammaticGridTessellationPage />} />
       </Routes>
     </HashRouter>
   );

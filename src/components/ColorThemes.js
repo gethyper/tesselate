@@ -18,7 +18,19 @@ const ColorThemes = {
     "Raking in Grands": {light:"#F0F8FF", medium:"#228B22", dark:"#006400", accent:"#FFD700", bg:"#2F4F2F"},
     "Decades Menu": {light:"#FFE135", medium:"#FF6B35", dark:"#B83A4B", accent:"#00B4D8", bg:"#2D1B69"},
     "Electric Sheep": {light:"#8A2BE2", medium:"#FF4500", dark:"#4B0082", accent:"#32CD32", bg:"#1A1A2E"},
-    "Coily Cubes": {light:"#50AF9F", medium:"#5040EF", dark:"#304040", accent:"#DFDF00", bg:"#000000"}
+    "Coily Cubes": {light:"#50AF9F", medium:"#5040EF", dark:"#304040", accent:"#DFDF00", bg:"#000000"},
+
+    // Monochromatic Light & Neutral Themes
+    "Soft Whisper": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#A8DADC", bg:"#FFFFFF"},
+    "Morning Mist": {light:"#F8F9FA", medium:"#DEE2E6", dark:"#ADB5BD", accent:"#CDB4DB", bg:"#FFFFFF"},
+    "Gentle Breeze": {light:"#FEFEFE", medium:"#EFEFEF", dark:"#C4C4C4", accent:"#B8C5D6", bg:"#FCFCFC"},
+    "Pale Horizon": {light:"#FBFBFB", medium:"#E8E8E8", dark:"#BFBFBF", accent:"#D4A574", bg:"#FFFFFF"},
+    "Cloud Nine": {light:"#F9F9F9", medium:"#E3E3E3", dark:"#B5B5B5", accent:"#9DC5BB", bg:"#FDFDFD"},
+    "Lunar Surface": {light:"#F7F7F7", medium:"#DBDBDB", dark:"#B0B0B0", accent:"#C5B9CD", bg:"#FAFAFA"},
+    "Quiet Dawn": {light:"#FBF8F3", medium:"#E8E3DC", dark:"#C7C0B5", accent:"#E8B4B8", bg:"#FFFCF7"},
+    "Stone Garden": {light:"#F5F5F5", medium:"#E0E0E0", dark:"#B3B3B3", accent:"#A8C2A5", bg:"#F9F9F9"},
+    "Frost Line": {light:"#F6F8FA", medium:"#E1E4E8", dark:"#BDC4CC", accent:"#89B0D9", bg:"#FFFFFF"},
+    "Pearl Dust": {light:"#FAF9F7", medium:"#E7E5E2", dark:"#C3C1BE", accent:"#D8C4A8", bg:"#FEFDFB"}
 
   };
 
