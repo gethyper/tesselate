@@ -13,14 +13,15 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  DialogContent
+  DialogContent,
+  Slider
 } from '@mui/material';
 import { Menu, Close } from '@mui/icons-material';
-import SquareTileDesigns from './SquareTileDesigns';
+import GridTileDesigns from './GridTileDesigns';
 import ColorThemes from './ColorThemes';
-import { TILE_STYLES } from '../hooks/useP5SquareTesselation';
+import { TILE_STYLES } from '../hooks/useP5GridTesselation';
 
-const SquareTessellationControls = ({
+const GridTessellationControls = ({
   selectedPattern,
   selectedTheme,
   tileWidth,
@@ -32,7 +33,13 @@ const SquareTessellationControls = ({
   onTileStyleChange,
   tileXAdjust = 0,
   tileYAdjust = 0,
-  onAdjustChange
+  onAdjustChange,
+  altColorFrequency = 0,
+  onAltColorChange,
+  altColorGradient = 'none',
+  onAltColorGradientChange,
+  altColorGradientIntensity = 1.0,
+  onAltColorGradientIntensityChange
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [previewWidth, setPreviewWidth] = useState(tileWidth);
@@ -57,22 +64,22 @@ const SquareTessellationControls = ({
       case '1920x1080':
         width = 1920;
         height = 1080;
-        filename = `square_tessellation_1920x1080_${cleanPattern}_${cleanTheme}.png`;
+        filename = `grid_tessellation_1920x1080_${cleanPattern}_${cleanTheme}.png`;
         break;
       case '1024x768':
         width = 1024;
         height = 768;
-        filename = `square_tessellation_1024x768_${cleanPattern}_${cleanTheme}.png`;
+        filename = `grid_tessellation_1024x768_${cleanPattern}_${cleanTheme}.png`;
         break;
       case '1080x1080':
         width = 1080;
         height = 1080;
-        filename = `square_tessellation_1080x1080_${cleanPattern}_${cleanTheme}.png`;
+        filename = `grid_tessellation_1080x1080_${cleanPattern}_${cleanTheme}.png`;
         break;
       default:
         width = 1920;
         height = 1080;
-        filename = `square_tessellation_1920x1080_${cleanPattern}_${cleanTheme}.png`;
+        filename = `grid_tessellation_1920x1080_${cleanPattern}_${cleanTheme}.png`;
     }
 
     // Create temporary canvas with specified dimensions
@@ -132,7 +139,7 @@ const SquareTessellationControls = ({
   );
 
   // Filter out empty tile patterns
-  const validPatterns = Object.entries(SquareTileDesigns).filter(([key, design]) =>
+  const validPatterns = Object.entries(GridTileDesigns).filter(([key, design]) =>
     design &&
     design.tilePattern &&
     design.tilePattern.length > 0
@@ -252,7 +259,7 @@ const SquareTessellationControls = ({
 
   // Generate current URL for sharing
   const generateCurrentUrl = () => {
-    const url = new URL(window.location.origin + window.location.pathname + '#/squares');
+    const url = new URL(window.location.origin + window.location.pathname + '#/grid');
     url.searchParams.set('pattern', selectedPattern);
     url.searchParams.set('theme', selectedTheme);
     url.searchParams.set('width', tileWidth.toString());
@@ -628,13 +635,15 @@ const SquareTessellationControls = ({
 
                   // Set new timeout - only clamp when sending to parent
                   const newTimeout = setTimeout(() => {
-                    const clampedValue = Math.max(20, Math.min(200, numValue));
+                    const clampedValue = Math.max(5, Math.min(200, numValue));
                     onSizeChange(clampedValue, tileHeight);
                   }, 200);
                   setSizeTimeout(newTimeout);
                 }
               }}
               inputProps={{
+                min: 5,
+                max: 200,
                 step: 5
               }}
               sx={{
@@ -681,13 +690,15 @@ const SquareTessellationControls = ({
 
                   // Set new timeout - only clamp when sending to parent
                   const newTimeout = setTimeout(() => {
-                    const clampedValue = Math.max(20, Math.min(200, numValue));
+                    const clampedValue = Math.max(5, Math.min(200, numValue));
                     onSizeChange(tileWidth, clampedValue);
                   }, 200);
                   setSizeTimeout(newTimeout);
                 }
               }}
               inputProps={{
+                min: 5,
+                max: 200,
                 step: 5
               }}
               sx={{
@@ -862,6 +873,123 @@ const SquareTessellationControls = ({
             )}
           </Box>
 
+          {/* Alt Color Frequency Slider */}
+          <Box sx={{ mb: 2, mt: 2 }}>
+            <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', display: 'block', mb: 1 }}>
+              Alt Color Frequency: {altColorFrequency}%
+            </Typography>
+            <Slider
+              value={altColorFrequency}
+              onChange={(e, value) => {
+                if (onAltColorChange) {
+                  onAltColorChange(value);
+                }
+              }}
+              min={0}
+              max={99}
+              step={1}
+              marks={[
+                { value: 0, label: '0%' },
+                { value: 25, label: '25%' },
+                { value: 50, label: '50%' },
+                { value: 75, label: '75%' }
+              ]}
+              size="small"
+              sx={{
+                color: themeColor,
+                '& .MuiSlider-markLabel': {
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.65rem'
+                }
+              }}
+            />
+            <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontStyle: 'italic', fontSize: '0.7rem', color: 'text.secondary' }}>
+              Random color inversion splotches
+            </Typography>
+          </Box>
+
+          {/* Alt Color Gradient Type */}
+          {altColorFrequency > 0 && (
+            <>
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel id="gradient-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Gradient Type</InputLabel>
+                <Select
+                  labelId="gradient-label"
+                  value={altColorGradient}
+                  label="Gradient Type"
+                  size="small"
+                  onChange={(e) => {
+                    if (onAltColorGradientChange) {
+                      onAltColorGradientChange(e.target.value);
+                    }
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        bgcolor: 'rgba(255, 255, 255, 0.9)',
+                        backdropFilter: 'blur(10px)',
+                      }
+                    }
+                  }}
+                  sx={{
+                    '& .MuiSelect-select': {
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '0.875rem',
+                      padding: '8.5px 14px'
+                    }
+                  }}
+                >
+                  <MenuItem value="none">None (Uniform)</MenuItem>
+                  <MenuItem value="vertical">Vertical (Top → Bottom)</MenuItem>
+                  <MenuItem value="vertical-reverse">Vertical Reverse (Bottom → Top)</MenuItem>
+                  <MenuItem value="horizontal">Horizontal (Left → Right)</MenuItem>
+                  <MenuItem value="horizontal-reverse">Horizontal Reverse (Right → Left)</MenuItem>
+                  <MenuItem value="radial-out">Radial Out (Center → Edge)</MenuItem>
+                  <MenuItem value="radial-in">Radial In (Edge → Center)</MenuItem>
+                  <MenuItem value="diagonal">Diagonal (TL → BR)</MenuItem>
+                  <MenuItem value="diagonal-reverse">Diagonal Reverse (TR → BL)</MenuItem>
+                </Select>
+              </FormControl>
+
+              {/* Gradient Intensity Slider */}
+              {altColorGradient !== 'none' && (
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', display: 'block', mb: 1 }}>
+                    Gradient Intensity: {altColorGradientIntensity.toFixed(1)}x
+                  </Typography>
+                  <Slider
+                    value={altColorGradientIntensity}
+                    onChange={(e, value) => {
+                      if (onAltColorGradientIntensityChange) {
+                        onAltColorGradientIntensityChange(value);
+                      }
+                    }}
+                    min={0.1}
+                    max={5.0}
+                    step={0.1}
+                    marks={[
+                      { value: 0.5, label: '0.5x' },
+                      { value: 1.0, label: '1x' },
+                      { value: 2.0, label: '2x' },
+                      { value: 4.0, label: '4x' }
+                    ]}
+                    size="small"
+                    sx={{
+                      color: themeColor,
+                      '& .MuiSlider-markLabel': {
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '0.65rem'
+                      }
+                    }}
+                  />
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontStyle: 'italic', fontSize: '0.7rem', color: 'text.secondary' }}>
+                    Higher = steeper gradient
+                  </Typography>
+                </Box>
+              )}
+            </>
+          )}
+
           {/* Download Button */}
           <Button
             id="download-button"
@@ -1025,4 +1153,4 @@ const SquareTessellationControls = ({
   );
 };
 
-export default SquareTessellationControls;
+export default GridTessellationControls;

@@ -119,27 +119,43 @@ const adjustColorBrightness = (colorStr, percent) => {
   } else if (colorStr === 'black') {
     colorStr = '#000000';
   }
-  
+
   let hex = colorStr.replace('#', '');
-  
+
   // Handle 3-character hex codes
   if (hex.length === 3) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
   }
-  
+
   // Handle 5-character hex (malformed)
   if (hex.length === 5) {
     hex = hex + hex[4]; // duplicate last character
   }
-  
+
   const num = parseInt(hex, 16);
   if (isNaN(num)) return colorStr; // Return original if can't parse
-  
+
   const amt = Math.round(2.55 * percent);
   const R = Math.min(255, Math.max(0, (num >> 16) + amt));
   const G = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amt));
   const B = Math.min(255, Math.max(0, (num & 0x0000FF) + amt));
   return `rgb(${R}, ${G}, ${B})`;
+};
+
+/**
+ * Creates an inverted color theme by swapping light/dark and medium/accent
+ *
+ * @param {Object} theme - Original color theme
+ * @returns {Object} Inverted color theme
+ */
+const invertColorTheme = (theme) => {
+  return {
+    light: theme.dark,
+    medium: theme.accent,
+    dark: theme.light,
+    accent: theme.medium,
+    bg: theme.bg // Keep background the same
+  };
 };
 
 /**
@@ -939,6 +955,13 @@ export const fillWithTiles = (p5, tile_shape, r, tile_pattern, color_theme, tile
 const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function, tile_options = {}, useGradient = false) => {
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
   const tile_y_adjust = tile_options.tile_y_adjust || 0;
+  const altColorFrequency = tile_options.altColorFrequency || 0;
+
+  // Image-driven pattern parameters
+  const imageData = tile_options.imageData;
+  const imageDrivenMode = tile_options.imageDrivenMode || false;
+  const imageIntensity = tile_options.imageIntensity || 100;
+  const imageInvert = tile_options.imageInvert || false;
   
   // PRE-CALCULATE ALL TILE PARAMETERS ONCE (major optimization)
   const isPointyTop = tile_shape === 'pointyTopHexatile';
@@ -1004,11 +1027,87 @@ const tileUnified = (p5, r, tile_shape, tile_pattern, color_theme, draw_function
         continue; // Skip off-screen tile
       }
 
+      // Determine if this tile should use alternate (inverted) colors
+      // Use deterministic random based on tile position for consistent pattern
+      const tileHash = ((i * 73) ^ (j * 79)) & 0x7fffffff;
+      const tileRandom = (tileHash % 100);
+
+      // Calculate effective alt color frequency
+      let effectiveFrequency = altColorFrequency;
+
+      // IMAGE-DRIVEN MODE: Override frequency based on image brightness
+      if (imageDrivenMode && imageData && imageData.getBrightness) {
+        // Calculate normalized position (0-1)
+        const normalizedI = i / tiles_wide;
+        const normalizedJ = j / tiles_high;
+
+        // Sample image brightness at this tile position
+        const brightness = imageData.getAverageBrightness(normalizedI, normalizedJ, 0.02);
+
+        // Map brightness to alt color frequency
+        // Dark areas (low brightness) = high frequency (more alt colors)
+        // Bright areas (high brightness) = low frequency (fewer alt colors)
+        let brightnessFrequency = imageInvert ? brightness * 99 : (1 - brightness) * 99;
+
+        // Apply intensity (0-100%)
+        brightnessFrequency = (brightnessFrequency * imageIntensity) / 100;
+
+        effectiveFrequency = Math.round(brightnessFrequency);
+      }
+      // GRADIENT MODE: Apply gradient if not in image mode
+      else if (altColorFrequency > 0) {
+        const altColorGradient = tile_options.altColorGradient || 'none';
+        const altColorGradientIntensity = tile_options.altColorGradientIntensity || 1.0;
+
+        let positionFactor = 1.0; // Default: uniform distribution
+
+        if (altColorGradient !== 'none') {
+        const normalizedI = i / tiles_wide;
+        const normalizedJ = j / tiles_high;
+
+        switch (altColorGradient) {
+          case 'vertical':
+            positionFactor = Math.pow(normalizedJ, altColorGradientIntensity);
+            break;
+          case 'vertical-reverse':
+            positionFactor = Math.pow(1 - normalizedJ, altColorGradientIntensity);
+            break;
+          case 'horizontal':
+            positionFactor = Math.pow(normalizedI, altColorGradientIntensity);
+            break;
+          case 'horizontal-reverse':
+            positionFactor = Math.pow(1 - normalizedI, altColorGradientIntensity);
+            break;
+          case 'radial-out':
+            const distFromCenterOut = Math.sqrt(Math.pow(normalizedI - 0.5, 2) + Math.pow(normalizedJ - 0.5, 2)) * 1.4142;
+            positionFactor = Math.pow(Math.min(distFromCenterOut, 1), altColorGradientIntensity);
+            break;
+          case 'radial-in':
+            const distFromCenterIn = Math.sqrt(Math.pow(normalizedI - 0.5, 2) + Math.pow(normalizedJ - 0.5, 2)) * 1.4142;
+            positionFactor = Math.pow(1 - Math.min(distFromCenterIn, 1), altColorGradientIntensity);
+            break;
+          case 'diagonal':
+            positionFactor = Math.pow((normalizedI + normalizedJ) / 2, altColorGradientIntensity);
+            break;
+          case 'diagonal-reverse':
+            positionFactor = Math.pow((1 - normalizedI + normalizedJ) / 2, altColorGradientIntensity);
+            break;
+          default:
+            positionFactor = 1.0;
+        }
+        }
+
+        effectiveFrequency = altColorFrequency * positionFactor;
+      }
+
+      const useAltColor = effectiveFrequency > 0 && tileRandom < effectiveFrequency;
+      const tileColorTheme = useAltColor ? invertColorTheme(color_theme) : color_theme;
+
       // Draw tile (unified call) - animations disabled
       if (isPointyTop) {
-        drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient, 1);
+        drawPointyTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], tileColorTheme, tile_options, useGradient, 1);
       } else {
-        drawFlatTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], color_theme, tile_options, useGradient, 1);
+        drawFlatTopHexatile(p5, x_loc, y_loc, r, tile_pattern[tile_column][tile_row], tileColorTheme, tile_options, useGradient, 1);
       }
     }
   }
@@ -1113,7 +1212,14 @@ export function useP5Tesselation({
   const draw = useCallback((p5) => {
     try {
       const params = paramsRef.current;
-      p5.background(params.safeColorTheme.bg);
+
+      // Only draw background if NOT in shader mode
+      if (!params.tile_options.shaderMode) {
+        p5.background(params.safeColorTheme.bg);
+      } else {
+        // Make background transparent for shader mode
+        p5.clear();
+      }
 
       // Update tile_options with current texture
       const updatedTileOptions = {

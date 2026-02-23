@@ -20,6 +20,30 @@ const ColorThemes = {
     "Electric Sheep": {light:"#8A2BE2", medium:"#FF4500", dark:"#4B0082", accent:"#32CD32", bg:"#1A1A2E"},
     "Coily Cubes": {light:"#50AF9F", medium:"#5040EF", dark:"#304040", accent:"#DFDF00", bg:"#000000"},
 
+    // Basic Bee Variations - Black & White with Bold Color
+    "Bee Crimson": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#B60514", bg:"#f5f5f5"},
+    "Bee Electric": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#00B4D8", bg:"#f5f5f5"},
+    "Bee Violet": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#8A2BE2", bg:"#f5f5f5"},
+    "Bee Lime": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#00FF41", bg:"#f5f5f5"},
+    "Bee Tangerine": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#FF6B35", bg:"#f5f5f5"},
+    "Bee Magenta": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#FF073A", bg:"#f5f5f5"},
+    "Bee Cyan": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#40E0D0", bg:"#f5f5f5"},
+    "Bee Royal": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#663399", bg:"#f5f5f5"},
+    "Bee Flame": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#FF4500", bg:"#f5f5f5"},
+    "Bee Emerald": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#228B22", bg:"#f5f5f5"},
+
+    // Soft Whisper Variations - Gray & White with Bold Color
+    "Whisper Scarlet": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#DC143C", bg:"#FFFFFF"},
+    "Whisper Azure": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#00FFFF", bg:"#FFFFFF"},
+    "Whisper Orchid": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#DA70D6", bg:"#FFFFFF"},
+    "Whisper Forest": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#32CD32", bg:"#FFFFFF"},
+    "Whisper Coral": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#E07A5F", bg:"#FFFFFF"},
+    "Whisper Fuchsia": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#FF6EC7", bg:"#FFFFFF"},
+    "Whisper Teal": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#50AF9F", bg:"#FFFFFF"},
+    "Whisper Gold": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#FFD700", bg:"#FFFFFF"},
+    "Whisper Crimson": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#8B0000", bg:"#FFFFFF"},
+    "Whisper Indigo": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#5040EF", bg:"#FFFFFF"},
+
     // Monochromatic Light & Neutral Themes
     "Soft Whisper": {light:"#FAFAFA", medium:"#E5E5E5", dark:"#B8B8B8", accent:"#A8DADC", bg:"#FFFFFF"},
     "Morning Mist": {light:"#F8F9FA", medium:"#DEE2E6", dark:"#ADB5BD", accent:"#CDB4DB", bg:"#FFFFFF"},
@@ -30,7 +54,48 @@ const ColorThemes = {
     "Quiet Dawn": {light:"#FBF8F3", medium:"#E8E3DC", dark:"#C7C0B5", accent:"#E8B4B8", bg:"#FFFCF7"},
     "Stone Garden": {light:"#F5F5F5", medium:"#E0E0E0", dark:"#B3B3B3", accent:"#A8C2A5", bg:"#F9F9F9"},
     "Frost Line": {light:"#F6F8FA", medium:"#E1E4E8", dark:"#BDC4CC", accent:"#89B0D9", bg:"#FFFFFF"},
-    "Pearl Dust": {light:"#FAF9F7", medium:"#E7E5E2", dark:"#C3C1BE", accent:"#D8C4A8", bg:"#FEFDFB"}
+    "Pearl Dust": {light:"#FAF9F7", medium:"#E7E5E2", dark:"#C3C1BE", accent:"#D8C4A8", bg:"#FEFDFB"},
+
+    // Light Themes with One Dominant Color
+    "Rose Whisper": {light:"#FFF5F8", medium:"#FFE4EC", dark:"#FFCCD9", accent:"#FF8FA3", bg:"#FFFAFB"},
+    "Mint Breath": {light:"#F5FFF9", medium:"#E3FFF0", dark:"#C9FFDF", accent:"#5EEAD4", bg:"#FAFFFC"},
+    "Sky Drift": {light:"#F5F9FF", medium:"#E6F2FF", dark:"#CCE4FF", accent:"#60A5FA", bg:"#FAFCFF"},
+    "Lavender Haze": {light:"#F9F5FF", medium:"#F0E6FF", dark:"#E0CCFF", accent:"#A78BFA", bg:"#FCFAFF"},
+    "Peach Dream": {light:"#FFF8F5", medium:"#FFEDE3", dark:"#FFD9C7", accent:"#FB923C", bg:"#FFFCFA"},
+    "Lemon Mist": {light:"#FFFEF5", medium:"#FFFBE3", dark:"#FFF5C7", accent:"#FDE047", bg:"#FFFFFA"},
+    "Coral Blush": {light:"#FFF6F5", medium:"#FFE9E6", dark:"#FFD4CD", accent:"#FB7185", bg:"#FFFBFA"},
+    "Sage Calm": {light:"#F7FFF7", medium:"#EAFFEA", dark:"#D6FFD6", accent:"#86EFAC", bg:"#FBFFFB"},
+    "Periwinkle Soft": {light:"#F7F7FF", medium:"#EBEBFF", dark:"#D6D6FF", accent:"#A5B4FC", bg:"#FCFCFF"},
+    "Honey Glow": {light:"#FFFCF5", medium:"#FFF8E3", dark:"#FFEFC7", accent:"#FBBF24", bg:"#FFFEFA"},
+    "Lilac Whisper": {light:"#FCF5FF", medium:"#F7E6FF", dark:"#EECCFF", accent:"#C084FC", bg:"#FEFAFF"},
+    "Aqua Hint": {light:"#F5FFFF", medium:"#E3FFFF", dark:"#C9FFFF", accent:"#22D3EE", bg:"#FAFFFFF"},
+    "Blush Pink": {light:"#FFF5F7", medium:"#FFE4EA", dark:"#FFCCD7", accent:"#F472B6", bg:"#FFFAFC"},
+    "Pistachio Light": {light:"#F8FFF5", medium:"#F0FFE3", dark:"#E0FFC9", accent:"#BEF264", bg:"#FCFFFA"},
+    "Powder Blue": {light:"#F5F8FF", medium:"#E6EEFF", dark:"#CCDCFF", accent:"#93C5FD", bg:"#FAFCFF"},
+
+    // Rich Bee Variations - Bold Color Backgrounds with Gray/White Accents
+    "Rich Bee Tangerine": {light:"#FF9B6B", medium:"#FF8050", dark:"#CC5528", accent:"#FFFFFF", bg:"#FF6B35"},
+    "Rich Bee Crimson": {light:"#E5354B", medium:"#CC1A30", dark:"#8B0000", accent:"#FFFFFF", bg:"#B60514"},
+    "Rich Bee Electric": {light:"#3DD4F4", medium:"#00C4E8", dark:"#0094B8", accent:"#FFFFFF", bg:"#00B4D8"},
+    "Rich Bee Violet": {light:"#A854F2", medium:"#9840D9", dark:"#7020B0", accent:"#FFFFFF", bg:"#8A2BE2"},
+    "Rich Bee Lime": {light:"#5AFF77", medium:"#33FF5A", dark:"#00DD33", accent:"#000000", bg:"#00FF41"},
+    "Rich Bee Magenta": {light:"#FF3A66", medium:"#FF0730", dark:"#CC0026", accent:"#FFFFFF", bg:"#FF073A"},
+    "Rich Bee Cyan": {light:"#70F0E0", medium:"#50E8D8", dark:"#30C0B0", accent:"#000000", bg:"#40E0D0"},
+    "Rich Bee Royal": {light:"#8866BB", medium:"#7755AA", dark:"#553388", accent:"#FFFFFF", bg:"#663399"},
+    "Rich Bee Flame": {light:"#FF6F33", medium:"#FF5A1A", dark:"#DD3800", accent:"#FFFFFF", bg:"#FF4500"},
+    "Rich Bee Emerald": {light:"#52C652", medium:"#33AA33", dark:"#1A7A1A", accent:"#FFFFFF", bg:"#228B22"},
+
+    // Rich Whisper Variations - Bold Color Backgrounds with Soft Gray Accents
+    "Rich Whisper Scarlet": {light:"#F44D5D", medium:"#E8283C", dark:"#A80F1F", accent:"#FAFAFA", bg:"#DC143C"},
+    "Rich Whisper Azure": {light:"#33FFFF", medium:"#1AFFFF", dark:"#00DDDD", accent:"#000000", bg:"#00FFFF"},
+    "Rich Whisper Orchid": {light:"#E89AE8", medium:"#E080E0", dark:"#C050C0", accent:"#FAFAFA", bg:"#DA70D6"},
+    "Rich Whisper Forest": {light:"#5EFF5E", medium:"#45E845", dark:"#28B828", accent:"#000000", bg:"#32CD32"},
+    "Rich Whisper Coral": {light:"#F09A85", medium:"#E8856D", dark:"#C05E42", accent:"#FAFAFA", bg:"#E07A5F"},
+    "Rich Whisper Fuchsia": {light:"#FF99DD", medium:"#FF7FCC", dark:"#DD50AA", accent:"#000000", bg:"#FF6EC7"},
+    "Rich Whisper Teal": {light:"#7ACFBF", medium:"#60BFAF", dark:"#408F7F", accent:"#FAFAFA", bg:"#50AF9F"},
+    "Rich Whisper Gold": {light:"#FFE74D", medium:"#FFE033", dark:"#DDBB00", accent:"#000000", bg:"#FFD700"},
+    "Rich Whisper Crimson": {light:"#B73333", medium:"#A81A1A", dark:"#6B0000", accent:"#FAFAFA", bg:"#8B0000"},
+    "Rich Whisper Indigo": {light:"#7060FF", medium:"#6050F0", dark:"#4030C0", accent:"#FAFAFA", bg:"#5040EF"}
 
   };
 
