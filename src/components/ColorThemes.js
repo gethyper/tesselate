@@ -23,10 +23,14 @@ const ColorThemes = {
     // Basic Bee Variations - Black & White with Bold Color
     "Bee Crimson": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#B60514", bg:"#f5f5f5"},
     "Bee Electric": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#00B4D8", bg:"#f5f5f5"},
+    "Fluent Bee Electric": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#3A96DD", bg:"#f5f5f5"},
     "Bee Violet": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#8A2BE2", bg:"#f5f5f5"},
     "Bee Lime": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#00FF41", bg:"#f5f5f5"},
     "Bee Tangerine": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#FF6B35", bg:"#f5f5f5"},
     "Bee Magenta": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#FF073A", bg:"#f5f5f5"},
+    "Fluent Bee Pinkgenta": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#FF777F", bg:"#f5f5f5"},
+    "Bee Pink Fluent": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#EA66BA", bg:"#f5f5f5"},
+    "Bee Orange Fluent": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#FF9C70", bg:"#f5f5f5"},
     "Bee Cyan": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#40E0D0", bg:"#f5f5f5"},
     "Bee Royal": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#663399", bg:"#f5f5f5"},
     "Bee Flame": {light:"#ffffff", medium:"#cccccc", dark:"#000000", accent:"#FF4500", bg:"#f5f5f5"},
@@ -83,6 +87,8 @@ const ColorThemes = {
     "Rich Bee Cyan": {light:"#70F0E0", medium:"#50E8D8", dark:"#30C0B0", accent:"#000000", bg:"#40E0D0"},
     "Rich Bee Royal": {light:"#8866BB", medium:"#7755AA", dark:"#553388", accent:"#FFFFFF", bg:"#663399"},
     "Rich Bee Flame": {light:"#FF6F33", medium:"#FF5A1A", dark:"#DD3800", accent:"#FFFFFF", bg:"#FF4500"},
+    "Rich Bee Fluent Yellow": {light:"#FDE61E", medium:"#FF9C70", dark:"#4D2A00", accent:"#FFFFFF", bg:"#FDE61E"},
+    "Rich Bee Fluent Yellow Improved": {light:"#FFFAD6", medium:"#FF9C70", dark:"#4D2A00", accent:"#FFFFFF", bg:"#FFFAD6"},
     "Rich Bee Emerald": {light:"#52C652", medium:"#33AA33", dark:"#1A7A1A", accent:"#FFFFFF", bg:"#228B22"},
 
     // Rich Whisper Variations - Bold Color Backgrounds with Soft Gray Accents
@@ -95,7 +101,8 @@ const ColorThemes = {
     "Rich Whisper Teal": {light:"#7ACFBF", medium:"#60BFAF", dark:"#408F7F", accent:"#FAFAFA", bg:"#50AF9F"},
     "Rich Whisper Gold": {light:"#FFE74D", medium:"#FFE033", dark:"#DDBB00", accent:"#000000", bg:"#FFD700"},
     "Rich Whisper Crimson": {light:"#B73333", medium:"#A81A1A", dark:"#6B0000", accent:"#FAFAFA", bg:"#8B0000"},
-    "Rich Whisper Indigo": {light:"#7060FF", medium:"#6050F0", dark:"#4030C0", accent:"#FAFAFA", bg:"#5040EF"}
+    "Rich Whisper Indigo": {light:"#7060FF", medium:"#6050F0", dark:"#4030C0", accent:"#FAFAFA", bg:"#5040EF"},
+    "Rich Whisper Fluent Purple": {light:"#C6B1DE", medium:"#9470BD", dark:"#341A51", accent:"#FAFAFA", bg:"#9470BD"}
 
   };
 
