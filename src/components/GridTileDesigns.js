@@ -1,7 +1,7 @@
 /**
- * Square Tile Designs
+ * Grid Tile Designs
  *
- * Each square tile is divided into 4 triangles from the center:
+ * Each grid tile is divided into 4 triangles from the center:
  * - Index 0: Top triangle
  * - Index 1: Right triangle
  * - Index 2: Bottom triangle
@@ -10,11 +10,11 @@
  * Pattern schema: { c: "color_key", s: "stroke_color_key", sw: stroke_weight }
  */
 
-const SquareTileDesigns = {
+const GridTileDesigns = {
 
   // 1. Checkerboard - Classic alternating pattern
   'checkerboard': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
@@ -29,7 +29,7 @@ const SquareTileDesigns = {
 
   // 2. Pinwheel - Rotating triangles creating a spinning effect
   'pinwheel': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
@@ -44,7 +44,7 @@ const SquareTileDesigns = {
 
   // 3. Windmill - Four-blade spinning pattern
   'windmill': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
@@ -59,7 +59,7 @@ const SquareTileDesigns = {
 
   // 4. Herringbone - Classic zigzag pattern
   'herringbone': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
@@ -74,7 +74,7 @@ const SquareTileDesigns = {
 
   // 5. Diamond - Diagonal diamond pattern
   'diamond': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"}],
@@ -89,7 +89,7 @@ const SquareTileDesigns = {
 
   // 6. Hourglass - Top/bottom vs left/right creating hourglass shapes
   'hourglass': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}]
@@ -99,7 +99,7 @@ const SquareTileDesigns = {
 
   // 7. Bowtie - Alternating bowtie/hourglass pattern
   'bowtie': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
@@ -110,7 +110,7 @@ const SquareTileDesigns = {
 
   // 8. Chevron - V-shaped pattern with 3 colors
   'chevron': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
@@ -125,7 +125,7 @@ const SquareTileDesigns = {
 
   // 9. Quarter Turn - Each quadrant rotates the pattern
   'quarterTurn': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"accent"},{c:"dark"},{c:"medium"},{c:"light"}],
@@ -140,7 +140,7 @@ const SquareTileDesigns = {
 
   // 10. Basketweave - Woven appearance with alternating orientations
   'basketweave': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
@@ -157,7 +157,7 @@ const SquareTileDesigns = {
 
   // 11. Solid - Simple solid color squares
   'solid': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}]
@@ -167,7 +167,7 @@ const SquareTileDesigns = {
 
   // 12. Striped Diagonal - Diagonal stripes
   'stripedDiagonal': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
@@ -189,7 +189,7 @@ const SquareTileDesigns = {
 
   // 13. Optical Illusion - Creates depth perception
   'opticalIllusion': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"light"},{c:"medium"},{c:"dark"},{c:"medium"}],
@@ -204,7 +204,7 @@ const SquareTileDesigns = {
 
   // 14. Tumbling Blocks - 3D cube illusion
   'tumblingBlocks': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
@@ -219,7 +219,7 @@ const SquareTileDesigns = {
 
   // 15. Star Burst - Radiating star pattern
   'starBurst': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"accent"},{c:"dark"},{c:"accent"},{c:"dark"}],
@@ -234,7 +234,7 @@ const SquareTileDesigns = {
 
   // 16. Maze - Interlocking maze-like pattern
   'maze': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
@@ -253,7 +253,7 @@ const SquareTileDesigns = {
 
   // 17. Gradient Fade - Smooth color transition
   'gradientFade': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
@@ -272,7 +272,7 @@ const SquareTileDesigns = {
 
   // 18. Argyle - Classic argyle diamond pattern
   'argyle': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"accent"},{c:"dark"},{c:"accent"}],
@@ -287,7 +287,7 @@ const SquareTileDesigns = {
 
   // 19. Cross - Interlocking cross pattern
   'cross': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"}],
@@ -302,7 +302,7 @@ const SquareTileDesigns = {
 
   // 20. Confetti - Random-looking scattered pattern
   'confetti': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"light"},{c:"accent"},{c:"medium"},{c:"dark"}],
@@ -336,7 +336,7 @@ const SquareTileDesigns = {
 
   // 21. Polka Dots - Classic alternating dots
   'polkaDots': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
@@ -351,7 +351,7 @@ const SquareTileDesigns = {
 
   // 22. Polka Inverse - Dots with dark background
   'polkaInverse': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"}],
@@ -366,7 +366,7 @@ const SquareTileDesigns = {
 
   // 23. Bubble Grid - Uniform circles in a grid
   'bubbleGrid': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"medium"},{c:"light"},{c:"medium"},{c:"light"}]
@@ -376,7 +376,7 @@ const SquareTileDesigns = {
 
   // 24. Rainbow Dots - Multi-colored circles
   'rainbowDots': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
@@ -398,7 +398,7 @@ const SquareTileDesigns = {
 
   // 25. Scattered Dots - Random-looking dot placement
   'scatteredDots': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
@@ -429,7 +429,7 @@ const SquareTileDesigns = {
 
   // 26. Gradient Dots - Circles transitioning in color
   'gradientDots': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"}],
@@ -441,7 +441,7 @@ const SquareTileDesigns = {
 
   // 27. Dotted Stripes - Rows of different colored dots
   'dottedStripes': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}]
@@ -457,7 +457,7 @@ const SquareTileDesigns = {
 
   // 28. Checker Dots - Checkerboard with dots
   'checkerDots': {
-    'tileShape': 'square',
+    'tileShape': 'grid',
     'tilePattern': [
       [
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
@@ -468,7 +468,159 @@ const SquareTileDesigns = {
         [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}]
       ]
     ]
+  },
+
+  // ===== Circle-with-lines patterns (inspired by generative art) =====
+  // These work best with circle-line-* tile styles
+  // Pattern format for circle-lines: [circleColor, bgColor, lineColor, (unused)]
+
+  // 29. Mixed Lines Grid - Various line orientations in circles
+  'mixedLinesGrid': {
+    'tileShape': 'grid',
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"accent"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"accent"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"accent"},{c:"light"}]
+      ]
+    ]
+  },
+
+  // 30. Gradient Circle Lines - Smooth color transition with lines
+  'gradientCircleLines': {
+    'tileShape': 'grid',
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"accent"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"accent"},{c:"dark"}]
+      ],
+      [
+        [{c:"accent"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"accent"},{c:"dark"},{c:"medium"},{c:"dark"}],
+        [{c:"accent"},{c:"dark"},{c:"accent"},{c:"dark"}]
+      ]
+    ]
+  },
+
+  // 31. Circle Crosses - Grid of circles with cross patterns
+  'circlesCrosses': {
+    'tileShape': 'grid',
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"accent"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}]
+      ]
+    ]
+  },
+
+  // 32. Circle X Pattern - Grid with diagonal cross patterns
+  'circlesX': {
+    'tileShape': 'grid',
+    'tilePattern': [
+      [
+        [{c:"accent"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"accent"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"accent"},{c:"light"},{c:"dark"},{c:"light"}]
+      ]
+    ]
+  },
+
+  // 33. Alternating Line Directions - Horizontal and vertical lines
+  'alternatingLineDirections': {
+    'tileShape': 'grid',
+    'tilePattern': [
+      [
+        [{c:"medium"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"dark"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"dark"},{c:"light"}]
+      ]
+    ]
+  },
+
+  // 34. Rainbow Circle Lines - Multi-color circles with consistent line pattern
+  'rainbowCircleLines': {
+    'tileShape': 'grid',
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"accent"},{c:"light"},{c:"accent"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"accent"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}]
+      ],
+      [
+        [{c:"accent"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"light"}]
+      ]
+    ]
+  },
+
+  // 35. Diagonal Wave - Circles with diagonal lines creating wave effect
+  'diagonalWave': {
+    'tileShape': 'grid',
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"accent"},{c:"light"},{c:"dark"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"accent"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}]
+      ],
+      [
+        [{c:"accent"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"accent"},{c:"light"}]
+      ]
+    ]
+  },
+
+  // 36. Circle Line Checker - Alternating circles with different line orientations
+  'circleLineChecker': {
+    'tileShape': 'grid',
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"light"},{c:"accent"},{c:"light"}],
+        [{c:"medium"},{c:"light"},{c:"dark"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"accent"},{c:"light"}]
+      ]
+    ]
   }
 };
 
-export default SquareTileDesigns;
+export default GridTileDesigns;

@@ -13,18 +13,22 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  DialogContent
+  DialogContent,
+  Slider,
+  Switch,
+  FormControlLabel
 } from '@mui/material';
-import { Menu, Close } from '@mui/icons-material';
+import { Menu, Close, Upload, Delete } from '@mui/icons-material';
 import TileDesigns from './TileDesigns';
 import ColorThemes from './ColorThemes';
+import { shaders } from '../utils/shaders';
 
-const TessellationControls = ({ 
-  selectedPattern, 
-  selectedTheme, 
-  tileSize, 
-  onPatternChange, 
-  onThemeChange, 
+const TessellationControls = ({
+  selectedPattern,
+  selectedTheme,
+  tileSize,
+  onPatternChange,
+  onThemeChange,
   onSizeChange,
   useGradient = false,
   textureKey = null,
@@ -33,6 +37,27 @@ const TessellationControls = ({
   onAdjustChange,
   shadowOptions = null,
   onShadowChange,
+  altColorFrequency = 0,
+  onAltColorChange,
+  altColorGradient = 'none',
+  onAltColorGradientChange,
+  altColorGradientIntensity = 1.0,
+  onAltColorGradientIntensityChange,
+  imageData = null,
+  onImageUpload,
+  onImageClear,
+  imageDrivenMode = false,
+  onImageDrivenModeChange,
+  imageIntensity = 100,
+  onImageIntensityChange,
+  imageInvert = false,
+  onImageInvertChange,
+  shaderMode = false,
+  onShaderModeChange,
+  selectedShader = 'plasma',
+  onShaderChange,
+  shaderOpacity = 1.0,
+  onShaderOpacityChange,
   autoOpenSettings = false
 }) => {
   const [isOpen, setIsOpen] = useState(autoOpenSettings);
@@ -663,13 +688,15 @@ const TessellationControls = ({
                   
                   // Set new timeout - only clamp when sending to parent
                   const newTimeout = setTimeout(() => {
-                    const clampedValue = Math.max(10, Math.min(100, numValue));
+                    const clampedValue = Math.max(5, Math.min(100, numValue));
                     onSizeChange(clampedValue);
                   }, 200);
                   setSizeTimeout(newTimeout);
                 }
               }}
               inputProps={{
+                min: 5,
+                max: 100,
                 step: 1
               }}
               sx={{
@@ -867,6 +894,436 @@ const TessellationControls = ({
                 </MenuItem>
               </Select>
             </FormControl>
+            )}
+          </Box>
+
+          {/* Alt Color Frequency Slider */}
+          <Box sx={{ mb: 2, mt: 2 }}>
+            <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', display: 'block', mb: 1 }}>
+              Alt Color Frequency: {altColorFrequency}%
+            </Typography>
+            <Slider
+              value={altColorFrequency}
+              onChange={(e, value) => {
+                if (onAltColorChange) {
+                  onAltColorChange(value);
+                }
+              }}
+              min={0}
+              max={99}
+              step={1}
+              marks={[
+                { value: 0, label: '0%' },
+                { value: 25, label: '25%' },
+                { value: 50, label: '50%' },
+                { value: 75, label: '75%' }
+              ]}
+              size="small"
+              sx={{
+                color: themeColor,
+                '& .MuiSlider-markLabel': {
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.65rem'
+                }
+              }}
+            />
+            <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontStyle: 'italic', fontSize: '0.7rem', color: 'text.secondary' }}>
+              Random color inversion splotches
+            </Typography>
+          </Box>
+
+          {/* Alt Color Gradient Type */}
+          {altColorFrequency > 0 && (
+            <>
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel id="gradient-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Gradient Type</InputLabel>
+                <Select
+                  labelId="gradient-label"
+                  value={altColorGradient}
+                  label="Gradient Type"
+                  size="small"
+                  onChange={(e) => {
+                    if (onAltColorGradientChange) {
+                      onAltColorGradientChange(e.target.value);
+                    }
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        bgcolor: 'rgba(255, 255, 255, 0.9)',
+                        backdropFilter: 'blur(10px)',
+                      }
+                    }
+                  }}
+                  sx={{
+                    '& .MuiSelect-select': {
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '0.875rem',
+                      padding: '8.5px 14px'
+                    }
+                  }}
+                >
+                  <MenuItem value="none">None (Uniform)</MenuItem>
+                  <MenuItem value="vertical">Vertical (Top → Bottom)</MenuItem>
+                  <MenuItem value="vertical-reverse">Vertical Reverse (Bottom → Top)</MenuItem>
+                  <MenuItem value="horizontal">Horizontal (Left → Right)</MenuItem>
+                  <MenuItem value="horizontal-reverse">Horizontal Reverse (Right → Left)</MenuItem>
+                  <MenuItem value="radial-out">Radial Out (Center → Edge)</MenuItem>
+                  <MenuItem value="radial-in">Radial In (Edge → Center)</MenuItem>
+                  <MenuItem value="diagonal">Diagonal (TL → BR)</MenuItem>
+                  <MenuItem value="diagonal-reverse">Diagonal Reverse (TR → BL)</MenuItem>
+                </Select>
+              </FormControl>
+
+              {/* Gradient Intensity Slider */}
+              {altColorGradient !== 'none' && (
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', display: 'block', mb: 1 }}>
+                    Gradient Intensity: {altColorGradientIntensity.toFixed(1)}x
+                  </Typography>
+                  <Slider
+                    value={altColorGradientIntensity}
+                    onChange={(e, value) => {
+                      if (onAltColorGradientIntensityChange) {
+                        onAltColorGradientIntensityChange(value);
+                      }
+                    }}
+                    min={0.1}
+                    max={5.0}
+                    step={0.1}
+                    marks={[
+                      { value: 0.5, label: '0.5x' },
+                      { value: 1.0, label: '1x' },
+                      { value: 2.0, label: '2x' },
+                      { value: 4.0, label: '4x' }
+                    ]}
+                    size="small"
+                    sx={{
+                      color: themeColor,
+                      '& .MuiSlider-markLabel': {
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '0.65rem'
+                      }
+                    }}
+                  />
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontStyle: 'italic', fontSize: '0.7rem', color: 'text.secondary' }}>
+                    Higher = steeper gradient
+                  </Typography>
+                </Box>
+              )}
+            </>
+          )}
+
+          {/* Visual Modes Section */}
+          <Box sx={{ mt: 3, pt: 2, borderTop: '1px solid rgba(0,0,0,0.1)' }}>
+            <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, display: 'block', mb: 1.5 }}>
+              Visual Modes
+            </Typography>
+
+            {/* Mode Tabs */}
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <Button
+                variant={!imageDrivenMode && !shaderMode ? "contained" : "outlined"}
+                size="small"
+                fullWidth
+                onClick={() => {
+                  if (imageDrivenMode) onImageDrivenModeChange(false);
+                  if (shaderMode) onShaderModeChange(false);
+                }}
+                sx={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.75rem',
+                  textTransform: 'none',
+                  py: 0.5,
+                  bgcolor: (!imageDrivenMode && !shaderMode) ? themeColor : 'transparent',
+                  borderColor: themeColor,
+                  color: (!imageDrivenMode && !shaderMode) ? 'white' : themeColor,
+                  '&:hover': {
+                    bgcolor: (!imageDrivenMode && !shaderMode) ? themeColor : `${themeColor}10`,
+                    borderColor: themeColor
+                  }
+                }}
+              >
+                Normal
+              </Button>
+              <Button
+                variant={imageDrivenMode ? "contained" : "outlined"}
+                size="small"
+                fullWidth
+                onClick={() => {
+                  if (shaderMode) onShaderModeChange(false);
+                  onImageDrivenModeChange(!imageDrivenMode);
+                }}
+                sx={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.75rem',
+                  textTransform: 'none',
+                  py: 0.5,
+                  bgcolor: imageDrivenMode ? themeColor : 'transparent',
+                  borderColor: themeColor,
+                  color: imageDrivenMode ? 'white' : themeColor,
+                  '&:hover': {
+                    bgcolor: imageDrivenMode ? themeColor : `${themeColor}10`,
+                    borderColor: themeColor
+                  }
+                }}
+              >
+                Image
+              </Button>
+              <Button
+                variant={shaderMode ? "contained" : "outlined"}
+                size="small"
+                fullWidth
+                onClick={() => {
+                  if (imageDrivenMode) onImageDrivenModeChange(false);
+                  onShaderModeChange(!shaderMode);
+                }}
+                sx={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '0.75rem',
+                  textTransform: 'none',
+                  py: 0.5,
+                  bgcolor: shaderMode ? themeColor : 'transparent',
+                  borderColor: themeColor,
+                  color: shaderMode ? 'white' : themeColor,
+                  '&:hover': {
+                    bgcolor: shaderMode ? themeColor : `${themeColor}10`,
+                    borderColor: themeColor
+                  }
+                }}
+              >
+                Shader
+              </Button>
+            </Box>
+
+            {/* Shader Mode Controls */}
+            {shaderMode && (
+              <Box sx={{ mb: 2 }}>
+                {/* Shader Selector */}
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <InputLabel id="shader-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Shader Effect</InputLabel>
+                  <Select
+                    labelId="shader-label"
+                    value={selectedShader}
+                    label="Shader Effect"
+                    size="small"
+                    onChange={(e) => {
+                      if (onShaderChange) {
+                        onShaderChange(e.target.value);
+                      }
+                    }}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          bgcolor: 'rgba(255, 255, 255, 0.9)',
+                          backdropFilter: 'blur(10px)',
+                        }
+                      }
+                    }}
+                    sx={{
+                      '& .MuiSelect-select': {
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '0.875rem',
+                        padding: '8.5px 14px'
+                      }
+                    }}
+                  >
+                    {Object.entries(shaders)
+                      .filter(([key]) => key !== 'none')
+                      .map(([key, shader]) => (
+                        <MenuItem key={key} value={key}>
+                          <Box>
+                            <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
+                              {shader.name}
+                            </Typography>
+                            <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontSize: '0.7rem', color: 'text.secondary', display: 'block' }}>
+                              {shader.description}
+                            </Typography>
+                          </Box>
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+
+                {/* Shader Opacity Slider */}
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', display: 'block', mb: 1 }}>
+                    Shader Opacity: {Math.round(shaderOpacity * 100)}%
+                  </Typography>
+                  <Slider
+                    value={shaderOpacity}
+                    onChange={(e, value) => {
+                      if (onShaderOpacityChange) {
+                        onShaderOpacityChange(value);
+                      }
+                    }}
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    marks={[
+                      { value: 0, label: '0%' },
+                      { value: 0.5, label: '50%' },
+                      { value: 1, label: '100%' }
+                    ]}
+                    size="small"
+                    sx={{
+                      color: themeColor,
+                      '& .MuiSlider-markLabel': {
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '0.65rem'
+                      }
+                    }}
+                  />
+                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontStyle: 'italic', fontSize: '0.7rem', color: 'text.secondary' }}>
+                    Blend shader with background
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+
+            {/* Image Mode Controls */}
+            {imageDrivenMode && (
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, display: 'block', mb: 1 }}>
+                  Image-Driven Patterns
+                </Typography>
+
+                {/* Upload Button */}
+                <Button
+                  variant="outlined"
+                  component="label"
+                  fullWidth
+                  startIcon={<Upload />}
+                  sx={{
+                    mb: 1,
+                    borderColor: themeColor,
+                    color: themeColor,
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '0.875rem',
+                    textTransform: 'none',
+                    '&:hover': {
+                      borderColor: themeColor,
+                      bgcolor: `${themeColor}10`
+                    }
+                  }}
+                >
+                  Upload Image
+                  <input
+                    type="file"
+                    hidden
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file && onImageUpload) {
+                        onImageUpload(file);
+                      }
+                    }}
+                  />
+                </Button>
+
+                {/* Image Preview and Controls */}
+                {imageData && (
+                  <Box sx={{ mb: 2 }}>
+                    {/* Preview */}
+                    <Box
+                      sx={{
+                        width: '100%',
+                        height: 80,
+                        mb: 1,
+                        borderRadius: 1,
+                        overflow: 'hidden',
+                        border: '1px solid rgba(0,0,0,0.1)',
+                        position: 'relative',
+                        backgroundImage: `url(${imageData.previewUrl})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                      }}
+                    >
+                      <IconButton
+                        size="small"
+                        onClick={onImageClear}
+                        sx={{
+                          position: 'absolute',
+                          top: 4,
+                          right: 4,
+                          bgcolor: 'rgba(255,255,255,0.9)',
+                          '&:hover': {
+                            bgcolor: 'rgba(255,255,255,1)'
+                          }
+                        }}
+                      >
+                        <Delete fontSize="small" />
+                      </IconButton>
+                    </Box>
+
+                    {/* Intensity Slider */}
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', display: 'block', mb: 1 }}>
+                        Image Intensity: {imageIntensity}%
+                      </Typography>
+                      <Slider
+                        value={imageIntensity}
+                        onChange={(e, value) => {
+                          if (onImageIntensityChange) {
+                            onImageIntensityChange(value);
+                          }
+                        }}
+                        min={0}
+                        max={100}
+                        step={1}
+                        marks={[
+                          { value: 0, label: '0%' },
+                          { value: 50, label: '50%' },
+                          { value: 100, label: '100%' }
+                        ]}
+                        size="small"
+                        sx={{
+                          color: themeColor,
+                          '& .MuiSlider-markLabel': {
+                            fontFamily: 'Inter, sans-serif',
+                            fontSize: '0.65rem'
+                          }
+                        }}
+                      />
+                      <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontStyle: 'italic', fontSize: '0.7rem', color: 'text.secondary' }}>
+                        Strength of image effect
+                      </Typography>
+                    </Box>
+
+                    {/* Invert Checkbox */}
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={imageInvert}
+                          onChange={(e) => {
+                            if (onImageInvertChange) {
+                              onImageInvertChange(e.target.checked);
+                            }
+                          }}
+                          size="small"
+                          sx={{
+                            '& .MuiSwitch-switchBase.Mui-checked': {
+                              color: themeColor,
+                            },
+                            '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                              backgroundColor: themeColor,
+                            }
+                          }}
+                        />
+                      }
+                      label={
+                        <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem' }}>
+                          Invert (bright=complex)
+                        </Typography>
+                      }
+                    />
+
+                    <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontStyle: 'italic', fontSize: '0.7rem', color: 'text.secondary', display: 'block', mt: 1 }}>
+                      Dark areas → more alt colors{imageInvert ? ' (inverted)' : ''}
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
             )}
           </Box>
 

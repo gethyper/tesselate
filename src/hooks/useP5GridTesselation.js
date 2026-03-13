@@ -1,21 +1,34 @@
 import { useCallback, useRef, useMemo } from 'react';
-import SquareTileDesigns from '../components/SquareTileDesigns';
+import GridTileDesigns from '../components/GridTileDesigns';
 import ColorThemes from '../components/ColorThemes';
 
 /**
- * Draws a single square tile composed of 4 triangular segments
- * Each square is divided into 4 triangles from the center (top, right, bottom, left)
+ * Creates an inverted color theme by swapping light/dark and medium/accent
+ */
+const invertColorTheme = (theme) => {
+  return {
+    light: theme.dark,
+    medium: theme.accent,
+    dark: theme.light,
+    accent: theme.medium,
+    bg: theme.bg // Keep background the same
+  };
+};
+
+/**
+ * Draws a single grid tile composed of 4 triangular segments
+ * Each grid tile is divided into 4 triangles from the center (top, right, bottom, left)
  *
  * @param {Object} p5 - The p5.js instance
- * @param {number} centerX - X coordinate of the square center
- * @param {number} centerY - Y coordinate of the square center
- * @param {number} width - Width of the square
- * @param {number} height - Height of the square
+ * @param {number} centerX - X coordinate of the grid tile center
+ * @param {number} centerY - Y coordinate of the grid tile center
+ * @param {number} width - Width of the grid tile
+ * @param {number} height - Height of the grid tile
  * @param {Array} tile_components - Array of 4 tile component definitions with colors
  * @param {Object} color_theme - Color theme object containing color definitions
  * @param {Object} tile_options - Optional tile configuration
  */
-export const drawSquareTile = (p5, centerX, centerY, width, height, tile_components, color_theme, tile_options = {}) => {
+export const drawGridTile = (p5, centerX, centerY, width, height, tile_components, color_theme, tile_options = {}) => {
   const halfW = width / 2;
   const halfH = height / 2;
 
@@ -56,9 +69,9 @@ export const drawSquareTile = (p5, centerX, centerY, width, height, tile_compone
 };
 
 /**
- * Draws a simple solid square tile (no triangular divisions)
+ * Draws a simple solid grid tile (no triangular divisions)
  */
-export const drawSolidSquareTile = (p5, centerX, centerY, width, height, color, stroke_color = null, stroke_weight = 1) => {
+export const drawSolidGridTile = (p5, centerX, centerY, width, height, color, stroke_color = null, stroke_weight = 1) => {
   p5.push();
   p5.fill(color);
 
@@ -91,12 +104,18 @@ export const TILE_STYLES = {
   'triangle-left': { label: 'Triangle Left', colorCount: 2 },
   'triangle-right': { label: 'Triangle Right', colorCount: 2 },
   'circle': { label: 'Circle', colorCount: 2 },
+  'circle-line-v': { label: 'Circle + Vertical Line', colorCount: 3 },
+  'circle-line-h': { label: 'Circle + Horizontal Line', colorCount: 3 },
+  'circle-line-diag': { label: 'Circle + Diagonal Line', colorCount: 3 },
+  'circle-line-diag-alt': { label: 'Circle + Diagonal Line (Alt)', colorCount: 3 },
+  'circle-cross': { label: 'Circle + Cross', colorCount: 3 },
+  'circle-x': { label: 'Circle + X', colorCount: 3 },
 };
 
 /**
- * Draws a square tile with the specified style
+ * Draws a grid tile with the specified style
  */
-export const drawStyledSquareTile = (p5, centerX, centerY, width, height, tile_components, color_theme, tile_options = {}) => {
+export const drawStyledGridTile = (p5, centerX, centerY, width, height, tile_components, color_theme, tile_options = {}) => {
   const tileStyle = tile_options.tileStyle || 'triangles';
   const halfW = width / 2;
   const halfH = height / 2;
@@ -283,9 +302,104 @@ export const drawStyledSquareTile = (p5, centerX, centerY, width, height, tile_c
       break;
     }
 
+    case 'circle-line-v': {
+      // Background + circle + vertical line
+      p5.fill(getColor(1));
+      p5.rectMode(p5.CENTER);
+      p5.rect(centerX, centerY, width, height);
+      p5.fill(getColor(0));
+      const dia = Math.min(width, height) * 0.8;
+      p5.ellipse(centerX, centerY, dia, dia);
+      // Draw vertical line
+      p5.stroke(getColor(2));
+      p5.strokeWeight(Math.max(2, dia * 0.08));
+      p5.line(centerX, centerY - dia/2, centerX, centerY + dia/2);
+      break;
+    }
+
+    case 'circle-line-h': {
+      // Background + circle + horizontal line
+      p5.fill(getColor(1));
+      p5.rectMode(p5.CENTER);
+      p5.rect(centerX, centerY, width, height);
+      p5.fill(getColor(0));
+      const dia = Math.min(width, height) * 0.8;
+      p5.ellipse(centerX, centerY, dia, dia);
+      // Draw horizontal line
+      p5.stroke(getColor(2));
+      p5.strokeWeight(Math.max(2, dia * 0.08));
+      p5.line(centerX - dia/2, centerY, centerX + dia/2, centerY);
+      break;
+    }
+
+    case 'circle-line-diag': {
+      // Background + circle + diagonal line (top-left to bottom-right)
+      p5.fill(getColor(1));
+      p5.rectMode(p5.CENTER);
+      p5.rect(centerX, centerY, width, height);
+      p5.fill(getColor(0));
+      const dia = Math.min(width, height) * 0.8;
+      p5.ellipse(centerX, centerY, dia, dia);
+      // Draw diagonal line
+      const offset = dia / 2 * 0.707; // sqrt(2)/2 for 45 degree
+      p5.stroke(getColor(2));
+      p5.strokeWeight(Math.max(2, dia * 0.08));
+      p5.line(centerX - offset, centerY - offset, centerX + offset, centerY + offset);
+      break;
+    }
+
+    case 'circle-line-diag-alt': {
+      // Background + circle + diagonal line (top-right to bottom-left)
+      p5.fill(getColor(1));
+      p5.rectMode(p5.CENTER);
+      p5.rect(centerX, centerY, width, height);
+      p5.fill(getColor(0));
+      const dia = Math.min(width, height) * 0.8;
+      p5.ellipse(centerX, centerY, dia, dia);
+      // Draw diagonal line
+      const offset = dia / 2 * 0.707;
+      p5.stroke(getColor(2));
+      p5.strokeWeight(Math.max(2, dia * 0.08));
+      p5.line(centerX + offset, centerY - offset, centerX - offset, centerY + offset);
+      break;
+    }
+
+    case 'circle-cross': {
+      // Background + circle + cross (vertical + horizontal)
+      p5.fill(getColor(1));
+      p5.rectMode(p5.CENTER);
+      p5.rect(centerX, centerY, width, height);
+      p5.fill(getColor(0));
+      const dia = Math.min(width, height) * 0.8;
+      p5.ellipse(centerX, centerY, dia, dia);
+      // Draw cross
+      p5.stroke(getColor(2));
+      p5.strokeWeight(Math.max(2, dia * 0.08));
+      p5.line(centerX, centerY - dia/2, centerX, centerY + dia/2);
+      p5.line(centerX - dia/2, centerY, centerX + dia/2, centerY);
+      break;
+    }
+
+    case 'circle-x': {
+      // Background + circle + X (two diagonals)
+      p5.fill(getColor(1));
+      p5.rectMode(p5.CENTER);
+      p5.rect(centerX, centerY, width, height);
+      p5.fill(getColor(0));
+      const dia = Math.min(width, height) * 0.8;
+      p5.ellipse(centerX, centerY, dia, dia);
+      // Draw X
+      const offset = dia / 2 * 0.707;
+      p5.stroke(getColor(2));
+      p5.strokeWeight(Math.max(2, dia * 0.08));
+      p5.line(centerX - offset, centerY - offset, centerX + offset, centerY + offset);
+      p5.line(centerX + offset, centerY - offset, centerX - offset, centerY + offset);
+      break;
+    }
+
     default: {
       // Fallback to triangles
-      drawSquareTile(p5, centerX, centerY, width, height, tile_components, color_theme, tile_options);
+      drawGridTile(p5, centerX, centerY, width, height, tile_components, color_theme, tile_options);
     }
   }
 
@@ -298,6 +412,12 @@ export const drawStyledSquareTile = (p5, centerX, centerY, width, height, tile_c
 const calculateTileAdjustment = (adjustment, i, j) => {
   if (!adjustment || adjustment.type === 'numeric') {
     return adjustment?.value || 0;
+  }
+
+  // Validate adjustment has required properties
+  if (!adjustment.type || !adjustment.values || !Array.isArray(adjustment.values)) {
+    console.warn('Invalid adjustment object:', adjustment);
+    return 0;
   }
 
   switch (adjustment.type) {
@@ -331,6 +451,7 @@ const calculateTileAdjustment = (adjustment, i, j) => {
       return (j % yInterval === 0) ? 0 : yOffset;
 
     default:
+      console.warn(`Unknown adjustment type: ${adjustment.type}`);
       return 0;
   }
 };
@@ -345,15 +466,17 @@ const getNumericValue = (adjustment) => {
 const createAdjustmentFunction = (adjustment, axis) => {
   if (typeof adjustment !== 'object' || adjustment.type === 'numeric') {
     const numericValue = getNumericValue(adjustment);
-    return (i, j) => numericValue * (axis === 'x' ? i : j);
+    // For constant numeric adjustments, just return the value (don't multiply by i or j)
+    return (i, j) => numericValue;
   }
+
   return (i, j) => calculateTileAdjustment(adjustment, i, j);
 };
 
 /**
- * Fills the canvas with tessellated square tiles
+ * Fills the canvas with tessellated grid tiles
  */
-export const fillWithSquareTiles = (p5, width, height, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
+export const fillWithGridTiles = (p5, width, height, tile_pattern, color_theme, tile_options = {}, useGradient = false) => {
   const tile_x_adjust = tile_options.tile_x_adjust || 0;
   const tile_y_adjust = tile_options.tile_y_adjust || 0;
 
@@ -389,32 +512,84 @@ export const fillWithSquareTiles = (p5, width, height, tile_pattern, color_theme
         continue;
       }
 
-      drawStyledSquareTile(p5, x_loc, y_loc, width, height, tile_pattern[tile_column][tile_row], color_theme, tile_options);
+      // Determine if this tile should use alternate (inverted) colors
+      // Use deterministic random based on tile position for consistent pattern
+      const altColorFrequency = tile_options.altColorFrequency || 0;
+      const tileHash = ((i * 73) ^ (j * 79)) & 0x7fffffff;
+      const tileRandom = (tileHash % 100);
+
+      // Calculate position-based frequency using gradient
+      const altColorGradient = tile_options.altColorGradient || 'none';
+      const altColorGradientIntensity = tile_options.altColorGradientIntensity || 1.0;
+
+      let positionFactor = 1.0; // Default: uniform distribution
+
+      if (altColorFrequency > 0 && altColorGradient !== 'none') {
+        const normalizedI = i / tiles_wide;
+        const normalizedJ = j / tiles_high;
+
+        switch (altColorGradient) {
+          case 'vertical':
+            positionFactor = Math.pow(normalizedJ, altColorGradientIntensity);
+            break;
+          case 'vertical-reverse':
+            positionFactor = Math.pow(1 - normalizedJ, altColorGradientIntensity);
+            break;
+          case 'horizontal':
+            positionFactor = Math.pow(normalizedI, altColorGradientIntensity);
+            break;
+          case 'horizontal-reverse':
+            positionFactor = Math.pow(1 - normalizedI, altColorGradientIntensity);
+            break;
+          case 'radial-out':
+            const distFromCenterOut = Math.sqrt(Math.pow(normalizedI - 0.5, 2) + Math.pow(normalizedJ - 0.5, 2)) * 1.4142;
+            positionFactor = Math.pow(Math.min(distFromCenterOut, 1), altColorGradientIntensity);
+            break;
+          case 'radial-in':
+            const distFromCenterIn = Math.sqrt(Math.pow(normalizedI - 0.5, 2) + Math.pow(normalizedJ - 0.5, 2)) * 1.4142;
+            positionFactor = Math.pow(1 - Math.min(distFromCenterIn, 1), altColorGradientIntensity);
+            break;
+          case 'diagonal':
+            positionFactor = Math.pow((normalizedI + normalizedJ) / 2, altColorGradientIntensity);
+            break;
+          case 'diagonal-reverse':
+            positionFactor = Math.pow((1 - normalizedI + normalizedJ) / 2, altColorGradientIntensity);
+            break;
+          default:
+            positionFactor = 1.0;
+        }
+      }
+
+      const effectiveFrequency = altColorFrequency * positionFactor;
+      const useAltColor = altColorFrequency > 0 && tileRandom < effectiveFrequency;
+      const tileColorTheme = useAltColor ? invertColorTheme(color_theme) : color_theme;
+
+      drawStyledGridTile(p5, x_loc, y_loc, width, height, tile_pattern[tile_column][tile_row], tileColorTheme, tile_options);
     }
   }
 };
 
 /**
- * React hook for creating p5.js square tessellation visualizations
+ * React hook for creating p5.js grid tessellation visualizations
  *
  * @param {Object} config - Configuration object for the tessellation
  * @param {Array<Array>} config.tile_pattern - 2D array defining the tile pattern
  * @param {Object} config.color_theme - Color theme object containing color definitions
- * @param {number} config.width - Width of each square tile (default: 100)
- * @param {number} config.height - Height of each square tile (default: 100)
+ * @param {number} config.width - Width of each grid tile (default: 100)
+ * @param {number} config.height - Height of each grid tile (default: 100)
  * @param {boolean} config.useGradient - Whether to apply gradient effects (default: false)
  * @param {Object} config.tile_options - Additional tile configuration options (default: {})
  * @returns {Object} Object containing setup and draw functions for p5.js
  */
-export function useP5SquareTesselation({
-  tile_pattern = SquareTileDesigns['checkerboard'].tilePattern,
+export function useP5GridTesselation({
+  tile_pattern = GridTileDesigns['checkerboard'].tilePattern,
   color_theme = ColorThemes['Basic Bee'],
   width = 100,
   height = 100,
   useGradient = false,
   tile_options = {},
 }) {
-  const safeTilePattern = useMemo(() => tile_pattern || SquareTileDesigns['checkerboard'].tilePattern, [tile_pattern]);
+  const safeTilePattern = useMemo(() => tile_pattern || GridTileDesigns['checkerboard'].tilePattern, [tile_pattern]);
   const safeColorTheme = useMemo(() => color_theme || ColorThemes['Basic Bee'], [color_theme]);
 
   const p5InstanceRef = useRef(null);
@@ -437,11 +612,11 @@ export function useP5SquareTesselation({
         return;
       }
 
-      fillWithSquareTiles(p5, params.width, params.height, params.safeTilePattern, params.safeColorTheme, params.tile_options, params.useGradient);
+      fillWithGridTiles(p5, params.width, params.height, params.safeTilePattern, params.safeColorTheme, params.tile_options, params.useGradient);
       p5.noStroke();
 
     } catch (error) {
-      console.error('Error in square draw function:', error);
+      console.error('Error in grid draw function:', error);
     }
   }, []);
 

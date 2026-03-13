@@ -235,7 +235,7 @@ const Showcase = {
     featured: false
   },
 
-  // ===== Square Tessellation Showcases =====
+  // ===== Grid Tessellation Showcases =====
 
   "electric_weave_wave": {
     title: "Electric Weave Wave",
@@ -244,7 +244,7 @@ const Showcase = {
     colorTheme: "Electric Sheep",
     tileSize: 80,
     tileYAdjust: "wave:200:40",
-    type: "square",
+    type: "grid",
     featured: true
   },
 
@@ -257,7 +257,7 @@ const Showcase = {
     tileStyle: "triangle-right",
     tileXAdjust: "wave:200:40",
     tileYAdjust: "wave:200:40",
-    type: "square",
+    type: "grid",
     featured: true
   },
 
@@ -270,7 +270,7 @@ const Showcase = {
     tileStyle: "triangle-up",
     tileXAdjust: "wave:100:20",
     tileYAdjust: "wave:100:20",
-    type: "square",
+    type: "grid",
     featured: true
   },
 
@@ -283,7 +283,7 @@ const Showcase = {
     tileStyle: "grid-3x3",
     tileXAdjust: "random:-100",
     tileYAdjust: "random:-100",
-    type: "square",
+    type: "grid",
     featured: true
   },
 
@@ -296,7 +296,7 @@ const Showcase = {
     tileStyle: "circle",
     tileXAdjust: "random:200",
     tileYAdjust: "random:200",
-    type: "square",
+    type: "grid",
     featured: true
   }
 };
@@ -304,16 +304,16 @@ const Showcase = {
 // Helper functions for working with showcase data
 export const getFeaturedShowcase = () => {
   return Object.entries(Showcase)
-    .filter(([key, item]) => item.featured && item.type !== 'square')
+    .filter(([key, item]) => item.featured && item.type !== 'grid')
     .reduce((acc, [key, item]) => {
       acc[key] = item;
       return acc;
     }, {});
 };
 
-export const getFeaturedSquareShowcase = () => {
+export const getFeaturedGridShowcase = () => {
   return Object.entries(Showcase)
-    .filter(([key, item]) => item.featured && item.type === 'square')
+    .filter(([key, item]) => item.featured && item.type === 'grid')
     .reduce((acc, [key, item]) => {
       acc[key] = item;
       return acc;

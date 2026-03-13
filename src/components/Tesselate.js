@@ -14,6 +14,14 @@ const TesselateComponent = ({
   tile_x_adjust = 0,
   tile_y_adjust = 0,
   shadowOptions = null,
+  altColorFrequency = 0,
+  altColorGradient = 'none',
+  altColorGradientIntensity = 1.0,
+  imageData = null,
+  imageDrivenMode = false,
+  imageIntensity = 100,
+  imageInvert = false,
+  shaderMode = false,
   width = '100vw',
   height = '100vh',
   position = 'fixed',
@@ -37,13 +45,28 @@ const TesselateComponent = ({
   const deferredTileXAdjust = useDeferredValue(tile_x_adjust);
   const deferredTileYAdjust = useDeferredValue(tile_y_adjust);
   const deferredShadowOptions = useDeferredValue(shadowOptions);
-  
+  const deferredAltColorFrequency = useDeferredValue(altColorFrequency);
+  const deferredAltColorGradient = useDeferredValue(altColorGradient);
+  const deferredAltColorGradientIntensity = useDeferredValue(altColorGradientIntensity);
+  const deferredImageData = useDeferredValue(imageData);
+  const deferredImageDrivenMode = useDeferredValue(imageDrivenMode);
+  const deferredImageIntensity = useDeferredValue(imageIntensity);
+  const deferredImageInvert = useDeferredValue(imageInvert);
+
   // Optimized tile_options memoization with deep comparison
   const tile_options = useMemo(() => ({
     tile_x_adjust: deferredTileXAdjust,
     tile_y_adjust: deferredTileYAdjust,
     shadowOptions: deferredShadowOptions,
-  }), [deferredTileXAdjust, deferredTileYAdjust, deferredShadowOptions]);
+    altColorFrequency: deferredAltColorFrequency,
+    altColorGradient: deferredAltColorGradient,
+    altColorGradientIntensity: deferredAltColorGradientIntensity,
+    imageData: deferredImageData,
+    imageDrivenMode: deferredImageDrivenMode,
+    imageIntensity: deferredImageIntensity,
+    imageInvert: deferredImageInvert,
+    shaderMode: shaderMode,
+  }), [deferredTileXAdjust, deferredTileYAdjust, deferredShadowOptions, deferredAltColorFrequency, deferredAltColorGradient, deferredAltColorGradientIntensity, deferredImageData, deferredImageDrivenMode, deferredImageIntensity, deferredImageInvert, shaderMode]);
 
   const { setup, draw } = useP5Tesselation({
     tile_shape: deferredTileShape,
@@ -164,7 +187,10 @@ const Tesselate = memo(TesselateComponent, (prevProps, nextProps) => {
     prevProps.textureKey === nextProps.textureKey &&
     prevProps.tile_x_adjust === nextProps.tile_x_adjust &&
     prevProps.tile_y_adjust === nextProps.tile_y_adjust &&
-    JSON.stringify(prevProps.shadowOptions) === JSON.stringify(nextProps.shadowOptions)
+    JSON.stringify(prevProps.shadowOptions) === JSON.stringify(nextProps.shadowOptions) &&
+    prevProps.altColorFrequency === nextProps.altColorFrequency &&
+    prevProps.altColorGradient === nextProps.altColorGradient &&
+    prevProps.altColorGradientIntensity === nextProps.altColorGradientIntensity
   );
 });
 

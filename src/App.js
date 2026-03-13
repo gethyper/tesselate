@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, useSearchParams } from 'react-router-dom';
 import Tesselate from './components/Tesselate';
 import GridTesselate from './components/GridTesselate';
 import ProgrammaticGridTesselate from './components/ProgrammaticGridTesselate';
+import ShaderBackground from './components/ShaderBackground';
 import TessellationControls from './components/TessellationControls';
 import GridTessellationControls from './components/GridTessellationControls';
 import ProgrammaticGridControls from './components/ProgrammaticGridControls';
@@ -14,6 +15,7 @@ import Presentation from './components/Presentation';
 import LearningPage from './components/LearningPage';
 import { getFeaturedShowcase } from './components/Showcase';
 import { initGA, trackPageView, trackTessellationEvent } from './utils/analytics';
+import { processImageFile } from './utils/imageProcessor';
 
 // Tessellation page component
 function TessellationPage() {
@@ -30,10 +32,30 @@ function TessellationPage() {
 
   // State to track if user has manually interacted with controls
   const [userHasInteracted, setUserHasInteracted] = useState(false);
-  
+
   // Auto-rotation state
   const autoRotationTimer = useRef(null);
   const lastAutoRotationTime = useRef(Date.now());
+
+  // Image-driven pattern state
+  const [imageData, setImageData] = useState(null);
+  const [imageDrivenMode, setImageDrivenMode] = useState(false);
+  const [imageIntensity, setImageIntensity] = useState(100);
+  const [imageInvert, setImageInvert] = useState(false);
+
+  // Shader mode state
+  const [shaderMode, setShaderMode] = useState(() => {
+    return searchParams.get('shader_mode') === 'true';
+  });
+  const [selectedShader, setSelectedShader] = useState(() => {
+    return searchParams.get('shader') || 'plasma';
+  });
+  const [shaderOpacity, setShaderOpacity] = useState(() => {
+    const param = searchParams.get('shader_opacity');
+    if (!param) return 1.0;
+    const value = parseFloat(param);
+    return (isNaN(value) || value < 0 || value > 1) ? 1.0 : value;
+  });
 
   // State management with URL and localStorage persistence
   const [selectedPattern, setSelectedPattern] = useState(() => {
@@ -100,6 +122,25 @@ function TessellationPage() {
     color: '#000000',
     alpha: 0.3
   } : null;
+
+  // Parse alt color frequency parameter (1-99%)
+  const altColorFrequency = (() => {
+    const param = searchParams.get('alt_color');
+    if (!param) return 0;
+    const value = parseInt(param, 10);
+    return (isNaN(value) || value < 0 || value > 99) ? 0 : value;
+  })();
+
+  // Parse alt color gradient type
+  const altColorGradient = searchParams.get('alt_gradient') || 'none';
+
+  // Parse alt color gradient intensity
+  const altColorGradientIntensity = (() => {
+    const param = searchParams.get('alt_gradient_intensity');
+    if (!param) return 1.0;
+    const value = parseFloat(param);
+    return (isNaN(value) || value < 0.1 || value > 5.0) ? 1.0 : value;
+  })();
 
   // Parse tile adjustment parameters (support both numeric and effect patterns)
   const parseAdjustment = (param) => {
@@ -342,9 +383,9 @@ function TessellationPage() {
     // Sanitize values to prevent NaN in URL
     const safeXValue = (xValue && xValue !== 'NaN' && !xValue.includes('NaN')) ? xValue : '0';
     const safeYValue = (yValue && yValue !== 'NaN' && !yValue.includes('NaN')) ? yValue : '0';
-    
+
     const newParams = new URLSearchParams(searchParams);
-    
+
     if (safeXValue === '0' && safeYValue === '0') {
       // Remove adjustment parameters when set to none
       newParams.delete('tile_x_adjust');
@@ -352,17 +393,154 @@ function TessellationPage() {
     } else {
       if (safeXValue !== '0') newParams.set('tile_x_adjust', safeXValue);
       else newParams.delete('tile_x_adjust');
-      
+
       if (safeYValue !== '0') newParams.set('tile_y_adjust', safeYValue);
       else newParams.delete('tile_y_adjust');
     }
-    
+
     setSearchParams(newParams);
-    
+
     // Track tile adjustments
-    trackTessellationEvent('tile_adjustment', { 
-      label: `x:${safeXValue},y:${safeYValue}` 
+    trackTessellationEvent('tile_adjustment', {
+      label: `x:${safeXValue},y:${safeYValue}`
     });
+  };
+
+  const updateAltColorFrequency = (frequency) => {
+    setUserHasInteracted(true); // Mark user interaction
+    const newParams = new URLSearchParams(searchParams);
+
+    if (frequency > 0) {
+      newParams.set('alt_color', frequency.toString());
+    } else {
+      newParams.delete('alt_color');
+      newParams.delete('alt_gradient');
+      newParams.delete('alt_gradient_intensity');
+    }
+
+    setSearchParams(newParams);
+
+    // Track alt color change
+    trackTessellationEvent('alt_color_change', {
+      label: `${frequency}%`,
+      value: frequency
+    });
+  };
+
+  const updateAltColorGradient = (gradient) => {
+    setUserHasInteracted(true);
+    const newParams = new URLSearchParams(searchParams);
+
+    if (gradient && gradient !== 'none') {
+      newParams.set('alt_gradient', gradient);
+    } else {
+      newParams.delete('alt_gradient');
+      newParams.delete('alt_gradient_intensity');
+    }
+
+    setSearchParams(newParams);
+
+    trackTessellationEvent('alt_gradient_change', { label: gradient });
+  };
+
+  const updateAltColorGradientIntensity = (intensity) => {
+    setUserHasInteracted(true);
+    const newParams = new URLSearchParams(searchParams);
+
+    newParams.set('alt_gradient_intensity', intensity.toFixed(1));
+
+    setSearchParams(newParams);
+
+    trackTessellationEvent('alt_gradient_intensity_change', { value: intensity });
+  };
+
+  // Image-driven pattern handlers
+  const handleImageUpload = async (file) => {
+    setUserHasInteracted(true);
+    try {
+      const processedImage = await processImageFile(file);
+      setImageData(processedImage);
+      trackTessellationEvent('image_upload', { label: file.name });
+    } catch (error) {
+      console.error('Failed to process image:', error);
+    }
+  };
+
+  const handleImageClear = () => {
+    setUserHasInteracted(true);
+    setImageData(null);
+    setImageDrivenMode(false);
+    trackTessellationEvent('image_clear');
+  };
+
+  const handleImageDrivenModeChange = (enabled) => {
+    setUserHasInteracted(true);
+    setImageDrivenMode(enabled);
+
+    // When enabling image mode, disable shader mode
+    if (enabled) {
+      setShaderMode(false);
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('shader_mode');
+      newParams.delete('shader');
+      newParams.delete('shader_opacity');
+      setSearchParams(newParams);
+    }
+
+    trackTessellationEvent('image_driven_mode_change', { label: enabled ? 'enabled' : 'disabled' });
+  };
+
+  const handleImageIntensityChange = (intensity) => {
+    setUserHasInteracted(true);
+    setImageIntensity(intensity);
+    trackTessellationEvent('image_intensity_change', { value: intensity });
+  };
+
+  const handleImageInvertChange = (invert) => {
+    setUserHasInteracted(true);
+    setImageInvert(invert);
+    trackTessellationEvent('image_invert_change', { label: invert ? 'inverted' : 'normal' });
+  };
+
+  // Shader mode handlers
+  const handleShaderModeChange = (enabled) => {
+    setUserHasInteracted(true);
+    setShaderMode(enabled);
+
+    // When enabling shader mode, disable image mode
+    if (enabled) {
+      setImageDrivenMode(false);
+    }
+
+    const newParams = new URLSearchParams(searchParams);
+    if (enabled) {
+      newParams.set('shader_mode', 'true');
+      newParams.set('shader', selectedShader);
+    } else {
+      newParams.delete('shader_mode');
+      newParams.delete('shader');
+      newParams.delete('shader_opacity');
+    }
+    setSearchParams(newParams);
+    trackTessellationEvent('shader_mode_change', { label: enabled ? 'enabled' : 'disabled' });
+  };
+
+  const handleShaderChange = (shader) => {
+    setUserHasInteracted(true);
+    setSelectedShader(shader);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('shader', shader);
+    setSearchParams(newParams);
+    trackTessellationEvent('shader_change', { label: shader });
+  };
+
+  const handleShaderOpacityChange = (opacity) => {
+    setUserHasInteracted(true);
+    setShaderOpacity(opacity);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('shader_opacity', opacity.toFixed(2));
+    setSearchParams(newParams);
+    trackTessellationEvent('shader_opacity_change', { value: opacity });
   };
 
   // This useEffect was causing the bounce - we already sync from localStorage on mount
@@ -382,7 +560,23 @@ function TessellationPage() {
 
   return (
     <>
-      <Tesselate 
+      {/* Shader Background Layer (behind tessellation) */}
+      {shaderMode && (
+        <ShaderBackground
+          shaderKey={selectedShader}
+          colorTheme={safeTheme}
+          opacity={shaderOpacity}
+          width="100vw"
+          height="100vh"
+          position="fixed"
+          top={0}
+          left={0}
+          zIndex={0}
+        />
+      )}
+
+      {/* Tessellation Layer */}
+      <Tesselate
         tile_shape={safeDesign.tileShape}
         tile_pattern={safeDesign.tilePattern}
         color_theme={safeTheme}
@@ -393,6 +587,14 @@ function TessellationPage() {
         tile_x_adjust={tileXAdjust}
         tile_y_adjust={tileYAdjust}
         shadowOptions={shadowOptions}
+        altColorFrequency={altColorFrequency}
+        altColorGradient={altColorGradient}
+        altColorGradientIntensity={altColorGradientIntensity}
+        imageData={imageData}
+        imageDrivenMode={imageDrivenMode}
+        imageIntensity={imageIntensity}
+        imageInvert={imageInvert}
+        shaderMode={shaderMode}
         width="100vw"
         height="100vh"
         position="fixed"
@@ -419,7 +621,7 @@ function TessellationPage() {
           onShadowChange={(newShadowOptions) => {
             setUserHasInteracted(true);
             const newParams = new URLSearchParams(searchParams);
-            
+
             if (newShadowOptions) {
               newParams.set('shadow', 'true');
               trackTessellationEvent('shadow_change', { label: 'enabled' });
@@ -427,9 +629,30 @@ function TessellationPage() {
               newParams.delete('shadow');
               trackTessellationEvent('shadow_change', { label: 'disabled' });
             }
-            
+
             setSearchParams(newParams);
           }}
+          altColorFrequency={altColorFrequency}
+          onAltColorChange={updateAltColorFrequency}
+          altColorGradient={altColorGradient}
+          onAltColorGradientChange={updateAltColorGradient}
+          altColorGradientIntensity={altColorGradientIntensity}
+          onAltColorGradientIntensityChange={updateAltColorGradientIntensity}
+          imageData={imageData}
+          onImageUpload={handleImageUpload}
+          onImageClear={handleImageClear}
+          imageDrivenMode={imageDrivenMode}
+          onImageDrivenModeChange={handleImageDrivenModeChange}
+          imageIntensity={imageIntensity}
+          onImageIntensityChange={handleImageIntensityChange}
+          imageInvert={imageInvert}
+          onImageInvertChange={handleImageInvertChange}
+          shaderMode={shaderMode}
+          onShaderModeChange={handleShaderModeChange}
+          selectedShader={selectedShader}
+          onShaderChange={handleShaderChange}
+          shaderOpacity={shaderOpacity}
+          onShaderOpacityChange={handleShaderOpacityChange}
           autoOpenSettings={autoOpenSettings}
         />
       )}
@@ -514,6 +737,25 @@ function GridTessellationPage() {
     return searchParams.get('style') || 'triangles';
   });
 
+  // Parse alt color frequency parameter
+  const altColorFrequency = (() => {
+    const param = searchParams.get('alt_color');
+    if (!param) return 0;
+    const value = parseInt(param, 10);
+    return (isNaN(value) || value < 0 || value > 99) ? 0 : value;
+  })();
+
+  // Parse alt color gradient type
+  const altColorGradient = searchParams.get('alt_gradient') || 'none';
+
+  // Parse alt color gradient intensity
+  const altColorGradientIntensity = (() => {
+    const param = searchParams.get('alt_gradient_intensity');
+    if (!param) return 1.0;
+    const value = parseFloat(param);
+    return (isNaN(value) || value < 0.1 || value > 5.0) ? 1.0 : value;
+  })();
+
   // Parse adjustments into proper objects - use useMemo to recompute when raw values change
   const tileXAdjust = useMemo(() => parseGridAdjustment(tileXAdjustRaw), [tileXAdjustRaw]);
   const tileYAdjust = useMemo(() => parseGridAdjustment(tileYAdjustRaw), [tileYAdjustRaw]);
@@ -588,6 +830,35 @@ function GridTessellationPage() {
     setSearchParams(newParams);
   };
 
+  const updateAltColorFrequency = (frequency) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (frequency > 0) {
+      newParams.set('alt_color', frequency.toString());
+    } else {
+      newParams.delete('alt_color');
+      newParams.delete('alt_gradient');
+      newParams.delete('alt_gradient_intensity');
+    }
+    setSearchParams(newParams);
+  };
+
+  const updateAltColorGradient = (gradient) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (gradient && gradient !== 'none') {
+      newParams.set('alt_gradient', gradient);
+    } else {
+      newParams.delete('alt_gradient');
+      newParams.delete('alt_gradient_intensity');
+    }
+    setSearchParams(newParams);
+  };
+
+  const updateAltColorGradientIntensity = (intensity) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('alt_gradient_intensity', intensity.toFixed(1));
+    setSearchParams(newParams);
+  };
+
   return (
     <>
       <GridTesselate
@@ -599,6 +870,9 @@ function GridTessellationPage() {
         tile_x_adjust={tileXAdjust}
         tile_y_adjust={tileYAdjust}
         tileStyle={tileStyle}
+        altColorFrequency={altColorFrequency}
+        altColorGradient={altColorGradient}
+        altColorGradientIntensity={altColorGradientIntensity}
       />
       <GridTessellationControls
         selectedPattern={selectedPattern}
@@ -613,6 +887,12 @@ function GridTessellationPage() {
         tileXAdjust={tileXAdjust}
         tileYAdjust={tileYAdjust}
         onAdjustChange={updateAdjustments}
+        altColorFrequency={altColorFrequency}
+        onAltColorChange={updateAltColorFrequency}
+        altColorGradient={altColorGradient}
+        onAltColorGradientChange={updateAltColorGradient}
+        altColorGradientIntensity={altColorGradientIntensity}
+        onAltColorGradientIntensityChange={updateAltColorGradientIntensity}
       />
     </>
   );

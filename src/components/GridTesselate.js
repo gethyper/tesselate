@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useDeferredValue, memo, useMemo } from 'react';
 import { Box } from '@mui/material';
 import p5 from 'p5';
-import { useP5SquareTesselation } from '../hooks/useP5SquareTesselation';
+import { useP5GridTesselation } from '../hooks/useP5GridTesselation';
 
-const SquareTesselateComponent = ({
+const GridTesselateComponent = ({
   tile_pattern,
   color_theme,
   width = 100,
@@ -12,6 +12,9 @@ const SquareTesselateComponent = ({
   tile_x_adjust = 0,
   tile_y_adjust = 0,
   tileStyle = 'triangles',
+  altColorFrequency = 0,
+  altColorGradient = 'none',
+  altColorGradientIntensity = 1.0,
   containerWidth = '100vw',
   containerHeight = '100vh',
   position = 'fixed',
@@ -33,15 +36,21 @@ const SquareTesselateComponent = ({
   const deferredTileXAdjust = useDeferredValue(tile_x_adjust);
   const deferredTileYAdjust = useDeferredValue(tile_y_adjust);
   const deferredTileStyle = useDeferredValue(tileStyle);
+  const deferredAltColorFrequency = useDeferredValue(altColorFrequency);
+  const deferredAltColorGradient = useDeferredValue(altColorGradient);
+  const deferredAltColorGradientIntensity = useDeferredValue(altColorGradientIntensity);
 
   // Optimized tile_options memoization
   const tile_options = useMemo(() => ({
     tile_x_adjust: deferredTileXAdjust,
     tile_y_adjust: deferredTileYAdjust,
+    altColorFrequency: deferredAltColorFrequency,
+    altColorGradient: deferredAltColorGradient,
+    altColorGradientIntensity: deferredAltColorGradientIntensity,
     tileStyle: deferredTileStyle,
-  }), [deferredTileXAdjust, deferredTileYAdjust, deferredTileStyle]);
+  }), [deferredTileXAdjust, deferredTileYAdjust, deferredAltColorFrequency, deferredAltColorGradient, deferredAltColorGradientIntensity, deferredTileStyle]);
 
-  const { setup, draw } = useP5SquareTesselation({
+  const { setup, draw } = useP5GridTesselation({
     tile_pattern: deferredTilePattern,
     color_theme: deferredColorTheme,
     width: deferredWidth,
@@ -53,7 +62,7 @@ const SquareTesselateComponent = ({
   // Create p5 instance once on mount
   useEffect(() => {
     const currentComponentId = componentId.current;
-    console.log(`[SQUARE ${currentComponentId}] CREATING P5 INSTANCE (MOUNT)`);
+    console.log(`[GRID ${currentComponentId}] CREATING P5 INSTANCE (MOUNT)`);
     const sketch = (p) => {
       p.setup = () => {
         setup(p);
@@ -61,7 +70,7 @@ const SquareTesselateComponent = ({
       };
       p.draw = () => draw(p);
       p.windowResized = () => {
-        console.log('SQUARE WINDOW RESIZE - TRIGGERING REDRAW', {
+        console.log('GRID WINDOW RESIZE - TRIGGERING REDRAW', {
           width: p.windowWidth,
           height: p.windowHeight,
           timestamp: Date.now()
@@ -75,7 +84,7 @@ const SquareTesselateComponent = ({
     p5InstanceRef.current = p5Instance;
 
     return () => {
-      console.log(`[SQUARE ${currentComponentId}] CLEANING UP P5 INSTANCE`);
+      console.log(`[GRID ${currentComponentId}] CLEANING UP P5 INSTANCE`);
       if (p5InstanceRef.current) {
         p5InstanceRef.current.remove();
         p5InstanceRef.current = null;
@@ -88,7 +97,7 @@ const SquareTesselateComponent = ({
   const redrawTimeoutRef = useRef(null);
 
   useEffect(() => {
-    console.log(`[SQUARE ${componentId.current}] EFFECT - DEFERRED PARAMS CHANGED, SCHEDULING REDRAW`, {
+    console.log(`[GRID ${componentId.current}] EFFECT - DEFERRED PARAMS CHANGED, SCHEDULING REDRAW`, {
       deferredWidth,
       deferredHeight,
       deferredTileXAdjust,
@@ -101,7 +110,7 @@ const SquareTesselateComponent = ({
     }
 
     redrawTimeoutRef.current = setTimeout(() => {
-      console.log(`[SQUARE ${componentId.current}] EXECUTING DEBOUNCED REDRAW`);
+      console.log(`[GRID ${componentId.current}] EXECUTING DEBOUNCED REDRAW`);
       if (p5InstanceRef.current) {
         p5InstanceRef.current.redraw();
       }
@@ -139,6 +148,6 @@ const SquareTesselateComponent = ({
   );
 };
 
-const SquareTesselate = memo(SquareTesselateComponent);
+const GridTesselate = memo(GridTesselateComponent);
 
-export default SquareTesselate;
+export default GridTesselate;

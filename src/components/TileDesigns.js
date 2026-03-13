@@ -562,6 +562,79 @@ const TileDesigns= {
 
 
 
+  // Minimal/Light Patterns with One Dominant Element
+  'singleDot': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"accent"}]
+      ]
+    ]
+  },
+
+  'cornerAccent': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"accent"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+      ]
+    ]
+  },
+
+  'thinLine': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"accent"},{c:"accent"},{c:"light"},{c:"light"}]
+      ]
+    ]
+  },
+
+  'subtleCross': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"accent"},{c:"light"},{c:"light"},{c:"accent"},{c:"light"}]
+      ]
+    ]
+  },
+
+  'edgeHighlight': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"},{c:"light", s:"accent"}]
+      ]
+    ]
+  },
+
+  'floatingTriangle': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"accent"},{c:"light"},{c:"light"}]
+      ]
+    ]
+  },
+
+  'minimalPair': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"accent"},{c:"light"},{c:"light"},{c:"accent"}]
+      ]
+    ]
+  },
+
+  'sparseCorners': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"accent"},{c:"light"},{c:"light"},{c:"accent"},{c:"light"},{c:"light"}]
+      ]
+    ]
+  },
+
   'egyptianHexatile': {
     'tileShape': "flatTopHexagon",
     'tilePattern': [
@@ -573,7 +646,7 @@ const TileDesigns= {
     "tileShape": "flatTopHexagon",
     'tilePattern': [
     ]
-  } 
+  }
 };
 
 export default TileDesigns; 
