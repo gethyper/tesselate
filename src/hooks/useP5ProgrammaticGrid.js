@@ -1,6 +1,6 @@
 import { useCallback, useRef, useMemo } from 'react';
 import ColorThemes from '../components/ColorThemes';
-import { drawStyledGridTile } from './useP5GridTesselation';
+import { drawStyledSquareTile } from './useP5GridTesselation';
 
 /**
  * Programmatic Grid Generators
@@ -639,7 +639,7 @@ const fillWithProgrammaticGrid = (p5, tileWidth, tileHeight, generator, color_th
       // Generate tile components programmatically
       const tile_components = generator(i, j, tileWidth, tileHeight, tile_options.generatorOptions || {});
 
-      drawStyledGridTile(p5, x_loc, y_loc, tileWidth, tileHeight, tile_components, color_theme, tile_options);
+      drawStyledSquareTile(p5, x_loc, y_loc, tileWidth, tileHeight, tile_components, color_theme, tile_options);
     }
   }
 };

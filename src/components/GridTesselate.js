@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useDeferredValue, memo, useMemo } from 'react';
 import { Box } from '@mui/material';
 import p5 from 'p5';
-import { useP5SquareTesselation } from '../hooks/useP5SquareTesselation';
+import { useP5SquareTesselation } from '../hooks/useP5GridTesselation';
 
 const SquareTesselateComponent = ({
   tile_pattern,

@@ -1,5 +1,5 @@
 import { useCallback, useRef, useMemo } from 'react';
-import SquareTileDesigns from '../components/SquareTileDesigns';
+import SquareTileDesigns from '../components/GridTileDesigns';
 import ColorThemes from '../components/ColorThemes';
 
 /**

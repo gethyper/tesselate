@@ -7,6 +7,9 @@ import TessellationControls from './components/TessellationControls';
 import GridTessellationControls from './components/GridTessellationControls';
 import ProgrammaticGridControls from './components/ProgrammaticGridControls';
 import Gallery from './components/Gallery';
+import BrushTesselate from './components/BrushTesselate';
+import BrushControls from './components/BrushControls';
+import { DEFAULT_BRUSH_OPTIONS } from './hooks/useP5BrushTesselation';
 import TileDesigns from './components/TileDesigns';
 import GridTileDesigns from './components/GridTileDesigns';
 import ColorThemes from './components/ColorThemes';
@@ -778,9 +781,56 @@ function ProgrammaticGridTessellationPage() {
   );
 }
 
+// Experimental p5.brush texture prototype page
+function BrushTessellationPage() {
+  const [pattern, setPattern] = useState(() => Object.keys(TileDesigns)[0]);
+  const [themeName, setThemeName] = useState('Ginger Neutral');
+  const [brushOptions, setBrushOptions] = useState(DEFAULT_BRUSH_OPTIONS);
+  const [progress, setProgress] = useState(1);
+  const saveHandlerRef = useRef(null);
+
+  const design = TileDesigns[pattern];
+  const theme = ColorThemes[themeName] || ColorThemes['Ginger Neutral'];
+  const isPointyTop = design?.tileShape === 'pointyTopHexatile';
+
+  useEffect(() => {
+    trackPageView('/brush');
+  }, []);
+
+  const registerSave = useCallback((handler) => {
+    saveHandlerRef.current = handler;
+  }, []);
+
+  const handleSave = useCallback((filename) => {
+    saveHandlerRef.current?.(filename);
+  }, []);
+
+  return (
+    <>
+      <BrushTesselate
+        tile_pattern={design?.tilePattern}
+        color_theme={theme}
+        isPointyTop={isPointyTop}
+        brushOptions={brushOptions}
+        registerSave={registerSave}
+        onProgress={setProgress}
+      />
+      <BrushControls
+        pattern={pattern}
+        setPattern={setPattern}
+        theme={themeName}
+        setTheme={setThemeName}
+        options={brushOptions}
+        setOptions={setBrushOptions}
+        progress={progress}
+        onSave={handleSave}
+      />
+    </>
+  );
+}
+
 // Main App component with routing
-function App() {
-  // Initialize Google Analytics
+function App() {  // Initialize Google Analytics
   useEffect(() => {
     const measurementId = process.env.REACT_APP_GA_MEASUREMENT_ID;
     if (measurementId) {
@@ -801,6 +851,7 @@ function App() {
         <Route path="/squares" element={<GridTessellationPage />} />
         <Route path="/programmatic" element={<ProgrammaticGridTessellationPage />} />
         <Route path="/generative" element={<ProgrammaticGridTessellationPage />} />
+        <Route path="/brush" element={<BrushTessellationPage />} />
       </Routes>
     </HashRouter>
   );

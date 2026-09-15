@@ -16,9 +16,9 @@ import {
   DialogContent
 } from '@mui/material';
 import { Menu, Close } from '@mui/icons-material';
-import SquareTileDesigns from './SquareTileDesigns';
+import SquareTileDesigns from './GridTileDesigns';
 import ColorThemes from './ColorThemes';
-import { TILE_STYLES } from '../hooks/useP5SquareTesselation';
+import { TILE_STYLES } from '../hooks/useP5GridTesselation';
 
 const SquareTessellationControls = ({
   selectedPattern,
