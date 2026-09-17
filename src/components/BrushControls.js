@@ -21,7 +21,9 @@ import {
   listBrushTips,
   BRUSH_FIELDS,
   TEXTURE_MODES,
-  HATCH_ANGLE_MODES
+  HATCH_ANGLE_MODES,
+  BLEED_DIRECTIONS,
+  isWatercolorMode
 } from '../hooks/useP5BrushTesselation';
 import TileDesigns from './TileDesigns';
 import ColorThemes from './ColorThemes';
@@ -47,9 +49,13 @@ const BrushControls = ({
 
   const update = (key, value) => setOptions((prev) => ({ ...prev, [key]: value }));
 
-  const showHatch = options.textureMode === 'hatch' || options.textureMode === 'washHatch';
+  const showHatch =
+    options.textureMode === 'hatch' ||
+    options.textureMode === 'washHatch' ||
+    options.textureMode === 'watercolorHatch';
   const showWash = options.textureMode === 'wash' || options.textureMode === 'washHatch';
   const showMass = options.textureMode === 'mass';
+  const showWatercolor = isWatercolorMode(options.textureMode);
 
   const downloadImage = () => {
     onSave?.(`brush_tessellation_${pattern}_${theme}`.replace(/\s+/g, '_'));
@@ -107,8 +113,8 @@ const BrushControls = ({
           </Box>
 
           <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 2 }}>
-            Dry-media texture via p5.brush hatching and massing. The watercolor fill
-            system is intentionally not used.
+            Dry-media texture via p5.brush hatching and massing, plus watercolor
+            modes using its bleeding fill system.
           </Typography>
 
           <FormControl fullWidth size="small" sx={{ mb: 1.5 }}>
@@ -136,6 +142,27 @@ const BrushControls = ({
           {selectRow('Texture mode', 'textureMode', Object.entries(TEXTURE_MODES))}
 
           {showWash && sliderRow('Wash opacity', 'washOpacity', 0, 255, 5)}
+
+          {showWatercolor && (
+            <>
+              {sliderRow('Fill opacity', 'fillOpacity', 0, 255, 5)}
+              {sliderRow('Bleed strength', 'bleedStrength', 0, 1, 0.01)}
+              {selectRow('Bleed direction', 'bleedDirection', Object.entries(BLEED_DIRECTIONS))}
+              {sliderRow('Bleed angle', 'bleedAngle', 0, 360, 5)}
+              {sliderRow('Paper texture', 'fillTextureStrength', 0, 1, 0.05)}
+              {sliderRow('Edge darkening', 'fillBorderStrength', 0, 1, 0.05)}
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={options.fillScatter}
+                    onChange={(e) => update('fillScatter', e.target.checked)}
+                  />
+                }
+                label={<Typography variant="caption">Scatter pigment</Typography>}
+                sx={{ mb: 1 }}
+              />
+            </>
+          )}
 
           {showHatch && (
             <>

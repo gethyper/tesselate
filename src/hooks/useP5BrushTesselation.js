@@ -8,13 +8,18 @@ import * as brush from 'p5.brush';
  * WEBGL canvas, while the original renderer relies on 2D canvas context operations
  * (clipping, `drawImage`, gradients) that do not exist in WEBGL.
  *
- * Design goal: *dry media texture*, not watercolor. We therefore never call
- * `brush.fill()` / `brush.fillBleed()` / `brush.fillTexture()`, which are the
- * watercolor diffusion system. Texture comes from:
+ * Two families of look are available:
+ *
+ * *Dry media* (the original goal) — texture without diffusion:
  *   - `brush.hatch()`      — repeated textured lines inside each facet
  *   - `brush.mass()`       — layered hand-filled tone
  *   - `brush.wash()`       — flat opaque base coat (no bleed, no diffusion)
  *   - `brush.set()`        — textured outline strokes on facet edges
+ *
+ * *Watercolor* — p5.brush's diffusion fill system:
+ *   - `brush.fill()`        — watercolor body color and opacity
+ *   - `brush.fillBleed()`   — how far and which way pigment creeps past the edge
+ *   - `brush.fillTexture()` — paper grain and the darker dried rim
  */
 
 /**
@@ -63,17 +68,34 @@ export const BRUSH_FIELDS = [
 ];
 
 /**
- * Texture modes. None of these use the watercolor fill system.
+ * Texture modes.
+ *
+ * Dry media (no diffusion):
  * - `hatch`     : hatching only, facets read as line texture over the background
  * - `washHatch` : flat color base coat + hatching on top (most "tessellation-like")
  * - `mass`      : layered gestural fill, coarse and painterly but dry
  * - `wash`      : flat color only; texture comes purely from the outline brush
+ *
+ * Watercolor (p5.brush's diffusion fill):
+ * - `watercolor`      : bleeding washes of pigment with paper grain
+ * - `watercolorHatch` : watercolor body with dry hatching drawn over the top
  */
 export const TEXTURE_MODES = {
   hatch: 'Hatch only',
   washHatch: 'Wash + hatch',
   mass: 'Mass (layered)',
-  wash: 'Wash only'
+  wash: 'Wash only',
+  watercolor: 'Watercolor',
+  watercolorHatch: 'Watercolor + hatch'
+};
+
+/** Whether a texture mode uses the watercolor diffusion fill. */
+export const isWatercolorMode = (mode) => mode === 'watercolor' || mode === 'watercolorHatch';
+
+/** Directions pigment can bleed relative to the facet edge. */
+export const BLEED_DIRECTIONS = {
+  out: 'Outward',
+  in: 'Inward'
 };
 
 /** How each facet of a hexagon chooses its hatch angle. */
@@ -96,6 +118,13 @@ export const DEFAULT_BRUSH_OPTIONS = Object.freeze({
   hatchBaseAngle: 30,
   hatchColorKey: 'auto',
   washOpacity: 225,
+  fillOpacity: 110,
+  bleedStrength: 0.12,
+  bleedDirection: 'out',
+  bleedAngle: 0,
+  fillTextureStrength: 0.45,
+  fillBorderStrength: 0.45,
+  fillScatter: true,
   outline: true,
   outlineBrush: 'HB',
   outlineWeight: 1,
@@ -315,7 +344,23 @@ export const drawBrushHexatile = (p5, centerX, centerY, radius, tileComponents, 
       brush.wash(facetColor, options.washOpacity);
     }
 
-    if (mode === 'hatch' || mode === 'washHatch') {
+    if (isWatercolorMode(mode)) {
+      brush.fill(facetColor, options.fillOpacity);
+      // Bleed is what separates watercolor from a flat wash: pigment creeps past
+      // the facet edge, so neighbouring facets blend instead of butting together.
+      brush.fillBleed(
+        options.bleedStrength,
+        options.bleedDirection,
+        options.bleedAngle > 0 ? options.bleedAngle : null
+      );
+      brush.fillTexture(
+        options.fillTextureStrength,
+        options.fillBorderStrength,
+        options.fillScatter
+      );
+    }
+
+    if (mode === 'hatch' || mode === 'washHatch' || mode === 'watercolorHatch') {
       const hatchColor = options.hatchColorKey === 'auto'
         ? autoHatchColor(facetColor, colorTheme)
         : (colorTheme[options.hatchColorKey] || facetColor);
