@@ -332,6 +332,11 @@ export const computeHexCenters = (width, height, radius, isPointyTop, adjust = n
 /**
  * Returns the six vertices of a hexagon as `[x, y]` pairs.
  *
+ * The starting angle matches the 2D renderer's `generateHexVertices`, so facet 0
+ * covers the same wedge in both. Both orientations describe the same hexagon
+ * whichever vertex you start from, but the pattern's components are assigned by
+ * facet index, so starting elsewhere silently rotates every tile's design.
+ *
  * @param {number} centerX - Center X coordinate
  * @param {number} centerY - Center Y coordinate
  * @param {number} radius - Hexagon radius
@@ -340,7 +345,7 @@ export const computeHexCenters = (width, height, radius, isPointyTop, adjust = n
  */
 export const hexVertices = (centerX, centerY, radius, isPointyTop) => {
   const vertices = [];
-  const startAngle = isPointyTop ? -Math.PI / 2 : 0;
+  const startAngle = isPointyTop ? Math.PI / 6 : 0;
   for (let i = 0; i < 6; i++) {
     const angle = startAngle + (i * Math.PI) / 3;
     vertices.push([
