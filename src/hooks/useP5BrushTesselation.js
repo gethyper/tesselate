@@ -175,6 +175,19 @@ export const MAX_BRUSH_FACETS = 2200;
 export const MAX_BRUSH_TILES = Math.ceil(MAX_BRUSH_FACETS / 6);
 
 /**
+ * Wraps a grid index into `[0, length)`, including negative indices.
+ *
+ * Tiles in the bleed ring sit at negative column/row indices. JavaScript's `%`
+ * keeps the sign, so `-1 % 3` is `-1` rather than `2`, which would index off the
+ * front of the pattern.
+ *
+ * @param {number} index - Grid index, possibly negative
+ * @param {number} length - Pattern dimension
+ * @returns {number} Index within range
+ */
+const wrapIndex = (index, length) => ((index % length) + length) % length;
+
+/**
  * Smallest hexagon radius that keeps a canvas within the facet budget.
  *
  * A regular hexagon of radius r covers `3·√3/2·r²`, so the facet count is
@@ -242,6 +255,12 @@ export const adjustmentBleed = (adjustment) => {
  * extra spacing (its offset grows linearly with the tile index), while effect
  * adjustments displace individual tiles without changing spacing.
  *
+ * `col`/`row` are grid indices anchored at the canvas origin, so the tile at the
+ * top-left corner is `(0, 0)` and tiles in the bleed ring are negative. Pattern
+ * lookup and row/column parity both key off these, exactly as the 2D renderer
+ * keys both off its loop counters — offsetting one but not the other would pair
+ * each pattern cell with the wrong tessellation phase.
+ *
  * @param {number} width - Canvas width
  * @param {number} height - Canvas height
  * @param {number} radius - Hexagon radius
@@ -279,8 +298,8 @@ export const computeHexCenters = (width, height, radius, isPointyTop, adjust = n
         centers.push({
           x: col * hexWidth + rowOffset + getX(col, row),
           y: row * rowSpacing + getY(col, row),
-          col: col + colBleed,
-          row: row + rowBleed
+          col,
+          row
         });
       }
     }
@@ -300,8 +319,8 @@ export const computeHexCenters = (width, height, radius, isPointyTop, adjust = n
         centers.push({
           x: col * colSpacing + getX(col, row),
           y: row * hexHeight + colOffset + getY(col, row),
-          col: col + colBleed,
-          row: row + rowBleed
+          col,
+          row
         });
       }
     }
@@ -675,7 +694,9 @@ export function useP5BrushTesselation({
       .map(({ x, y, col, row }) => ({
         x: x - offsetX,
         y: y - offsetY,
-        components: pattern[col % patternCols][row % patternRows]
+        // Tiles in the bleed ring have negative indices, so wrap into range the
+        // way the 2D renderer's pattern repeats rather than with a bare `%`.
+        components: pattern[wrapIndex(col, patternCols)][wrapIndex(row, patternRows)]
       }))
       // Last-resort guard: an adjustment pathological enough to defeat the loop
       // above must still not turn a repaint into minutes of work.
