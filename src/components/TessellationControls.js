@@ -534,15 +534,15 @@ const TessellationControls = ({
             maxWidth: 300,
             // The panel grows upward from the bottom of the screen, so cap it and
             // scroll instead of letting a tall panel push its header off-screen.
-            // border-box keeps the padding inside that cap.
-            boxSizing: 'border-box',
-            maxHeight: 'calc(100vh - 32px)',
+            // maxWidth is a content-box measurement the layout depends on, so the
+            // padding and border are subtracted from the cap rather than folded in.
+            maxHeight: 'calc(100vh - 66px)',
             overflowY: 'auto',
             // Mobile responsive width
             '@media (max-width: 768px)': {
               minWidth: 280,
               maxWidth: '90vw',
-              maxHeight: 'calc(100vh - 40px)',
+              maxHeight: 'calc(100vh - 74px)',
             },
             background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(240, 240, 255, 0.75))',
             backdropFilter: 'blur(10px)',
