@@ -9,7 +9,7 @@ import ProgrammaticGridControls from './components/ProgrammaticGridControls';
 import Gallery from './components/Gallery';
 import BrushTesselate from './components/BrushTesselate';
 import BrushControls from './components/BrushControls';
-import { DEFAULT_BRUSH_OPTIONS } from './hooks/useP5BrushTesselation';
+import { DEFAULT_BRUSH_OPTIONS, minBrushRadius } from './hooks/useP5BrushTesselation';
 import TileDesigns from './components/TileDesigns';
 import GridTileDesigns from './components/GridTileDesigns';
 import ColorThemes from './components/ColorThemes';
@@ -91,6 +91,32 @@ function TessellationPage() {
 
   // Check for settings parameter to auto-open settings pane
   const autoOpenSettings = searchParams.get('settings') === 'true';
+
+  // Hidden brush mode: renders the tessellation with p5.brush instead of the
+  // standard 2D renderer and reveals the brush section in the controls palette.
+  const brushMode = searchParams.get('brush') === 'true';
+  const [brushOptions, setBrushOptions] = useState(DEFAULT_BRUSH_OPTIONS);
+  const [brushProgress, setBrushProgress] = useState(1);
+  const brushCanvasRef = useRef(null);
+
+  const registerBrushCanvas = useCallback((getter) => {
+    brushCanvasRef.current = getter;
+  }, []);
+
+  const getBrushCanvas = useCallback(
+    () => (brushMode ? brushCanvasRef.current?.() || null : null),
+    [brushMode]
+  );
+
+  // The palette's existing Size control drives the hexagon radius, floored so a
+  // small size cannot push the tile count past what brush rendering can sustain.
+  const brushRadiusFloor = brushMode
+    ? minBrushRadius(window.innerWidth, window.innerHeight)
+    : 0;
+  const brushEffectiveOptions = useMemo(
+    () => ({ ...brushOptions, radius: Math.max(tileSize, brushRadiusFloor) }),
+    [brushOptions, tileSize, brushRadiusFloor]
+  );
   
   // Check for shadow parameter
   const useShadow = searchParams.get('shadow') === 'true';
@@ -269,9 +295,10 @@ function TessellationPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]); // Run when URL params change, ignoring state dependencies to prevent loops
 
-  // Auto-rotation effect
+  // Auto-rotation effect. Disabled in brush mode, where each repaint costs
+  // seconds of brush work rather than a single cheap frame.
   useEffect(() => {
-    if (userHasInteracted || hideControls) {
+    if (userHasInteracted || hideControls || brushMode) {
       // Clear any existing timer if user has interacted
       if (autoRotationTimer.current) {
         clearInterval(autoRotationTimer.current);
@@ -290,7 +317,7 @@ function TessellationPage() {
         autoRotationTimer.current = null;
       }
     };
-  }, [userHasInteracted, hideControls, rotateToNextDesign]);
+  }, [userHasInteracted, hideControls, brushMode, rotateToNextDesign]);
 
   // Update URL and localStorage when state changes
   const updatePattern = (pattern) => {
@@ -385,25 +412,42 @@ function TessellationPage() {
 
   return (
     <>
-      <Tesselate 
-        tile_shape={safeDesign.tileShape}
-        tile_pattern={safeDesign.tilePattern}
-        color_theme={safeTheme}
-        r={tileSize}
-        single_tile={false}
-        useGradient={useGradient}
-        textureKey={textureKey}
-        tile_x_adjust={tileXAdjust}
-        tile_y_adjust={tileYAdjust}
-        shadowOptions={shadowOptions}
-        width="100vw"
-        height="100vh"
-        position="fixed"
-        top={0}
-        left={0}
-        zIndex={1}
-        overflow="hidden"
-      />
+      {brushMode ? (
+        <BrushTesselate
+          tile_pattern={safeDesign.tilePattern}
+          color_theme={safeTheme}
+          isPointyTop={safeDesign.tileShape === 'pointyTopHexatile'}
+          brushOptions={brushEffectiveOptions}
+          onProgress={setBrushProgress}
+          registerCanvas={registerBrushCanvas}
+          containerWidth="100vw"
+          containerHeight="100vh"
+          position="fixed"
+          top={0}
+          left={0}
+          zIndex={1}
+        />
+      ) : (
+        <Tesselate
+          tile_shape={safeDesign.tileShape}
+          tile_pattern={safeDesign.tilePattern}
+          color_theme={safeTheme}
+          r={tileSize}
+          single_tile={false}
+          useGradient={useGradient}
+          textureKey={textureKey}
+          tile_x_adjust={tileXAdjust}
+          tile_y_adjust={tileYAdjust}
+          shadowOptions={shadowOptions}
+          width="100vw"
+          height="100vh"
+          position="fixed"
+          top={0}
+          left={0}
+          zIndex={1}
+          overflow="hidden"
+        />
+      )}
 
       {!hideControls && (
         <TessellationControls
@@ -419,6 +463,11 @@ function TessellationPage() {
           tileYAdjust={tileYAdjust}
           onAdjustChange={updateAdjustments}
           shadowOptions={shadowOptions}
+          brushMode={brushMode}
+          brushOptions={brushOptions}
+          onBrushOptionsChange={setBrushOptions}
+          brushProgress={brushProgress}
+          getSourceCanvas={getBrushCanvas}
           onShadowChange={(newShadowOptions) => {
             setUserHasInteracted(true);
             const newParams = new URLSearchParams(searchParams);

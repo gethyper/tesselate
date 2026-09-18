@@ -157,6 +157,31 @@ export const resetBrushScale = () => {
 };
 
 /**
+ * Upper bound on brush polygons drawn per render.
+ *
+ * Brush strokes cost roughly a millisecond each, so an unbounded tile count turns
+ * a repaint into minutes of work. This keeps a full repaint in the low seconds.
+ */
+export const MAX_BRUSH_FACETS = 2200;
+
+/**
+ * Smallest hexagon radius that keeps a canvas within the facet budget.
+ *
+ * A regular hexagon of radius r covers `3·√3/2·r²`, so the facet count is
+ * `6·area / hexArea`. Solving that for r at the budget gives the floor below which
+ * brush rendering stops being interactive.
+ *
+ * @param {number} width - Canvas width
+ * @param {number} height - Canvas height
+ * @returns {number} Minimum usable radius
+ */
+export const minBrushRadius = (width, height) => {
+  const area = Math.max(1, width) * Math.max(1, height);
+  const facetsPerUnitArea = 6 / ((3 * Math.sqrt(3)) / 2);
+  return Math.ceil(Math.sqrt((facetsPerUnitArea * area) / MAX_BRUSH_FACETS));
+};
+
+/**
  * Computes the centers of every hexagon needed to cover the canvas, with one tile
  * of bleed on each edge so partial tiles reach the borders.
  *
@@ -500,6 +525,9 @@ export function useP5BrushTesselation({
 
     const options = { ...DEFAULT_BRUSH_OPTIONS, ...rawOptions, isPointyTop: pointyTop };
 
+    // Guard against a radius so small the tile count makes a repaint take minutes.
+    options.radius = Math.max(options.radius, minBrushRadius(p5.width, p5.height));
+
     // Seeding p5 also seeds p5.brush, keeping renders reproducible.
     p5.randomSeed(options.seed);
     p5.noiseSeed(options.seed);
@@ -577,12 +605,19 @@ export function useP5BrushTesselation({
   }, [startPass]);
 
   /**
-   * Exports the tessellation as a PNG.
+   * Returns the canvas holding the rendered tessellation.
    *
-   * Reads the offscreen buffer rather than the visible canvas: a displayed WEBGL
-   * canvas has its drawing buffer discarded once the frame is composited, so it
-   * reads back fully transparent from outside the draw loop. The buffer is never
-   * composited, so it keeps its pixels.
+   * This is the offscreen buffer, not the visible canvas: a displayed WEBGL canvas
+   * has its drawing buffer discarded once the frame is composited, so it reads back
+   * fully transparent from outside the draw loop. The buffer is never composited,
+   * so it keeps its pixels and can be sampled at any time.
+   *
+   * @returns {HTMLCanvasElement|null} Source canvas, or null before setup
+   */
+  const getCanvas = useCallback(() => bufferRef.current?.canvas || null, []);
+
+  /**
+   * Exports the tessellation as a PNG.
    *
    * @param {string} filename - file name without extension
    */
@@ -592,7 +627,7 @@ export function useP5BrushTesselation({
     downloadCanvas(canvas, filename || 'brush-tesselation');
   }, []);
 
-  return { setup, draw, invalidate, teardown, save, job };
+  return { setup, draw, invalidate, teardown, save, getCanvas, job };
 }
 
 export default useP5BrushTesselation;

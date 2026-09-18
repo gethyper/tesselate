@@ -18,6 +18,7 @@ import {
 import { Menu, Close } from '@mui/icons-material';
 import TileDesigns from './TileDesigns';
 import ColorThemes from './ColorThemes';
+import BrushPaletteSection from './BrushPaletteSection';
 
 const TessellationControls = ({ 
   selectedPattern, 
@@ -33,7 +34,12 @@ const TessellationControls = ({
   onAdjustChange,
   shadowOptions = null,
   onShadowChange,
-  autoOpenSettings = false
+  autoOpenSettings = false,
+  brushMode = false,
+  brushOptions = null,
+  onBrushOptionsChange,
+  brushProgress = 1,
+  getSourceCanvas = null
 }) => {
   const [isOpen, setIsOpen] = useState(autoOpenSettings);
   const [previewSize, setPreviewSize] = useState(tileSize);
@@ -44,7 +50,9 @@ const TessellationControls = ({
 
   // Download functions
   const downloadImage = (format = '1920x1080') => {
-    const canvas = document.querySelector('canvas');
+    // In brush mode the visible canvas is WEBGL and reads back transparent once the
+    // frame is composited, so sample the renderer's offscreen buffer instead.
+    const canvas = getSourceCanvas?.() || document.querySelector('canvas');
     if (!canvas) return;
 
     let filename, dataUrl, width, height;
@@ -524,10 +532,17 @@ const TessellationControls = ({
             p: 2,
             minWidth: 210,
             maxWidth: 300,
+            // The panel grows upward from the bottom of the screen, so cap it and
+            // scroll instead of letting a tall panel push its header off-screen.
+            // border-box keeps the padding inside that cap.
+            boxSizing: 'border-box',
+            maxHeight: 'calc(100vh - 32px)',
+            overflowY: 'auto',
             // Mobile responsive width
             '@media (max-width: 768px)': {
               minWidth: 280,
               maxWidth: '90vw',
+              maxHeight: 'calc(100vh - 40px)',
             },
             background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(240, 240, 255, 0.75))',
             backdropFilter: 'blur(10px)',
@@ -869,6 +884,15 @@ const TessellationControls = ({
             </FormControl>
             )}
           </Box>
+
+          {/* Brush controls, revealed by the hidden `?brush=true` parameter */}
+          {brushMode && brushOptions && (
+            <BrushPaletteSection
+              options={brushOptions}
+              onChange={onBrushOptionsChange}
+              progress={brushProgress}
+            />
+          )}
 
           {/* Download Button */}
           <Button

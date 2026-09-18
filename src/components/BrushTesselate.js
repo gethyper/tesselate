@@ -21,15 +21,18 @@ const BrushTesselateComponent = ({
   left = 0,
   zIndex = 1,
   onProgress,
-  registerSave
+  registerSave,
+  registerCanvas
 }) => {
   const p5ContainerRef = useRef(null);
   const p5InstanceRef = useRef(null);
   const invalidateTimeoutRef = useRef(null);
   const registerSaveRef = useRef(registerSave);
   registerSaveRef.current = registerSave;
+  const registerCanvasRef = useRef(registerCanvas);
+  registerCanvasRef.current = registerCanvas;
 
-  const { setup, draw, invalidate, teardown, save, job } = useP5BrushTesselation({
+  const { setup, draw, invalidate, teardown, save, getCanvas, job } = useP5BrushTesselation({
     tile_pattern,
     color_theme,
     isPointyTop,
@@ -63,6 +66,7 @@ const BrushTesselateComponent = ({
     // A WEBGL canvas reads back as fully transparent once the frame is composited,
     // so the export is deferred into the draw loop instead of grabbing it here.
     registerSaveRef.current?.(save);
+    registerCanvasRef.current?.(getCanvas);
 
     return () => {
       if (invalidateTimeoutRef.current) {
@@ -70,6 +74,7 @@ const BrushTesselateComponent = ({
         invalidateTimeoutRef.current = null;
       }
       registerSaveRef.current?.(null);
+      registerCanvasRef.current?.(null);
       instance.remove();
       teardown();
       p5InstanceRef.current = null;
