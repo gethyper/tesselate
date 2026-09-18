@@ -74,6 +74,8 @@ const BrushPaletteSection = ({ options, onChange, progress = 1 }) => {
   const update = (key, value) => onChange({ ...options, [key]: value });
 
   const mode = options.textureMode;
+  // Flat facets have nothing to tune, so every other control is hidden.
+  const textured = mode !== 'none';
   const showHatch = mode === 'hatch' || mode === 'washHatch' || mode === 'watercolorHatch';
   const showWash = mode === 'wash' || mode === 'washHatch';
   const showMass = mode === 'mass';
@@ -148,9 +150,9 @@ const BrushPaletteSection = ({ options, onChange, progress = 1 }) => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
         <Typography
           variant="subtitle2"
-          sx={{ fontFamily: 'Tourney, sans-serif', fontWeight: 500, letterSpacing: 1 }}
+          sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, color: 'text.secondary' }}
         >
-          BRUSH
+          Brush
         </Typography>
         {progress < 1 && (
           <Typography
@@ -164,44 +166,105 @@ const BrushPaletteSection = ({ options, onChange, progress = 1 }) => {
 
       {select('brush-texture-label', 'Texture', 'textureMode', Object.entries(TEXTURE_MODES))}
 
-      {showWash && (
-        <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-          {number('Wash opacity', 'washOpacity', { min: 0, max: 255, step: 5 })}
-        </Box>
-      )}
-
-      {showWatercolor && (
+      {textured && (
         <>
+        {showWash && (
           <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-            {number('Opacity', 'fillOpacity', { min: 0, max: 255, step: 5 })}
-            {number('Bleed', 'bleedStrength', { min: 0, max: 1, step: 0.01 })}
+            {number('Wash opacity', 'washOpacity', { min: 0, max: 255, step: 5 })}
           </Box>
-          {select(
-            'brush-bleed-label',
-            'Bleed direction',
-            'bleedDirection',
-            Object.entries(BLEED_DIRECTIONS)
-          )}
-          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-            {number('Paper', 'fillTextureStrength', { min: 0, max: 1, step: 0.05 })}
-            {number('Edges', 'fillBorderStrength', { min: 0, max: 1, step: 0.05 })}
-          </Box>
-        </>
-      )}
+        )}
 
-      {showHatch && (
-        <>
+        {showWatercolor && (
+          <>
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              {number('Opacity', 'fillOpacity', { min: 0, max: 255, step: 5 })}
+              {number('Bleed', 'bleedStrength', { min: 0, max: 1, step: 0.01 })}
+            </Box>
+            {select(
+              'brush-bleed-label',
+              'Bleed direction',
+              'bleedDirection',
+              Object.entries(BLEED_DIRECTIONS)
+            )}
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              {number('Paper', 'fillTextureStrength', { min: 0, max: 1, step: 0.05 })}
+              {number('Edges', 'fillBorderStrength', { min: 0, max: 1, step: 0.05 })}
+            </Box>
+          </>
+        )}
+
+        {showHatch && (
+          <>
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <FormControl sx={{ flex: 1 }}>
+                <InputLabel id="brush-hatch-tip-label" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                  Hatch
+                </InputLabel>
+                <Select
+                  labelId="brush-hatch-tip-label"
+                  value={options.hatchBrush}
+                  label="Hatch"
+                  size="small"
+                  onChange={(e) => update('hatchBrush', e.target.value)}
+                  MenuProps={MENU_PROPS}
+                  sx={SELECT_SX}
+                >
+                  {BRUSH_TIP_OPTIONS.map(([value, text]) => (
+                    <MenuItem key={value} value={value}>
+                      <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                        {text}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              {number('Spacing', 'hatchDistance', { min: 1, max: 20, step: 0.5 })}
+            </Box>
+
+            {select(
+              'brush-hatch-color-label',
+              'Hatch color',
+              'hatchColorKey',
+              HATCH_COLOR_KEYS.map((k) => [k, k])
+            )}
+            {select(
+              'brush-hatch-angle-label',
+              'Hatch angles',
+              'hatchAngleMode',
+              Object.entries(HATCH_ANGLE_MODES)
+            )}
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              {number('Angle', 'hatchBaseAngle', { min: 0, max: 180, step: 5 })}
+              {number('Weight', 'hatchWeight', { min: 0.2, max: 4, step: 0.1 })}
+            </Box>
+          </>
+        )}
+
+        {showMass && (
+          <>
+            {select('brush-mass-label', 'Mass brush', 'massBrush', BRUSH_TIP_OPTIONS)}
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              {number('Precision', 'massPrecision', { min: 0, max: 1, step: 0.05 })}
+              {number('Strength', 'massStrength', { min: 0, max: 1, step: 0.05 })}
+            </Box>
+          </>
+        )}
+
+        {toggle('Textured outlines', 'outline')}
+
+        {options.outline && (
           <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
             <FormControl sx={{ flex: 1 }}>
-              <InputLabel id="brush-hatch-tip-label" sx={{ fontFamily: 'Inter, sans-serif' }}>
-                Hatch
+              <InputLabel id="brush-outline-tip-label" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                Outline
               </InputLabel>
               <Select
-                labelId="brush-hatch-tip-label"
-                value={options.hatchBrush}
-                label="Hatch"
+                labelId="brush-outline-tip-label"
+                value={options.outlineBrush}
+                label="Outline"
                 size="small"
-                onChange={(e) => update('hatchBrush', e.target.value)}
+                onChange={(e) => update('outlineBrush', e.target.value)}
                 MenuProps={MENU_PROPS}
                 sx={SELECT_SX}
               >
@@ -214,121 +277,64 @@ const BrushPaletteSection = ({ options, onChange, progress = 1 }) => {
                 ))}
               </Select>
             </FormControl>
-            {number('Spacing', 'hatchDistance', { min: 1, max: 20, step: 0.5 })}
+            <FormControl sx={{ flex: 1 }}>
+              <InputLabel id="brush-outline-color-label" sx={{ fontFamily: 'Inter, sans-serif' }}>
+                Color
+              </InputLabel>
+              <Select
+                labelId="brush-outline-color-label"
+                value={options.outlineColorKey}
+                label="Color"
+                size="small"
+                onChange={(e) => update('outlineColorKey', e.target.value)}
+                MenuProps={MENU_PROPS}
+                sx={SELECT_SX}
+              >
+                {COLOR_KEYS.map((key) => (
+                  <MenuItem key={key} value={key}>
+                    <Typography
+                      variant="caption"
+                      sx={{ textTransform: 'capitalize', fontFamily: 'Inter, sans-serif' }}
+                    >
+                      {key}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
+        )}
 
-          {select(
-            'brush-hatch-color-label',
-            'Hatch color',
-            'hatchColorKey',
-            HATCH_COLOR_KEYS.map((k) => [k, k])
-          )}
-          {select(
-            'brush-hatch-angle-label',
-            'Hatch angles',
-            'hatchAngleMode',
-            Object.entries(HATCH_ANGLE_MODES)
-          )}
-
-          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-            {number('Angle', 'hatchBaseAngle', { min: 0, max: 180, step: 5 })}
-            {number('Weight', 'hatchWeight', { min: 0.2, max: 4, step: 0.1 })}
-          </Box>
-        </>
-      )}
-
-      {showMass && (
-        <>
-          {select('brush-mass-label', 'Mass brush', 'massBrush', BRUSH_TIP_OPTIONS)}
-          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-            {number('Precision', 'massPrecision', { min: 0, max: 1, step: 0.05 })}
-            {number('Strength', 'massStrength', { min: 0, max: 1, step: 0.05 })}
-          </Box>
-        </>
-      )}
-
-      {toggle('Textured outlines', 'outline')}
-
-      {options.outline && (
         <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+          {number('Brush scale', 'brushScale', { min: 0.5, max: 4, step: 0.1 })}
           <FormControl sx={{ flex: 1 }}>
-            <InputLabel id="brush-outline-tip-label" sx={{ fontFamily: 'Inter, sans-serif' }}>
-              Outline
+            <InputLabel id="brush-field-label" sx={{ fontFamily: 'Inter, sans-serif' }}>
+              Field
             </InputLabel>
             <Select
-              labelId="brush-outline-tip-label"
-              value={options.outlineBrush}
-              label="Outline"
+              labelId="brush-field-label"
+              value={options.field}
+              label="Field"
               size="small"
-              onChange={(e) => update('outlineBrush', e.target.value)}
+              onChange={(e) => update('field', e.target.value)}
               MenuProps={MENU_PROPS}
               sx={SELECT_SX}
             >
-              {BRUSH_TIP_OPTIONS.map(([value, text]) => (
-                <MenuItem key={value} value={value}>
-                  <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif' }}>
-                    {text}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl sx={{ flex: 1 }}>
-            <InputLabel id="brush-outline-color-label" sx={{ fontFamily: 'Inter, sans-serif' }}>
-              Color
-            </InputLabel>
-            <Select
-              labelId="brush-outline-color-label"
-              value={options.outlineColorKey}
-              label="Color"
-              size="small"
-              onChange={(e) => update('outlineColorKey', e.target.value)}
-              MenuProps={MENU_PROPS}
-              sx={SELECT_SX}
-            >
-              {COLOR_KEYS.map((key) => (
-                <MenuItem key={key} value={key}>
+              {BRUSH_FIELDS.map((name) => (
+                <MenuItem key={name} value={name}>
                   <Typography
                     variant="caption"
                     sx={{ textTransform: 'capitalize', fontFamily: 'Inter, sans-serif' }}
                   >
-                    {key}
+                    {labelFor(name)}
                   </Typography>
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         </Box>
+        </>
       )}
-
-      <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        {number('Brush scale', 'brushScale', { min: 0.5, max: 4, step: 0.1 })}
-        <FormControl sx={{ flex: 1 }}>
-          <InputLabel id="brush-field-label" sx={{ fontFamily: 'Inter, sans-serif' }}>
-            Field
-          </InputLabel>
-          <Select
-            labelId="brush-field-label"
-            value={options.field}
-            label="Field"
-            size="small"
-            onChange={(e) => update('field', e.target.value)}
-            MenuProps={MENU_PROPS}
-            sx={SELECT_SX}
-          >
-            {BRUSH_FIELDS.map((name) => (
-              <MenuItem key={name} value={name}>
-                <Typography
-                  variant="caption"
-                  sx={{ textTransform: 'capitalize', fontFamily: 'Inter, sans-serif' }}
-                >
-                  {labelFor(name)}
-                </Typography>
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
     </>
   );
 };

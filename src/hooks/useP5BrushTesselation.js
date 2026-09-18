@@ -83,6 +83,7 @@ export const BRUSH_FIELDS = [
  * - `watercolorHatch` : watercolor body with dry hatching drawn over the top
  */
 export const TEXTURE_MODES = {
+  none: 'No texture',
   hatch: 'Hatch only',
   washHatch: 'Wash + hatch',
   mass: 'Mass (layered)',
@@ -432,6 +433,17 @@ export const drawBrushHexatile = (p5, centerX, centerY, radius, tileComponents, 
     brush.noStroke();
 
     const mode = options.textureMode;
+
+    // Flat facets: bypass p5.brush entirely rather than paint an untextured
+    // stroke, so this mode also renders fast enough to preview a pattern.
+    if (mode === 'none') {
+      p5.noStroke();
+      p5.fill(facetColor);
+      p5.beginShape();
+      points.forEach(([px, py]) => p5.vertex(px, py));
+      p5.endShape(p5.CLOSE);
+      continue;
+    }
 
     if (mode === 'wash' || mode === 'washHatch') {
       brush.wash(facetColor, options.washOpacity);
