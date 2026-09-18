@@ -168,6 +168,13 @@ export const resetBrushScale = () => {
 export const MAX_BRUSH_FACETS = 2200;
 
 /**
+ * Upper bound on hexagons drawn per render.
+ *
+ * Each hexagon is six facets, so this is the facet budget expressed in tiles.
+ */
+export const MAX_BRUSH_TILES = Math.ceil(MAX_BRUSH_FACETS / 6);
+
+/**
  * Smallest hexagon radius that keeps a canvas within the facet budget.
  *
  * A regular hexagon of radius r covers `3·√3/2·r²`, so the facet count is
@@ -623,7 +630,8 @@ export function useP5BrushTesselation({
 
     const options = { ...DEFAULT_BRUSH_OPTIONS, ...rawOptions, isPointyTop: pointyTop };
 
-    // Guard against a radius so small the tile count makes a repaint take minutes.
+    // First guess at a radius small enough to stay inside the facet budget. The
+    // real tile count is settled below, once the adjustments are known.
     options.radius = Math.max(options.radius, minBrushRadius(p5.width, p5.height));
 
     // Seeding p5 also seeds p5.brush, keeping renders reproducible.
@@ -640,23 +648,38 @@ export function useP5BrushTesselation({
     const offsetY = p5.height / 2;
     // Reuse the 2D renderer's adjustment math so the Adjust control behaves the
     // same in both renderers.
-    const adjust = {
-      getX: createAdjustmentFunction(xAdjust, options.radius, 'x'),
-      getY: createAdjustmentFunction(yAdjust, options.radius, 'y'),
+    const buildAdjust = (radius) => ({
+      getX: createAdjustmentFunction(xAdjust, radius, 'x'),
+      getY: createAdjustmentFunction(yAdjust, radius, 'y'),
       xNumeric: getNumericValue(xAdjust),
       yNumeric: getNumericValue(yAdjust),
       xBleed: adjustmentBleed(xAdjust),
       yBleed: adjustmentBleed(yAdjust)
-    };
+    });
 
-    const queue = computeHexCenters(p5.width, p5.height, options.radius, pointyTop, adjust)
+    // Grow the radius until the grid fits the facet budget. Truncating the queue
+    // instead would leave the bottom (or right) of the canvas unpainted, because
+    // `computeHexCenters` emits tiles in raster order.
+    let centers = computeHexCenters(p5.width, p5.height, options.radius, pointyTop, buildAdjust(options.radius));
+    for (let attempt = 0; attempt < 8 && centers.length > MAX_BRUSH_TILES; attempt++) {
+      // Tile count falls with the square of the radius, so this converges fast.
+      const nextRadius = Math.max(
+        options.radius + 1,
+        Math.ceil(options.radius * Math.sqrt(centers.length / MAX_BRUSH_TILES))
+      );
+      options.radius = nextRadius;
+      centers = computeHexCenters(p5.width, p5.height, nextRadius, pointyTop, buildAdjust(nextRadius));
+    }
+
+    const queue = centers
       .map(({ x, y, col, row }) => ({
         x: x - offsetX,
         y: y - offsetY,
         components: pattern[col % patternCols][row % patternRows]
       }))
-      // Adjustments can multiply the tile count, so cap it as a final guard.
-      .slice(0, Math.ceil(MAX_BRUSH_FACETS / 6));
+      // Last-resort guard: an adjustment pathological enough to defeat the loop
+      // above must still not turn a repaint into minutes of work.
+      .slice(0, MAX_BRUSH_TILES);
 
     const buffer = ensureBuffer(p5);
     buffer.background(theme.bg || '#ffffff');
