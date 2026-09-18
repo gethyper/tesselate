@@ -14,6 +14,8 @@ const BrushTesselateComponent = ({
   color_theme,
   isPointyTop = true,
   brushOptions,
+  tile_x_adjust = 0,
+  tile_y_adjust = 0,
   containerWidth = '100vw',
   containerHeight = '100vh',
   position = 'fixed',
@@ -32,11 +34,18 @@ const BrushTesselateComponent = ({
   const registerCanvasRef = useRef(registerCanvas);
   registerCanvasRef.current = registerCanvas;
 
+  // Adjustments arrive as freshly parsed objects on every parent render, so key
+  // the repaint effect on their contents instead of their identity. Otherwise the
+  // render-progress callback and the repaint it triggers loop forever.
+  const adjustKey = JSON.stringify([tile_x_adjust, tile_y_adjust]);
+
   const { setup, draw, invalidate, teardown, save, getCanvas, job } = useP5BrushTesselation({
     tile_pattern,
     color_theme,
     isPointyTop,
-    brushOptions
+    brushOptions,
+    tile_x_adjust,
+    tile_y_adjust
   });
 
   // Progress is reported from the render loop, so route it through the job ref
@@ -98,7 +107,8 @@ const BrushTesselateComponent = ({
         invalidateTimeoutRef.current = null;
       }
     };
-  }, [tile_pattern, color_theme, isPointyTop, brushOptions, invalidate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tile_pattern, color_theme, isPointyTop, brushOptions, adjustKey, invalidate]);
 
   return (
     <Box sx={{ width: containerWidth, height: containerHeight, position, top, left, zIndex, overflow: 'hidden' }}>

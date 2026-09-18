@@ -1,6 +1,8 @@
 import { useCallback, useRef } from 'react';
 import * as brush from 'p5.brush';
 
+import { getNumericValue, createAdjustmentFunction } from '../utils/tileAdjustments';
+
 /**
  * Experimental p5.brush tessellation renderer.
  *
@@ -191,41 +193,107 @@ export const minBrushRadius = (width, height) => {
  * @param {boolean} isPointyTop - Pointy-top (true) or flat-top (false)
  * @returns {Array<{x: number, y: number, col: number, row: number}>} Hexagon centers
  */
-export const computeHexCenters = (width, height, radius, isPointyTop) => {
+/**
+ * Largest absolute offset an adjustment effect can produce for a single tile.
+ *
+ * Used to widen the bleed margin so tiles pushed around by an effect still reach
+ * the canvas edges instead of leaving gaps.
+ *
+ * @param {Object|number} adjustment - Adjustment value or effect object
+ * @returns {number} Maximum absolute displacement in pixels
+ */
+export const adjustmentBleed = (adjustment) => {
+  if (!adjustment || typeof adjustment !== 'object' || adjustment.type === 'numeric') {
+    return 0;
+  }
+  const values = adjustment.values || [];
+  const magnitude = (index) => Math.abs(values[index] || 0);
+
+  switch (adjustment.type) {
+    case 'wave':
+    case 'sine':
+      return magnitude(0);
+    case 'random':
+      return magnitude(0);
+    case 'alt':
+      return Math.max(magnitude(0), magnitude(1));
+    case 'shiftx':
+    case 'shifty':
+      return magnitude(0);
+    default:
+      return 0;
+  }
+};
+
+/**
+ * Computes the centers of every hexagon needed to cover the canvas, with one tile
+ * of bleed on each edge so partial tiles reach the borders.
+ *
+ * Tile adjustments are applied here so the palette's Adjust control affects the
+ * brush renderer exactly as it does the 2D one. A numeric adjustment behaves as
+ * extra spacing (its offset grows linearly with the tile index), while effect
+ * adjustments displace individual tiles without changing spacing.
+ *
+ * @param {number} width - Canvas width
+ * @param {number} height - Canvas height
+ * @param {number} radius - Hexagon radius
+ * @param {boolean} isPointyTop - Pointy-top (true) or flat-top (false)
+ * @param {Object} [adjust] - `{ getX, getY, xNumeric, yNumeric, xBleed, yBleed }`
+ * @returns {Array<{x: number, y: number, col: number, row: number}>} Hexagon centers
+ */
+export const computeHexCenters = (width, height, radius, isPointyTop, adjust = null) => {
   const centers = [];
   const SQRT3 = Math.sqrt(3);
+
+  const getX = adjust?.getX || (() => 0);
+  const getY = adjust?.getY || (() => 0);
+  const xNumeric = adjust?.xNumeric || 0;
+  const yNumeric = adjust?.yNumeric || 0;
+  const xBleed = adjust?.xBleed || 0;
+  const yBleed = adjust?.yBleed || 0;
+
+  // A spacing of zero or less would need infinitely many tiles to cover the canvas.
+  const spacing = (base, bonus) => Math.max(base * 0.5, base + bonus);
 
   if (isPointyTop) {
     const hexWidth = SQRT3 * radius;
     const rowSpacing = 1.5 * radius;
-    const rows = Math.ceil(height / rowSpacing) + 2;
-    const cols = Math.ceil(width / hexWidth) + 2;
+    const colStep = spacing(hexWidth, xNumeric);
+    const rowStep = spacing(rowSpacing, yNumeric);
+    const colBleed = 1 + Math.ceil(xBleed / colStep);
+    const rowBleed = 1 + Math.ceil(yBleed / rowStep);
+    const rows = Math.ceil(height / rowStep) + rowBleed;
+    const cols = Math.ceil(width / colStep) + colBleed;
 
-    for (let row = -1; row < rows; row++) {
-      const rowOffset = (row % 2 === 0) ? 0 : hexWidth / 2;
-      for (let col = -1; col < cols; col++) {
+    for (let row = -rowBleed; row < rows; row++) {
+      const rowOffset = (Math.abs(row) % 2 === 0) ? 0 : hexWidth / 2;
+      for (let col = -colBleed; col < cols; col++) {
         centers.push({
-          x: col * hexWidth + rowOffset,
-          y: row * rowSpacing,
-          col: col + 1,
-          row: row + 1
+          x: col * hexWidth + rowOffset + getX(col, row),
+          y: row * rowSpacing + getY(col, row),
+          col: col + colBleed,
+          row: row + rowBleed
         });
       }
     }
   } else {
     const hexHeight = SQRT3 * radius;
     const colSpacing = 1.5 * radius;
-    const cols = Math.ceil(width / colSpacing) + 2;
-    const rows = Math.ceil(height / hexHeight) + 2;
+    const colStep = spacing(colSpacing, xNumeric);
+    const rowStep = spacing(hexHeight, yNumeric);
+    const colBleed = 1 + Math.ceil(xBleed / colStep);
+    const rowBleed = 1 + Math.ceil(yBleed / rowStep);
+    const cols = Math.ceil(width / colStep) + colBleed;
+    const rows = Math.ceil(height / rowStep) + rowBleed;
 
-    for (let col = -1; col < cols; col++) {
-      const colOffset = (col % 2 === 0) ? 0 : hexHeight / 2;
-      for (let row = -1; row < rows; row++) {
+    for (let col = -colBleed; col < cols; col++) {
+      const colOffset = (Math.abs(col) % 2 === 0) ? 0 : hexHeight / 2;
+      for (let row = -rowBleed; row < rows; row++) {
         centers.push({
-          x: col * colSpacing,
-          y: row * hexHeight + colOffset,
-          col: col + 1,
-          row: row + 1
+          x: col * colSpacing + getX(col, row),
+          y: row * hexHeight + colOffset + getY(col, row),
+          col: col + colBleed,
+          row: row + rowBleed
         });
       }
     }
@@ -453,11 +521,27 @@ export function useP5BrushTesselation({
   tile_pattern,
   color_theme,
   isPointyTop = true,
-  brushOptions = {}
+  brushOptions = {},
+  tile_x_adjust = 0,
+  tile_y_adjust = 0
 }) {
   // Latest values are read at draw time so redraws never use stale props.
-  const latest = useRef({ tile_pattern, color_theme, isPointyTop, brushOptions });
-  latest.current = { tile_pattern, color_theme, isPointyTop, brushOptions };
+  const latest = useRef({
+    tile_pattern,
+    color_theme,
+    isPointyTop,
+    brushOptions,
+    tile_x_adjust,
+    tile_y_adjust
+  });
+  latest.current = {
+    tile_pattern,
+    color_theme,
+    isPointyTop,
+    brushOptions,
+    tile_x_adjust,
+    tile_y_adjust
+  };
 
   // Progressive render state, deliberately outside React so frames stay cheap.
   const job = useRef({ dirty: true, queue: [], index: 0, options: null, onProgress: null });
@@ -516,7 +600,9 @@ export function useP5BrushTesselation({
       tile_pattern: pattern,
       color_theme: theme,
       isPointyTop: pointyTop,
-      brushOptions: rawOptions
+      brushOptions: rawOptions,
+      tile_x_adjust: xAdjust,
+      tile_y_adjust: yAdjust
     } = latest.current;
 
     if (!pattern || !pattern.length || !pattern[0] || !pattern[0].length || !theme) {
@@ -540,13 +626,25 @@ export function useP5BrushTesselation({
     // resolves transforms against the main sketch rather than the buffer.
     const offsetX = p5.width / 2;
     const offsetY = p5.height / 2;
-    const queue = computeHexCenters(p5.width, p5.height, options.radius, pointyTop).map(
-      ({ x, y, col, row }) => ({
+    // Reuse the 2D renderer's adjustment math so the Adjust control behaves the
+    // same in both renderers.
+    const adjust = {
+      getX: createAdjustmentFunction(xAdjust, options.radius, 'x'),
+      getY: createAdjustmentFunction(yAdjust, options.radius, 'y'),
+      xNumeric: getNumericValue(xAdjust),
+      yNumeric: getNumericValue(yAdjust),
+      xBleed: adjustmentBleed(xAdjust),
+      yBleed: adjustmentBleed(yAdjust)
+    };
+
+    const queue = computeHexCenters(p5.width, p5.height, options.radius, pointyTop, adjust)
+      .map(({ x, y, col, row }) => ({
         x: x - offsetX,
         y: y - offsetY,
         components: pattern[col % patternCols][row % patternRows]
-      })
-    );
+      }))
+      // Adjustments can multiply the tile count, so cap it as a final guard.
+      .slice(0, Math.ceil(MAX_BRUSH_FACETS / 6));
 
     const buffer = ensureBuffer(p5);
     buffer.background(theme.bg || '#ffffff');

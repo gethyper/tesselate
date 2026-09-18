@@ -22,14 +22,16 @@ import { initGA, trackPageView, trackTessellationEvent } from './utils/analytics
 function TessellationPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Get a fresh random featured showcase on every page load/refresh
-  const getInitialShowcase = (() => {
+  // Get a fresh random featured showcase on every page load/refresh. Memoized so
+  // it stays fixed for the life of the mount — re-rolling it on every render made
+  // the derived tile adjustments flip between showcases.
+  const getInitialShowcase = useMemo(() => {
     const featured = getFeaturedShowcase();
     const keys = Object.keys(featured);
     if (keys.length === 0) return null;
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
     return featured[randomKey];
-  })();
+  }, []);
 
   // State to track if user has manually interacted with controls
   const [userHasInteracted, setUserHasInteracted] = useState(false);
@@ -418,6 +420,8 @@ function TessellationPage() {
           color_theme={safeTheme}
           isPointyTop={safeDesign.tileShape === 'pointyTopHexatile'}
           brushOptions={brushEffectiveOptions}
+          tile_x_adjust={tileXAdjust}
+          tile_y_adjust={tileYAdjust}
           onProgress={setBrushProgress}
           registerCanvas={registerBrushCanvas}
           containerWidth="100vw"
