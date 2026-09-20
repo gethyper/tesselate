@@ -100,6 +100,32 @@ const TileDesigns= {
     ]
   },
 
+  // After the "Persian Triangles" tangle by Neil Burley: a triangular grid whose
+  // every triangle is subdivided into nine, with the three inverted sub-triangles
+  // filled dark.
+  //
+  // Flat-top hexatiles are used because their six wedges are equilateral triangles
+  // with horizontal edges, so the tessellation's wedges form exactly the tangle's
+  // up/down triangular grid. Each wedge is one sub-triangle, which makes the
+  // repeat two hexatiles wide by three tall. Facets alternate within a hexatile
+  // because a wedge is inverted relative to its containing grid triangle exactly
+  // when its neighbours are not.
+  'persianTrianglesTangle': {
+    'tileShape': "flatTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"},{c:"light"},{c:"dark"}],
+      ],
+      [
+        [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
+      ],
+    ]
+  },
+
   'snowCaps': {
     'tileShape': "pointyTopHexatile",
     'tilePattern': [
