@@ -128,65 +128,470 @@ const TileDesigns= {
 
   // After "Ribboned Stars": isolated medium hexagons on a dark ground, each
   // dark tile carrying one light wedge so the gaps read as stars.
+  // After "Venetian Triangles": every down-pointing triangle dark, the
+  // up-pointing ones alternating tone row by row.
+  // After "San Marco Lightning": vertical zigzag stripes cycling three tones.
+  // After "Spiral Flowers": dark pinwheel arms on a medium ground with light
+  // wedges as the flower centres.
+  // After "San Marco Stepped Boxes": tumbling blocks, one cube per tile.
+  // Pointy-top wedges are used because facets 3+4 form a flat top face.
+  // After "Camera Obscura": three-tone stripes sheared a step per row so they
+  // stack into chevron columns.
+  // After "Whirling Hexagons": paired wedges rotated two facets per tile so
+  // the tones appear to spin.
+  // After "Seljuk Brick": tumbling blocks with their faces rotated tile by
+  // tile, turning the stack into interlocking Y-shaped strapwork.
+  // After "Turkish Sky": light rhombi and offset medium rhombi on a dark ground.
+  // After "Palermo Meander": three-diamond half-stars stepping across the field.
+  // After "Egyptian Hexapod": light six-footed motifs punched out of dark.
+  // After "Shimmering Diamonds": light and dark rhombi meeting at their
+  // vertices on a medium ground.
+  // After "Persian Basket": solid dark hexagons with light and medium rhombi
+  // woven between them.
+  // Concentric rings inside each repeat, sheared so they spiral into the centre.
+  // A dithered tonal ramp, its dither offset across the row so the tone
+  // boundaries break up instead of banding.
   'ribbonedStars': {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"}]
       ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"}]
+      ]
     ]
   },
-
-  // After "Venetian Triangles": every down-pointing triangle dark, the
-  // up-pointing ones alternating tone row by row.
   'venetianTriangles': {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"medium"}],
+        [{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}]
       ],
       [
-        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}]
       ],
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"}]
+      ]
     ]
   },
-
-  // After "San Marco Lightning": vertical zigzag stripes cycling three tones.
   'sanMarcoLightning': {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
       ],
       [
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}]
       ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ]
     ]
   },
-
-  // After "Spiral Flowers": dark pinwheel arms on a medium ground with light
-  // wedges as the flower centres.
+  'turkishSky': {
+    'tileShape': "flatTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ]
+    ]
+  },
+  'seljukBrick': {
+    'tileShape': "flatTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}]
+      ]
+    ]
+  },
+  'palermoMeander': {
+    'tileShape': "flatTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}]
+      ]
+    ]
+  },
+  'egyptianHexapod': {
+    'tileShape': "flatTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ]
+    ]
+  },
+  'shimmeringDiamonds': {
+    'tileShape': "flatTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}]
+      ]
+    ]
+  },
+  'gradientAscent': {
+    'tileShape': "flatTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"accent"},{c:"dark"},{c:"dark"}],
+        [{c:"accent"},{c:"accent"},{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"accent"},{c:"accent"},{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"accent"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"accent"},{c:"accent"},{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"accent"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"accent"},{c:"dark"},{c:"dark"}],
+        [{c:"accent"},{c:"accent"},{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"}]
+      ]
+    ]
+  },
   'spiralFlowers': {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
       ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ]
     ]
   },
-
-  // After "San Marco Stepped Boxes": tumbling blocks, one cube per tile.
-  // Pointy-top wedges are used because facets 3+4 form a flat top face.
+  'cameraObscura': {
+    'tileShape': "pointyTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}]
+      ]
+    ]
+  },
+  'persianBasket': {
+    'tileShape': "flatTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}]
+      ]
+    ]
+  },
+  'whirlingHexagons': {
+    'tileShape': "flatTopHexatile",
+    'tilePattern': [
+      [
+        [{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"}]
+      ]
+    ]
+  },
   'sanMarcoSteppedBoxes': {
     'tileShape': "pointyTopHexatile",
     'tilePattern': [
@@ -195,157 +600,6 @@ const TileDesigns= {
       ],
     ]
   },
-
-  // After "Camera Obscura": three-tone stripes sheared a step per row so they
-  // stack into chevron columns.
-  'cameraObscura': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"},{c:"light"}],
-      ],
-      [
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"dark"}],
-        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"light"}],
-      ],
-    ]
-  },
-
-  // After "Whirling Hexagons": paired wedges rotated two facets per tile so
-  // the tones appear to spin.
-  'whirlingHexagons': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-      ],
-    ]
-  },
-
-  // After "Seljuk Brick": tumbling blocks with their faces rotated tile by
-  // tile, turning the stack into interlocking Y-shaped strapwork.
-  'seljukBrick': {
-    'tileShape': "pointyTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
-      ],
-      [
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-      ],
-    ]
-  },
-
-  // After "Turkish Sky": light rhombi and offset medium rhombi on a dark ground.
-  'turkishSky': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-      ],
-    ]
-  },
-
-  // After "Palermo Meander": three-diamond half-stars stepping across the field.
-  'palermoMeander': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"dark"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"}],
-      ],
-      [
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-      ],
-    ]
-  },
-
-  // After "Egyptian Hexapod": light six-footed motifs punched out of dark.
-  'egyptianHexapod': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}],
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}],
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-      ],
-      [
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}],
-      ],
-      [
-        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-      ],
-    ]
-  },
-
-  // After "Shimmering Diamonds": light and dark rhombi meeting at their
-  // vertices on a medium ground.
-  'shimmeringDiamonds': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
-      ],
-    ]
-  },
-
-  // After "Persian Basket": solid dark hexagons with light and medium rhombi
-  // woven between them.
-  'persianBasket': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-      ],
-      [
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"medium"}],
-      ],
-    ]
-  },
-
-  // Concentric rings inside each repeat, sheared so they spiral into the centre.
   'wormhole': {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
@@ -372,22 +626,6 @@ const TileDesigns= {
         [{c:"accent"},{c:"light"},{c:"medium"},{c:"accent"},{c:"accent"},{c:"light"}],
         [{c:"dark"},{c:"accent"},{c:"light"},{c:"light"},{c:"accent"},{c:"dark"}],
         [{c:"dark"},{c:"accent"},{c:"accent"},{c:"dark"},{c:"medium"},{c:"medium"}],
-      ],
-    ]
-  },
-
-  // A dithered tonal ramp, its dither offset across the row so the tone
-  // boundaries break up instead of banding.
-  'gradientAscent': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
-      [
-        [{c:"light"},{c:"light"},{c:"light"},{c:"accent"},{c:"accent"},{c:"accent"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-      ],
-      [
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"accent"},{c:"accent"},{c:"accent"},{c:"dark"},{c:"dark"},{c:"dark"}],
       ],
     ]
   },
