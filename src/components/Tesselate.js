@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useDeferredValue, memo, useMemo } from 'react
 import { Box } from '@mui/material';
 import p5 from 'p5';
 import { useP5Tesselation } from '../hooks/useP5Tesselation';
+import disposeP5Instance from '../utils/disposeP5Instance';
 
 const TesselateComponent = ({
   tile_shape,
@@ -83,7 +84,7 @@ const TesselateComponent = ({
     return () => {
       console.log(`🗑️ [COMPONENT ${currentComponentId}] CLEANING UP P5 INSTANCE`);
       if (p5InstanceRef.current) {
-        p5InstanceRef.current.remove();
+        disposeP5Instance(p5InstanceRef.current);
         p5InstanceRef.current = null;
       }
     };

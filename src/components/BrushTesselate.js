@@ -2,6 +2,7 @@ import React, { useEffect, useRef, memo } from 'react';
 import { Box } from '@mui/material';
 import p5 from 'p5';
 import { useP5BrushTesselation } from '../hooks/useP5BrushTesselation';
+import disposeP5Instance from '../utils/disposeP5Instance';
 
 /**
  * Mounts a WEBGL p5 sketch that renders a p5.brush-textured tessellation.
@@ -84,7 +85,7 @@ const BrushTesselateComponent = ({
       }
       registerSaveRef.current?.(null);
       registerCanvasRef.current?.(null);
-      instance.remove();
+      disposeP5Instance(instance);
       teardown();
       p5InstanceRef.current = null;
     };

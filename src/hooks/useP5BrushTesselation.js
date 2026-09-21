@@ -609,6 +609,19 @@ export function useP5BrushTesselation({
     }
     existing?.remove();
     const buffer = p5.createGraphics(p5.width, p5.height, p5.WEBGL);
+    // p5 2.x appends an offscreen graphics canvas to a <main> element of its
+    // own, because the buffer's inner sketch has no parent node. It marks that
+    // canvas hidden, but the end of every sketch's setup clears the flag again
+    // and restores visibility, which leaves the buffer stacked on top of the
+    // real canvas. Hiding it with `display` survives that.
+    // p5 2.x appends an offscreen graphics canvas to a <main> element of its
+    // own, because the buffer's inner sketch has no parent node. p5 then resets
+    // any visibility or display style we set on it, so the buffer ends up
+    // stacked on top of the real canvas and hides it. Detaching the element is
+    // the only durable fix; WebGL rendering into it works fine offscreen.
+    if (buffer.canvas && buffer.canvas.parentNode) {
+      buffer.canvas.parentNode.removeChild(buffer.canvas);
+    }
     buffer.angleMode(p5.DEGREES);
     bufferRef.current = buffer;
     return buffer;
