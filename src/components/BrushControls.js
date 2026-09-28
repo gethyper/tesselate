@@ -22,6 +22,7 @@ import {
   BRUSH_FIELDS,
   TEXTURE_MODES,
   HATCH_ANGLE_MODES,
+  OUTLINE_MODES,
   BLEED_DIRECTIONS,
   isWatercolorMode
 } from '../hooks/useP5BrushTesselation';
@@ -194,6 +195,7 @@ const BrushControls = ({
 
           {options.outline && (
             <>
+              {selectRow('Outline edges', 'outlineMode', Object.entries(OUTLINE_MODES))}
               {selectRow('Outline brush', 'outlineBrush', BRUSH_TIP_OPTIONS)}
               {selectRow('Outline color', 'outlineColorKey', COLOR_KEYS.map((k) => [k, k]))}
               {sliderRow('Outline weight', 'outlineWeight', 0.2, 4, 0.1)}

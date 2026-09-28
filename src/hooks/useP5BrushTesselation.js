@@ -109,6 +109,12 @@ export const HATCH_ANGLE_MODES = {
   random: 'Random'
 };
 
+/** How outlines choose which facet edges to stroke. */
+export const OUTLINE_MODES = {
+  motif: 'Trace motif only',
+  all: 'Every facet'
+};
+
 export const DEFAULT_BRUSH_OPTIONS = Object.freeze({
   radius: 110,
   textureMode: 'washHatch',
@@ -129,6 +135,7 @@ export const DEFAULT_BRUSH_OPTIONS = Object.freeze({
   fillBorderStrength: 0.45,
   fillScatter: true,
   outline: true,
+  outlineMode: 'motif',
   outlineBrush: 'HB',
   outlineWeight: 1,
   outlineColorKey: 'dark',
@@ -357,6 +364,49 @@ export const hexVertices = (centerX, centerY, radius, isPointyTop) => {
 };
 
 /**
+ * Returns the grid coordinates of the hexagon sharing facet `facet`'s outer edge.
+ *
+ * Facet `i` spans vertices `i` and `i+1`, so its outer edge points at angle
+ * `(i + 0.5) * 60°` from the center (plus the orientation's start angle). These
+ * offsets are that direction expressed in the staggered `col`/`row` indexing
+ * `computeHexCenters` emits, where every other column (flat-top) or row
+ * (pointy-top) is shifted by half a tile.
+ *
+ * The neighbour meets this facet with its own facet `(facet + 3) % 6`.
+ *
+ * @param {number} col - Column index
+ * @param {number} row - Row index
+ * @param {number} facet - Facet index 0-5
+ * @param {boolean} isPointyTop - Pointy-top (true) or flat-top (false)
+ * @returns {Array<number>} `[col, row]` of the neighbouring hexagon
+ */
+export const hexNeighbor = (col, row, facet, isPointyTop) => {
+  if (isPointyTop) {
+    // Odd rows sit half a hex to the right, so the diagonal steps that cross a
+    // row boundary land on a different column depending on that offset.
+    const odd = Math.abs(row) % 2 === 1 ? 1 : 0;
+    switch (facet) {
+      case 0: return [col + odd, row + 1];
+      case 1: return [col - 1 + odd, row + 1];
+      case 2: return [col - 1, row];
+      case 3: return [col - 1 + odd, row - 1];
+      case 4: return [col + odd, row - 1];
+      default: return [col + 1, row];
+    }
+  }
+
+  const odd = Math.abs(col) % 2 === 1 ? 1 : 0;
+  switch (facet) {
+    case 0: return [col + 1, row + odd];
+    case 1: return [col, row + 1];
+    case 2: return [col - 1, row + odd];
+    case 3: return [col - 1, row - 1 + odd];
+    case 4: return [col, row - 1];
+    default: return [col + 1, row - 1 + odd];
+  }
+};
+
+/**
  * Resolves the hatch angle for a given facet.
  *
  * @param {Object} p5 - p5 instance (used for seeded randomness)
@@ -444,9 +494,40 @@ const autoHatchColor = (facetColor, colorTheme) => {
  * @param {Object} colorTheme - Color theme object
  * @param {Object} options - Brush render options (see DEFAULT_BRUSH_OPTIONS)
  */
-export const drawBrushHexatile = (p5, centerX, centerY, radius, tileComponents, colorTheme, options) => {
+export const drawBrushHexatile = (p5, centerX, centerY, radius, tileComponents, colorTheme, options, neighborTones = null) => {
   const isPointyTop = options.isPointyTop;
   const vertices = hexVertices(centerX, centerY, radius, isPointyTop);
+
+  const toneAt = (i) => {
+    const c = tileComponents[i % tileComponents.length] || { c: 'light' };
+    return c.c || c.color || 'light';
+  };
+
+  // Motif mode traces only the edges where the design actually changes tone, so
+  // outlines read as the pattern's own contours instead of a wireframe over every
+  // facet. Each edge is claimed by exactly one facet of one hexagon: the inner
+  // spoke to vertex `i` by facet `i`, and an outer edge by whichever side holds
+  // facets 0-2, so no boundary is struck twice and over-darkened.
+  //
+  // `none` is excluded because it deliberately bypasses p5.brush for speed;
+  // stroking its edges would reintroduce the cost it exists to avoid.
+  const motifOutline = options.outline
+    && options.outlineMode !== 'all'
+    && options.textureMode !== 'none';
+  const strokeEdges = [];
+  if (motifOutline) {
+    for (let i = 0; i < 6; i++) {
+      const tone = toneAt(i);
+      if (tone !== toneAt((i + 5) % 6)) {
+        strokeEdges.push([centerX, centerY, vertices[i][0], vertices[i][1]]);
+      }
+      if (i < 3 && neighborTones && tone !== neighborTones[i]) {
+        const [x1, y1] = vertices[i];
+        const [x2, y2] = vertices[(i + 1) % 6];
+        strokeEdges.push([x1, y1, x2, y2]);
+      }
+    }
+  }
 
   for (let i = 0; i < 6; i++) {
     const component = tileComponents[i % tileComponents.length] || { c: 'light' };
@@ -521,12 +602,25 @@ export const drawBrushHexatile = (p5, centerX, centerY, radius, tileComponents, 
       });
     }
 
-    if (options.outline) {
+    if (options.outline && !motifOutline) {
       const outlineColor = colorTheme[options.outlineColorKey] || colorTheme.dark;
       brush.set(options.outlineBrush, outlineColor, options.outlineWeight);
     }
 
     brush.polygon(points);
+  }
+
+  // Drawn after every facet so the traced contour sits on top of the fills
+  // rather than being partly buried by the next facet painted over it.
+  if (strokeEdges.length > 0) {
+    brush.noFill();
+    brush.noWash();
+    brush.noHatch();
+    brush.noMass();
+    const outlineColor = colorTheme[options.outlineColorKey] || colorTheme.dark;
+    brush.set(options.outlineBrush, outlineColor, options.outlineWeight);
+    strokeEdges.forEach(([x1, y1, x2, y2]) => brush.line(x1, y1, x2, y2));
+    brush.noStroke();
   }
 };
 
@@ -708,13 +802,24 @@ export function useP5BrushTesselation({
       centers = computeHexCenters(p5.width, p5.height, nextRadius, pointyTop, buildAdjust(nextRadius));
     }
 
+    const componentsAt = (col, row) =>
+      pattern[wrapIndex(col, patternCols)][wrapIndex(row, patternRows)];
+
     const queue = centers
       .map(({ x, y, col, row }) => ({
         x: x - offsetX,
         y: y - offsetY,
         // Tiles in the bleed ring have negative indices, so wrap into range the
         // way the 2D renderer's pattern repeats rather than with a bare `%`.
-        components: pattern[wrapIndex(col, patternCols)][wrapIndex(row, patternRows)]
+        components: componentsAt(col, row),
+        // Tone each facet meets across its outer edge, so the renderer can tell a
+        // motif boundary from an edge that merely divides two same-tone facets.
+        neighborTones: [0, 1, 2].map((facet) => {
+          const [nc, nr] = hexNeighbor(col, row, facet, pointyTop);
+          const opposite = componentsAt(nc, nr);
+          const c = opposite[(facet + 3) % opposite.length] || {};
+          return c.c || c.color || 'light';
+        })
       }))
       // Last-resort guard: an adjustment pathological enough to defeat the loop
       // above must still not turn a repaint into minutes of work.
@@ -761,7 +866,7 @@ export function useP5BrushTesselation({
       const started = performance.now();
       do {
         const tile = queue[state.index];
-        drawBrushHexatile(buffer, tile.x, tile.y, options.radius, tile.components, theme, options);
+        drawBrushHexatile(buffer, tile.x, tile.y, options.radius, tile.components, theme, options, tile.neighborTones);
         state.index += 1;
       } while (state.index < queue.length && performance.now() - started < FRAME_BUDGET_MS);
 

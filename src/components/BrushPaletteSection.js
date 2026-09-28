@@ -16,6 +16,7 @@ import {
   BRUSH_FIELDS,
   TEXTURE_MODES,
   HATCH_ANGLE_MODES,
+  OUTLINE_MODES,
   BLEED_DIRECTIONS,
   isWatercolorMode
 } from '../hooks/useP5BrushTesselation';
@@ -252,6 +253,13 @@ const BrushPaletteSection = ({ options, onChange, progress = 1 }) => {
         )}
 
         {toggle('Textured outlines', 'outline')}
+
+        {options.outline && select(
+          'brush-outline-mode-label',
+          'Outline edges',
+          'outlineMode',
+          Object.entries(OUTLINE_MODES)
+        )}
 
         {options.outline && (
           <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
