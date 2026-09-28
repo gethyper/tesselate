@@ -155,34 +155,130 @@ const TileDesigns= {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"}],
         [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"}]
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}]
+      ],
+      [
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}]
       ],
       [
         [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"}]
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}]
       ],
       [
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}]
-      ],
-      [
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
         [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"}]
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
       ],
       [
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
         [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"}]
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}]
+      ],
+      [
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}]
       ]
     ]
   },
@@ -252,63 +348,13 @@ const TileDesigns= {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"medium"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
         [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"}]
       ],
       [
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
         [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
       ]
     ]
@@ -338,28 +384,14 @@ const TileDesigns= {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"}]
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"}]
-      ],
-      [
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}]
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
       ]
     ]
   },
@@ -367,22 +399,130 @@ const TileDesigns= {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
         [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"light"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
         [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}]
+      ],
+      [
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}]
+      ],
+      [
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}]
       ]
     ]
   },
@@ -425,129 +565,129 @@ const TileDesigns= {
     'tilePattern': [
       [
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}]
       ],
       [
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}]
       ],
       [
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}]
       ],
       [
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
+        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"dark"}],
         [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}]
       ]
     ]
   },
@@ -563,24 +703,130 @@ const TileDesigns= {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"}]
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"}]
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
       ],
       [
-        [{c:"light"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"dark"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}]
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
       ],
       [
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"}]
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
       ]
     ]
   },
@@ -588,16 +834,50 @@ const TileDesigns= {
     'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"}]
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"},{c:"light"}]
+      ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"},{c:"light"},{c:"medium"}]
       ]
     ]
   },
   'sanMarcoSteppedBoxes': {
-    'tileShape': "pointyTopHexatile",
+    'tileShape': "flatTopHexatile",
     'tilePattern': [
       [
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
       ],
+      [
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+      ],
+      [
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"medium"}],
+        [{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+      ],
+      [
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
+        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
+        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}]
+      ],
+      [
+        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
+        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"medium"}],
+        [{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+      ]
     ]
   },
   'wormhole': {
