@@ -710,11 +710,11 @@ const TessellationControls = ({
 
             {/* Adjust Tiles Selector - 45% width */}
             <FormControl sx={{ flex: '0 0 45%' }}>
-              <InputLabel id="adjust-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Adjust</InputLabel>
+              <InputLabel id="adjust-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Distort</InputLabel>
               <Select
                 labelId="adjust-label"
                 value={getCurrentAdjustOption()}
-                label="Adjust"
+                label="Distort"
                 size="small"
                 onChange={(e) => {
                   const selectedOption = adjustOptions.find(opt => opt.value === e.target.value);
@@ -1113,7 +1113,7 @@ const TessellationControls = ({
                     {(tileXAdjust.raw && tileXAdjust.raw !== '0') && (
                       <Box>
                         <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
-                          X Adjust
+                          X Distort
                         </Typography>
                         <Typography variant="body2" sx={{ fontFamily: 'Inter, sans-serif' }}>
                           {tileXAdjust.raw}
@@ -1123,7 +1123,7 @@ const TessellationControls = ({
                     {(tileYAdjust.raw && tileYAdjust.raw !== '0') && (
                       <Box>
                         <Typography variant="caption" sx={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
-                          Y Adjust
+                          Y Distort
                         </Typography>
                         <Typography variant="body2" sx={{ fontFamily: 'Inter, sans-serif' }}>
                           {tileYAdjust.raw}

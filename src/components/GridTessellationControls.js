@@ -713,11 +713,11 @@ const SquareTessellationControls = ({
           <Box sx={{ display: 'flex', gap: '2%', mb: 2 }}>
             {/* Adjust Tiles Selector */}
             <FormControl sx={{ flex: '0 0 60%' }}>
-              <InputLabel id="adjust-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Adjust</InputLabel>
+              <InputLabel id="adjust-label" sx={{ fontFamily: 'Inter, sans-serif' }}>Distort</InputLabel>
               <Select
                 labelId="adjust-label"
                 value={getCurrentAdjustOption()}
-                label="Adjust"
+                label="Distort"
                 size="small"
                 onChange={(e) => {
                   const selectedOption = adjustOptions.find(opt => opt.value === e.target.value);
