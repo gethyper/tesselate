@@ -154,210 +154,98 @@ const TileDesigns= {
   // A dithered tonal ramp, its dither offset across the row so the tone
   // boundaries break up instead of banding.
   'ribbonedStars': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
+    tileShape: "flatTopHexatile",
+    tilePattern: [
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }]
       ],
       [
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}]
-      ],
-      [
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}]
-      ],
-      [
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}]
-      ],
-      [
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}]
-      ],
-      [
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}]
-      ],
-      [
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"medium"},{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }]
       ]
     ]
   },
   'venetianTriangles': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
+    tileShape: "flatTopHexatile",
+    tilePattern: [
       [
-        [{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"medium"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"dark"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}]
-      ],
-      [
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"medium"}]
-      ],
-      [
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"}],
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"dark"}],
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"light"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }]
       ]
     ]
   },
   'sanMarcoLightning': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
+    tileShape: "flatTopHexatile",
+    tilePattern: [
       [
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "light" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }]
       ],
       [
-        [{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"}]
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "medium" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "dark" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"light"}]
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "dark" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "light" }, { c: "light" }, { c: "dark" }, { c: "dark" }, { c: "dark" }]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"},{c:"dark"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "dark" }, { c: "dark" }, { c: "dark" }]
+      ],
+      [
+        [{ c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "dark" }, { c: "dark" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
+      ],
+      [
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "light" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "dark" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
       ]
     ]
   },
   'turkishSky': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
+    tileShape: "flatTopHexatile",
+    tilePattern: [
       [
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }]
       ],
       [
-        [{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"},{c:"medium"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }]
+      ],
+      [
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }]
+      ],
+      [
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }]
       ]
     ]
   },
@@ -392,161 +280,103 @@ const TileDesigns= {
   },
 
   'palermoMeander': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
+    tileShape: "flatTopHexatile",
+    tilePattern: [
       [
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "dark" }, { c: "dark" }]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}]
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "dark" }, { c: "dark" }]
       ]
     ]
   },
   'egyptianHexapod': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
+    tileShape: "flatTopHexatile",
+    tilePattern: [
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}]
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }]
       ],
       [
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}]
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "medium" }]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "medium" }]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }]
       ],
       [
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}]
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}]
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }]
       ],
       [
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}]
-      ],
-      [
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}]
-      ],
-      [
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
-      ],
-      [
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}]
-      ],
-      [
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"light"},{c:"medium"}],
-        [{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"light"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"light"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }]
       ]
     ]
   },
   'shimmeringDiamonds': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
+    tileShape: "flatTopHexatile",
+    tilePattern: [
       [
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"dark"},{c:"dark"}],
-        [{c:"light"},{c:"light"},{c:"medium"},{c:"medium"},{c:"light"},{c:"light"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
+      ],
+      [
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }]
+      ],
+      [
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
+      ],
+      [
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
+      ],
+      [
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
       ]
     ]
   },
@@ -857,37 +687,55 @@ const TileDesigns= {
     ]
   },
   'sanMarcoSteppedBoxes': {
-    'tileShape': "flatTopHexatile",
-    'tilePattern': [
+    tileShape: "flatTopHexatile",
+    tilePattern: [
       [
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "light" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
       ],
       [
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}],
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "light" }, { c: "light" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
       ],
       [
-        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"medium"}],
-        [{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "dark" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "light" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }]
       ],
       [
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"light"},{c:"light"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}]
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "light" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "light" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }]
       ],
       [
-        [{c:"light"},{c:"dark"},{c:"dark"},{c:"medium"},{c:"medium"},{c:"light"}],
-        [{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],
-        [{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"},{c:"medium"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "light" }, { c: "light" }, { c: "dark" }, { c: "dark" }, { c: "light" }, { c: "light" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }]
       ],
       [
-        [{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],
-        [{c:"dark"},{c:"light"},{c:"medium"},{c:"dark"},{c:"light"},{c:"medium"}],
-        [{c:"light"},{c:"dark"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
       ]
     ]
   },
