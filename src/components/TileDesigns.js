@@ -363,7 +363,32 @@ const TileDesigns= {
   },
   'seljukBrick': {
     'tileShape': "flatTopHexatile",
-    'tilePattern': [[[{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],[{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],[{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}]],[[{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],[{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}],[{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}]],[[{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"dark"},{c:"dark"}],[{c:"dark"},{c:"medium"},{c:"dark"},{c:"dark"},{c:"light"},{c:"dark"}],[{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"},{c:"light"}]]]
+    'tilePattern': [
+      [
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }]
+      ],
+      [
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }]
+      ],
+      [
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }, { c: "light" }]
+      ],
+      [
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }],
+        [{ c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }, { c: "medium" }],
+        [{ c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }, { c: "dark" }]
+      ]
+    ]
   },
 
   'palermoMeander': {
