@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ColorThemes from './ColorThemes';
-import { DRAFT_STORAGE_KEY } from './TileDesigns';
+import TileDesigns, { DRAFT_STORAGE_KEY } from './TileDesigns';
+
 import {
   RULE_PRESETS,
   TONES,
@@ -13,6 +14,30 @@ import {
   verifyPeriodic
 } from '../lib/hexLattice';
 import { computeHexCenters, hexVertices } from '../hooks/useP5BrushTesselation';
+
+/**
+ * Needlepoint plates the designs were drawn from, so a design can be corrected
+ * against its source rather than from memory. Designs invented for this app have
+ * no plate and simply show no reference.
+ */
+const PLATE_BY_DESIGN = {
+  ribbonedStars: '7099',
+  venetianTriangles: '7100',
+  sanMarcoLightning: '7101',
+  sanMarcoSteppedBoxes: '7103',
+  turkishSky: '7108',
+  palermoMeander: '7109',
+  egyptianHexapod: '7111',
+  shimmeringDiamonds: '7112'
+};
+
+/** Designs that can be loaded for correction, plate-backed ones listed first. */
+const LOADABLE_DESIGNS = Object.keys(TileDesigns)
+  .filter((name) => Array.isArray(TileDesigns[name]?.tilePattern))
+  .sort((a, b) => {
+    const plated = Number(Boolean(PLATE_BY_DESIGN[b])) - Number(Boolean(PLATE_BY_DESIGN[a]));
+    return plated || a.localeCompare(b);
+  });
 
 const PREVIEW_RADIUS = 26;
 const TONE_CYCLE = [...TONES];
@@ -81,6 +106,10 @@ const DesignBuilder = () => {
   const [ruleSource, setRuleSource] = useState(RULE_PRESETS[0].source);
   const [grid, setGrid] = useState(() => buildPattern(2, 2, () => 'light'));
   const [copied, setCopied] = useState(false);
+  const [loadedFrom, setLoadedFrom] = useState('');
+  const [showPlate, setShowPlate] = useState(true);
+  const [previewScale, setPreviewScale] = useState(PREVIEW_RADIUS);
+  const undoStack = useRef([]);
 
   const previewRef = useRef(null);
   const editorRef = useRef(null);
@@ -133,6 +162,33 @@ const DesignBuilder = () => {
     resize(preset.cols, preset.rows);
   }, [resize]);
 
+  /**
+   * Loads a shipped design into the painted grid so it can be corrected by hand
+   * against its plate. The facets are deep-copied because the grid is mutated
+   * in place while painting and `TileDesigns` is a live module-level object.
+   */
+  const loadDesign = useCallback((name) => {
+    const source = TileDesigns[name]?.tilePattern;
+    if (!Array.isArray(source) || !source.length) return;
+    undoStack.current = [];
+    setCols(source.length);
+    setRows(source[0].length);
+    setGrid(source.map((column) => column.map((facets) => facets.map((facet) => ({ c: facet.c })))));
+    setMode('paint');
+    setDesignName(name);
+    setLoadedFrom(name);
+  }, []);
+
+  /** Throws away every correction and reloads the shipped design. */
+  const revertDesign = useCallback(() => {
+    if (loadedFrom) loadDesign(loadedFrom);
+  }, [loadedFrom, loadDesign]);
+
+  const undo = useCallback(() => {
+    const previous = undoStack.current.pop();
+    if (previous) setGrid(previous);
+  }, []);
+
   // Repaint the tiled preview whenever the pattern or theme changes.
   useEffect(() => {
     const canvas = previewRef.current;
@@ -147,15 +203,15 @@ const DesignBuilder = () => {
     ctx.fillStyle = theme.bg || '#ffffff';
     ctx.fillRect(0, 0, width, height);
 
-    const centers = computeHexCenters(width, height, PREVIEW_RADIUS, false);
+    const centers = computeHexCenters(width, height, previewScale, false);
     centers.forEach(({ x, y, col, row }) => {
       const facets = pattern[mod(col, pattern.length)][mod(row, pattern[0].length)];
-      const vertices = hexVertices(x, y, PREVIEW_RADIUS, false);
+      const vertices = hexVertices(x, y, previewScale, false);
       for (let f = 0; f < 6; f++) {
         fillFacet(ctx, x, y, vertices, f, theme[facets[f].c] || '#888');
       }
     });
-  }, [pattern, theme]);
+  }, [pattern, theme, previewScale]);
 
   // Repaint the editable single-tile view. Drawn at the same geometry as the
   // preview so a facet is clicked where it actually appears in the tiling.
@@ -231,6 +287,8 @@ const DesignBuilder = () => {
     if (!target) return;
     const { col, row, f } = target;
     setGrid((previous) => {
+      undoStack.current.push(previous);
+      if (undoStack.current.length > 80) undoStack.current.shift();
       const next = previous.map((column) => column.map((facets) => facets.map((facet) => ({ ...facet }))));
       const current = next[col][row][f].c;
       next[col][row][f].c = cycle
@@ -290,6 +348,40 @@ const DesignBuilder = () => {
     <div style={styles.page}>
       <aside style={styles.panel}>
         <h1 style={styles.title}>Design builder</h1>
+
+        <section style={styles.section}>
+          <label style={styles.label}>Correct a design</label>
+          <select
+            value={loadedFrom}
+            onChange={(event) => loadDesign(event.target.value)}
+            style={styles.select}
+          >
+            <option value="">Load a shipped design…</option>
+            {LOADABLE_DESIGNS.map((name) => (
+              <option key={name} value={name}>
+                {PLATE_BY_DESIGN[name] ? `${name} — plate ${PLATE_BY_DESIGN[name]}` : name}
+              </option>
+            ))}
+          </select>
+          {loadedFrom && (
+            <div style={{ ...styles.row, marginTop: 7 }}>
+              <button onClick={undo} style={styles.smallButton}>Undo</button>
+              <button onClick={revertDesign} style={styles.smallButton}>Revert</button>
+              {PLATE_BY_DESIGN[loadedFrom] && (
+                <button
+                  onClick={() => setShowPlate((v) => !v)}
+                  style={{ ...styles.smallButton, ...(showPlate ? styles.toggleOn : {}) }}
+                >
+                  Plate
+                </button>
+              )}
+            </div>
+          )}
+          <p style={styles.hint}>
+            Loads the shipped facets so you can repaint the wrong ones against the
+            plate it was drawn from.
+          </p>
+        </section>
 
         <section style={styles.section}>
           <label style={styles.label}>Tile size</label>
@@ -420,8 +512,27 @@ const DesignBuilder = () => {
           />
         </div>
         <div style={styles.previewWrap}>
-          <div style={styles.paneLabel}>Tiled preview</div>
-          <canvas ref={previewRef} style={styles.canvas} />
+          <div style={styles.previewPane}>
+            <div style={styles.paneLabel}>
+              Tiled preview
+              <span style={styles.coords}>
+                <button onClick={() => setPreviewScale((v) => Math.max(6, v - 4))} style={styles.zoomButton}>−</button>
+                {previewScale}px
+                <button onClick={() => setPreviewScale((v) => Math.min(90, v + 4))} style={styles.zoomButton}>+</button>
+              </span>
+            </div>
+            <canvas ref={previewRef} style={styles.canvas} />
+          </div>
+          {showPlate && PLATE_BY_DESIGN[loadedFrom] && (
+            <div style={styles.platePane}>
+              <div style={styles.paneLabel}>Plate {PLATE_BY_DESIGN[loadedFrom]}</div>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/plates/cr_${PLATE_BY_DESIGN[loadedFrom]}.jpg`}
+                alt={`Needlepoint plate ${PLATE_BY_DESIGN[loadedFrom]}`}
+                style={styles.plateImage}
+              />
+            </div>
+          )}
         </div>
       </main>
     </div>
@@ -461,7 +572,12 @@ const styles = {
   input: { width: '100%', padding: 7, background: '#191919', color: '#ddd', border: '1px solid #333', borderRadius: 5, boxSizing: 'border-box', font: '12px ui-monospace, Menlo, monospace' },
   main: { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
   editorWrap: { flex: '0 0 46%', display: 'flex', flexDirection: 'column', borderBottom: '1px solid #262626', minHeight: 0 },
-  previewWrap: { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 },
+  previewWrap: { flex: 1, display: 'flex', minHeight: 0, minWidth: 0 },
+  previewPane: { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, minWidth: 0 },
+  platePane: { flex: '0 0 38%', display: 'flex', flexDirection: 'column', minHeight: 0, borderLeft: '1px solid #262626' },
+  plateImage: { flex: 1, minHeight: 0, width: '100%', objectFit: 'contain', background: '#0d0d0d' },
+  zoomButton: { width: 20, height: 20, marginInline: 5, border: '1px solid #333', borderRadius: 4, background: '#1c1c1c', color: '#bbb', cursor: 'pointer', fontSize: 12, lineHeight: 1, padding: 0 },
+  smallButton: { padding: '5px 11px', border: '1px solid #333', borderRadius: 5, background: '#1c1c1c', color: '#bbb', cursor: 'pointer', fontSize: 11 },
   paneLabel: { padding: '7px 12px', font: '600 10px/1 inherit', letterSpacing: '.08em', textTransform: 'uppercase', color: '#777', display: 'flex', justifyContent: 'space-between' },
   coords: { color: '#6a8', fontVariantNumeric: 'tabular-nums', textTransform: 'none', letterSpacing: 0 },
   canvas: { flex: 1, width: '100%', minHeight: 0, display: 'block' }
