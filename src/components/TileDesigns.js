@@ -1371,6 +1371,24 @@ const TileDesigns= {
   } 
 };
 
+/**
+ * Designs exported from the /builder route are stashed in localStorage so they
+ * can be previewed with real p5.brush texture without editing this file. A
+ * draft only ever shadows a built-in design if it is given the same name.
+ */
+export const DRAFT_STORAGE_KEY = 'tesselate.designDrafts';
+
+try {
+  const drafts = JSON.parse(window.localStorage.getItem(DRAFT_STORAGE_KEY) || '{}');
+  Object.entries(drafts).forEach(([name, design]) => {
+    if (design && Array.isArray(design.tilePattern)) {
+      TileDesigns[name] = design;
+    }
+  });
+} catch (error) {
+  // A corrupt or unavailable store should never stop the built-in designs loading.
+}
+
 export default TileDesigns; 
 
 

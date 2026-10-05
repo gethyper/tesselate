@@ -7,6 +7,7 @@ import TessellationControls from './components/TessellationControls';
 import GridTessellationControls from './components/GridTessellationControls';
 import ProgrammaticGridControls from './components/ProgrammaticGridControls';
 import Gallery from './components/Gallery';
+import DesignBuilder from './components/DesignBuilder';
 import BrushTesselate from './components/BrushTesselate';
 import BrushControls from './components/BrushControls';
 import { DEFAULT_BRUSH_OPTIONS, minBrushRadius } from './hooks/useP5BrushTesselation';
@@ -905,6 +906,7 @@ function App() {  // Initialize Google Analytics
         <Route path="/programmatic" element={<ProgrammaticGridTessellationPage />} />
         <Route path="/generative" element={<ProgrammaticGridTessellationPage />} />
         <Route path="/brush" element={<BrushTessellationPage />} />
+        <Route path="/builder" element={<DesignBuilder />} />
       </Routes>
     </HashRouter>
   );
