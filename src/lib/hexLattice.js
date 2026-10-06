@@ -134,13 +134,34 @@ export const toneFractions = (pattern) => {
 export const formatDesignLiteral = (name, pattern) => {
   const columns = pattern.map((column) => {
     const rows = column.map((facets) => {
-      const facetList = facets.map(({ c }) => `{c: "${c}"}`).join(', ');
+      const facetList = facets
+        .map(({ c, b }) => (b ? `{c: "${c}", b: "${b}"}` : `{c: "${c}"}`))
+        .join(', ');
       return `      [${facetList}]`;
     });
     return `    [\n${rows.join(',\n')}\n    ]`;
   });
   return `  '${name}': {\n    tileShape: "flatTopHexatile",\n    tilePattern: [\n${columns.join(',\n')}\n    ]\n  },`;
 };
+
+/**
+ * Edges of facet `f`, named as they are authored: `a` is the spoke out to vertex
+ * `f`, `b` the outer hexagon edge, `c` the spoke back from vertex `f + 1`.
+ *
+ * A facet's `c` edge is the same line as the next facet's `a`, so callers that
+ * stroke these must dedupe or the shared spoke is struck twice and reads darker
+ * than the ones around it.
+ *
+ * @param {string} border - "all", "a", "b", "c", or falsy for no border.
+ * @returns {Array<string>} the edge names to stroke.
+ */
+export const borderEdges = (border) => {
+  if (!border) return [];
+  return border === 'all' ? ['a', 'b', 'c'] : [border];
+};
+
+/** The order shift-clicking steps a facet's border through. */
+export const BORDER_CYCLE = [null, 'all', 'a', 'b', 'c'];
 
 /**
  * Compiles a user-written rule body into a tone function.

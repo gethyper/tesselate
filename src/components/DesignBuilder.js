@@ -3,8 +3,10 @@ import ColorThemes from './ColorThemes';
 import TileDesigns, { DRAFT_STORAGE_KEY } from './TileDesigns';
 
 import {
+  BORDER_CYCLE,
   RULE_PRESETS,
   TONES,
+  borderEdges,
   buildPattern,
   compileRule,
   facetCoords,
@@ -80,6 +82,33 @@ const fillFacet = (ctx, x, y, vertices, facet, color) => {
   ctx.fill();
 };
 
+/**
+ * Strokes the edges a facet's border asks for.
+ *
+ * A facet's `c` edge is the same line as the next facet's `a`, so a hexagon
+ * whose facets all carry `all` would stroke every spoke twice. Edges are keyed
+ * by their endpoints and skipped once drawn, which keeps a shared spoke the same
+ * weight as a lone one.
+ */
+const strokeBorder = (ctx, x, y, vertices, facet, border, drawn) => {
+  const a = vertices[facet];
+  const b = vertices[(facet + 1) % 6];
+  const segments = { a: [[x, y], a], b: [a, b], c: [b, [x, y]] };
+  borderEdges(border).forEach((edge) => {
+    const [from, to] = segments[edge];
+    const key = [from, to]
+      .map((p) => `${Math.round(p[0] * 2)},${Math.round(p[1] * 2)}`)
+      .sort()
+      .join('|');
+    if (drawn.has(key)) return;
+    drawn.add(key);
+    ctx.beginPath();
+    ctx.moveTo(from[0], from[1]);
+    ctx.lineTo(to[0], to[1]);
+    ctx.stroke();
+  });
+};
+
 /** True when `(px, py)` falls inside the triangle `(x, y) - a - b`. */
 const insideFacet = (px, py, x, y, a, b) => {
   const sign = (ax, ay, bx, by, cx, cy) => (ax - cx) * (by - cy) - (bx - cx) * (ay - cy);
@@ -104,7 +133,6 @@ const DesignBuilder = () => {
   const [rows, setRows] = useState(2);
   const [mode, setMode] = useState('paint');
   const [themeName, setThemeName] = useState('Basic Bee');
-  const [brushTone, setBrushTone] = useState('dark');
   const [designName, setDesignName] = useState('myDesign');
   const [ruleSource, setRuleSource] = useState(RULE_PRESETS[0].source);
   const [grid, setGrid] = useState(() => buildPattern(2, 2, () => 'light'));
@@ -112,6 +140,7 @@ const DesignBuilder = () => {
   const [loadedFrom, setLoadedFrom] = useState('');
   const [showPlate, setShowPlate] = useState(true);
   const [previewScale, setPreviewScale] = useState(PREVIEW_RADIUS);
+  const [borderTone, setBorderTone] = useState('bg');
   const undoStack = useRef([]);
 
   const previewRef = useRef(null);
@@ -214,7 +243,21 @@ const DesignBuilder = () => {
         fillFacet(ctx, x, y, vertices, f, theme[facets[f].c] || '#888');
       }
     });
-  }, [pattern, theme, previewScale]);
+
+    // Borders are stroked after every fill, so a facet drawn later cannot paint
+    // over an edge it shares with one drawn earlier.
+    ctx.strokeStyle = theme[borderTone] || '#222';
+    ctx.lineWidth = Math.max(1, previewScale / 14);
+    ctx.lineCap = 'round';
+    const drawn = new Set();
+    centers.forEach(({ x, y, col, row }) => {
+      const facets = pattern[mod(col, pattern.length)][mod(row, pattern[0].length)];
+      const vertices = hexVertices(x, y, previewScale, false);
+      for (let f = 0; f < 6; f++) {
+        if (facets[f].b) strokeBorder(ctx, x, y, vertices, f, facets[f].b, drawn);
+      }
+    });
+  }, [pattern, theme, previewScale, borderTone]);
 
   // Repaint the editable single-tile view. Drawn at the same geometry as the
   // preview so a facet is clicked where it actually appears in the tiling.
@@ -228,8 +271,7 @@ const DesignBuilder = () => {
     canvas.height = height * ratio;
     const ctx = canvas.getContext('2d');
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-    ctx.fillStyle = '#1b1b1b';
-    ctx.fillRect(0, 0, width, height);
+    ctx.clearRect(0, 0, width, height);
 
     const { radius, offsetX, offsetY } = editorLayout(width, height, pattern.length, pattern[0].length);
     const centers = computeHexCenters(width, height, radius, false);
@@ -245,7 +287,7 @@ const DesignBuilder = () => {
       }
       ctx.globalAlpha = 1;
       if (inTile) {
-        ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
         ctx.lineWidth = 1;
         for (let f = 0; f < 6; f++) {
           ctx.beginPath();
@@ -255,7 +297,25 @@ const DesignBuilder = () => {
         }
       }
     });
-  }, [pattern, theme]);
+
+    // Authored borders go over the faint facet guides, so an edge that carries a
+    // border is told apart from the spokes that merely divide the hexagon.
+    ctx.strokeStyle = theme[borderTone] || '#222';
+    ctx.lineWidth = Math.max(1.5, radius / 12);
+    ctx.lineCap = 'round';
+    const drawn = new Set();
+    centers.forEach(({ x: cx, y: cy, col, row }) => {
+      const x = cx + offsetX;
+      const y = cy + offsetY;
+      const facets = pattern[mod(col, pattern.length)][mod(row, pattern[0].length)];
+      const vertices = hexVertices(x, y, radius, false);
+      ctx.globalAlpha = col >= 0 && col < pattern.length && row >= 0 && row < pattern[0].length ? 1 : 0.22;
+      for (let f = 0; f < 6; f++) {
+        if (facets[f].b) strokeBorder(ctx, x, y, vertices, f, facets[f].b, drawn);
+      }
+      ctx.globalAlpha = 1;
+    });
+  }, [pattern, theme, borderTone]);
 
   /**
    * Finds the facet under the pointer, or null when the pointer is outside the
@@ -283,8 +343,11 @@ const DesignBuilder = () => {
     return null;
   }, [cols, rows]);
 
-  /** Steps the clicked facet to the next tone, or sets it straight to the active tone. */
-  const paintAt = useCallback((event, paintDirect) => {
+  /**
+   * Plain click steps the facet's tone; shift-click steps its border instead, so
+   * tone and edge are authored with the same gesture on the same target.
+   */
+  const paintAt = useCallback((event, editBorder) => {
     if (mode !== 'paint') return;
     const target = facetUnderCursor(event);
     if (!target) return;
@@ -293,14 +356,18 @@ const DesignBuilder = () => {
       undoStack.current.push(previous);
       if (undoStack.current.length > 80) undoStack.current.shift();
       const next = previous.map((column) => column.map((facets) => facets.map((facet) => ({ ...facet }))));
-      const current = next[col][row][f].c;
-      const step = TONE_CYCLE.indexOf(current);
-      next[col][row][f].c = paintDirect
-        ? brushTone
-        : TONE_CYCLE[(step + 1) % TONE_CYCLE.length];
+      const facet = next[col][row][f];
+      if (editBorder) {
+        const step = BORDER_CYCLE.indexOf(facet.b || null);
+        const border = BORDER_CYCLE[(step + 1) % BORDER_CYCLE.length];
+        if (border) facet.b = border;
+        else delete facet.b;
+      } else {
+        facet.c = TONE_CYCLE[(TONE_CYCLE.indexOf(facet.c) + 1) % TONE_CYCLE.length];
+      }
       return next;
     });
-  }, [mode, brushTone, facetUnderCursor]);
+  }, [mode, facetUnderCursor]);
 
   const literal = useMemo(() => (pattern ? formatDesignLiteral(designName || 'myDesign', pattern) : ''), [pattern, designName]);
   const fractions = useMemo(() => (pattern ? toneFractions(pattern) : {}), [pattern]);
@@ -347,19 +414,57 @@ const DesignBuilder = () => {
   }, [pattern, designName, themeName]);
 
   const [hover, setHover] = useState(null);
+  const accent = theme.dark || '#333';
 
   return (
     <div style={styles.page}>
+      {/* The tiling fills the window and the controls float over it, so the
+          pattern is read at size rather than through a letterboxed panel. */}
+      <canvas ref={previewRef} style={styles.previewCanvas} />
+
+      <div style={styles.leftStack}>
+        <section style={styles.card}>
+          <header style={styles.cardHead}>
+            <span>Tile {cols} &times; {rows}</span>
+            {hover && (
+              <span style={styles.coords}>
+                band {hover.band} · tc {hover.tc} · {hover.up ? 'up' : 'down'} · facet {hover.f}
+              </span>
+            )}
+          </header>
+          <canvas
+            ref={editorRef}
+            style={{ ...styles.editorCanvas, cursor: mode === 'paint' ? 'pointer' : 'default' }}
+            onClick={(event) => paintAt(event, event.shiftKey)}
+            onMouseMove={(event) => setHover(facetUnderCursor(event))}
+            onMouseLeave={() => setHover(null)}
+          />
+        </section>
+
+        {showPlate && PLATE_BY_DESIGN[loadedFrom] && (
+          <section style={styles.card}>
+            <header style={styles.cardHead}>Plate {PLATE_BY_DESIGN[loadedFrom]}</header>
+            <img
+              src={`${process.env.PUBLIC_URL}/images/plates/cr_${PLATE_BY_DESIGN[loadedFrom]}.jpg`}
+              alt={`Needlepoint plate ${PLATE_BY_DESIGN[loadedFrom]}`}
+              style={styles.plateImage}
+            />
+          </section>
+        )}
+      </div>
+
       <aside style={styles.panel}>
-        <h1 style={styles.title}>Design builder</h1>
+        <h1 style={styles.wordmark}>
+          <svg width="22" height="22" viewBox="0 0 24 24" style={styles.glyph}>
+            <polygon points="12,1 22,7 22,17 12,23 2,17 2,7" stroke="currentColor" strokeWidth="1" fill="none" />
+          </svg>
+          TESSELLATIONS
+        </h1>
+        <p style={styles.subtitle}>Pattern builder</p>
 
         <section style={styles.section}>
           <label style={styles.label}>Correct a design</label>
-          <select
-            value={loadedFrom}
-            onChange={(event) => loadDesign(event.target.value)}
-            style={styles.select}
-          >
+          <select value={loadedFrom} onChange={(event) => loadDesign(event.target.value)} style={styles.select}>
             <option value="">Load a shipped design…</option>
             {LOADABLE_DESIGNS.map((name) => (
               <option key={name} value={name}>
@@ -368,23 +473,19 @@ const DesignBuilder = () => {
             ))}
           </select>
           {loadedFrom && (
-            <div style={{ ...styles.row, marginTop: 7 }}>
-              <button onClick={undo} style={styles.smallButton}>Undo</button>
-              <button onClick={revertDesign} style={styles.smallButton}>Revert</button>
+            <div style={{ ...styles.row, marginTop: 8 }}>
+              <button onClick={undo} style={styles.chip}>Undo</button>
+              <button onClick={revertDesign} style={styles.chip}>Revert</button>
               {PLATE_BY_DESIGN[loadedFrom] && (
                 <button
                   onClick={() => setShowPlate((v) => !v)}
-                  style={{ ...styles.smallButton, ...(showPlate ? styles.toggleOn : {}) }}
+                  style={{ ...styles.chip, ...(showPlate ? { borderColor: accent, color: accent } : {}) }}
                 >
                   Plate
                 </button>
               )}
             </div>
           )}
-          <p style={styles.hint}>
-            Loads the shipped facets so you can repaint the wrong ones against the
-            plate it was drawn from.
-          </p>
         </section>
 
         <section style={styles.section}>
@@ -400,13 +501,30 @@ const DesignBuilder = () => {
         </section>
 
         <section style={styles.section}>
+          <label style={styles.label}>Preview</label>
+          <div style={styles.row}>
+            <div style={styles.stepper}>
+              <button onClick={() => setPreviewScale((v) => Math.max(6, v - 4))} style={styles.stepButton}>−</button>
+              <span style={styles.stepValue}>{previewScale}<small style={styles.stepLabel}>px</small></span>
+              <button onClick={() => setPreviewScale((v) => Math.min(90, v + 4))} style={styles.stepButton}>+</button>
+            </div>
+            <select value={borderTone} onChange={(e) => setBorderTone(e.target.value)} style={styles.inlineSelect}>
+              {['bg', ...TONES].map((tone) => <option key={tone} value={tone}>border: {tone}</option>)}
+            </select>
+          </div>
+        </section>
+
+        <section style={styles.section}>
           <label style={styles.label}>Mode</label>
           <div style={styles.row}>
             {['paint', 'rule'].map((m) => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                style={{ ...styles.toggle, ...(mode === m ? styles.toggleOn : {}) }}
+                style={{
+                  ...styles.toggle,
+                  ...(mode === m ? { background: accent, borderColor: accent, color: '#fff' } : {})
+                }}
               >
                 {m}
               </button>
@@ -416,22 +534,17 @@ const DesignBuilder = () => {
 
         {mode === 'paint' ? (
           <section style={styles.section}>
-            <label style={styles.label}>Tone</label>
-            <div style={styles.row}>
+            <label style={styles.label}>Tones</label>
+            <div style={styles.swatchRow}>
               {TONES.map((tone) => (
-                <button
-                  key={tone}
-                  onClick={() => setBrushTone(tone)}
-                  title={tone}
-                  style={{
-                    ...styles.swatch,
-                    background: theme[tone] || '#888',
-                    outline: brushTone === tone ? '2px solid #7ac' : '1px solid #444'
-                  }}
-                />
+                <span key={tone} style={{ ...styles.swatch, background: theme[tone] || '#888' }} title={tone} />
               ))}
             </div>
-            <p style={styles.hint}>Click a facet to step it light → medium → dark → accent. Shift-click paints the selected tone.</p>
+            <p style={styles.hint}>
+              Click a facet to step it light → medium → dark → accent. Shift-click
+              steps its border: all → a → b → c → none, where a and c are the
+              spokes and b the outer edge.
+            </p>
           </section>
         ) : (
           <section style={styles.section}>
@@ -450,9 +563,13 @@ const DesignBuilder = () => {
             {compiled.error && <p style={styles.error}>{compiled.error}</p>}
             {periodicity.map((issue) => <p key={issue} style={styles.error}>{issue}</p>)}
             {!compiled.error && periodicity.length === 0 && (
-              <p style={styles.ok}>Tile repeats cleanly at {cols} x {rows}.</p>
+              <p style={styles.ok}>Tile repeats cleanly at {cols} &times; {rows}.</p>
             )}
-            <button onClick={bakeRuleIntoGrid} disabled={!compiled.rule} style={styles.button}>
+            <button
+              onClick={bakeRuleIntoGrid}
+              disabled={!compiled.rule}
+              style={{ ...styles.button, background: accent }}
+            >
               Bake into grid and switch to paint
             </button>
           </section>
@@ -484,10 +601,10 @@ const DesignBuilder = () => {
             style={styles.input}
             placeholder="designName"
           />
-          <button onClick={copyLiteral} style={styles.button} disabled={!literal}>
+          <button onClick={copyLiteral} style={{ ...styles.button, background: accent }} disabled={!literal}>
             {copied ? 'Copied' : 'Copy for TileDesigns.js'}
           </button>
-          <button onClick={previewWithBrush} style={styles.button} disabled={!pattern}>
+          <button onClick={previewWithBrush} style={styles.buttonGhost} disabled={!pattern}>
             Preview with brush texture
           </button>
           <p style={styles.hint}>
@@ -496,49 +613,6 @@ const DesignBuilder = () => {
           </p>
         </section>
       </aside>
-
-      <main style={styles.main}>
-        <div style={styles.editorWrap}>
-          <div style={styles.paneLabel}>
-            Tile {cols} x {rows}
-            {hover && (
-              <span style={styles.coords}>
-                band {hover.band} · tc {hover.tc} · {hover.up ? 'up' : 'down'} · facet {hover.f}
-              </span>
-            )}
-          </div>
-          <canvas
-            ref={editorRef}
-            style={{ ...styles.canvas, cursor: mode === 'paint' ? 'pointer' : 'default' }}
-            onClick={(event) => paintAt(event, event.shiftKey)}
-            onMouseMove={(event) => setHover(facetUnderCursor(event))}
-            onMouseLeave={() => setHover(null)}
-          />
-        </div>
-        <div style={styles.previewWrap}>
-          <div style={styles.previewPane}>
-            <div style={styles.paneLabel}>
-              Tiled preview
-              <span style={styles.coords}>
-                <button onClick={() => setPreviewScale((v) => Math.max(6, v - 4))} style={styles.zoomButton}>−</button>
-                {previewScale}px
-                <button onClick={() => setPreviewScale((v) => Math.min(90, v + 4))} style={styles.zoomButton}>+</button>
-              </span>
-            </div>
-            <canvas ref={previewRef} style={styles.canvas} />
-          </div>
-          {showPlate && PLATE_BY_DESIGN[loadedFrom] && (
-            <div style={styles.platePane}>
-              <div style={styles.paneLabel}>Plate {PLATE_BY_DESIGN[loadedFrom]}</div>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/plates/cr_${PLATE_BY_DESIGN[loadedFrom]}.jpg`}
-                alt={`Needlepoint plate ${PLATE_BY_DESIGN[loadedFrom]}`}
-                style={styles.plateImage}
-              />
-            </div>
-          )}
-        </div>
-      </main>
     </div>
   );
 };
@@ -551,40 +625,234 @@ const Stepper = ({ label, value, onChange, step }) => (
   </div>
 );
 
+const FROST = 'linear-gradient(135deg, rgba(255,255,255,0.78), rgba(240,240,255,0.78))';
+const SHADOW = '0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14)';
+const INK = 'rgba(0,0,0,0.78)';
+const MUTED = 'rgba(0,0,0,0.5)';
+const LINE = 'rgba(0,0,0,0.23)';
+
 const styles = {
-  page: { display: 'flex', height: '100vh', background: '#111', color: '#eee', font: '13px/1.45 -apple-system, system-ui, sans-serif' },
-  panel: { width: 320, flex: '0 0 320px', padding: 18, overflowY: 'auto', borderRight: '1px solid #262626', boxSizing: 'border-box' },
-  title: { font: '600 12px/1 inherit', letterSpacing: '.08em', textTransform: 'uppercase', color: '#8a8', margin: '0 0 18px' },
-  section: { margin: '0 0 20px' },
-  label: { display: 'block', font: '600 10px/1 inherit', letterSpacing: '.08em', textTransform: 'uppercase', color: '#888', margin: '0 0 7px' },
-  row: { display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' },
-  hint: { margin: '7px 0 0', fontSize: 11, color: '#777' },
-  error: { margin: '7px 0 0', fontSize: 11, color: '#e08a7a' },
-  ok: { margin: '7px 0 0', fontSize: 11, color: '#8a8' },
-  stepper: { display: 'flex', alignItems: 'center', gap: 4, background: '#1c1c1c', borderRadius: 5, padding: 3 },
-  stepButton: { width: 24, height: 24, border: 0, borderRadius: 4, background: '#2a2a2a', color: '#ddd', cursor: 'pointer', fontSize: 14 },
-  stepValue: { minWidth: 44, textAlign: 'center', fontVariantNumeric: 'tabular-nums' },
-  stepLabel: { display: 'block', fontSize: 9, color: '#777', textTransform: 'uppercase', letterSpacing: '.06em' },
-  toggle: { flex: 1, padding: '7px 0', border: '1px solid #333', borderRadius: 5, background: '#1c1c1c', color: '#aaa', cursor: 'pointer', textTransform: 'capitalize' },
-  toggleOn: { background: '#2f3a33', border: '1px solid #4a6', color: '#cfe' },
-  swatch: { width: 34, height: 34, borderRadius: 5, border: 0, cursor: 'pointer', padding: 0 },
-  textarea: { width: '100%', minHeight: 210, background: '#191919', color: '#dfe', border: '1px solid #333', borderRadius: 5, padding: 9, font: '12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace', resize: 'vertical', boxSizing: 'border-box' },
-  button: { width: '100%', marginTop: 8, padding: '8px 0', border: '1px solid #3a4', borderRadius: 5, background: '#223', color: '#cfe', cursor: 'pointer' },
-  presetGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5 },
-  preset: { padding: '7px 4px', border: '1px solid #333', borderRadius: 5, background: '#1c1c1c', color: '#bbb', cursor: 'pointer', fontSize: 11 },
-  select: { width: '100%', padding: 7, background: '#191919', color: '#ddd', border: '1px solid #333', borderRadius: 5 },
-  input: { width: '100%', padding: 7, background: '#191919', color: '#ddd', border: '1px solid #333', borderRadius: 5, boxSizing: 'border-box', font: '12px ui-monospace, Menlo, monospace' },
-  main: { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
-  editorWrap: { flex: '0 0 46%', display: 'flex', flexDirection: 'column', borderBottom: '1px solid #262626', minHeight: 0 },
-  previewWrap: { flex: 1, display: 'flex', minHeight: 0, minWidth: 0 },
-  previewPane: { flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, minWidth: 0 },
-  platePane: { flex: '0 0 38%', display: 'flex', flexDirection: 'column', minHeight: 0, borderLeft: '1px solid #262626' },
-  plateImage: { flex: 1, minHeight: 0, width: '100%', objectFit: 'contain', background: '#0d0d0d' },
-  zoomButton: { width: 20, height: 20, marginInline: 5, border: '1px solid #333', borderRadius: 4, background: '#1c1c1c', color: '#bbb', cursor: 'pointer', fontSize: 12, lineHeight: 1, padding: 0 },
-  smallButton: { padding: '5px 11px', border: '1px solid #333', borderRadius: 5, background: '#1c1c1c', color: '#bbb', cursor: 'pointer', fontSize: 11 },
-  paneLabel: { padding: '7px 12px', font: '600 10px/1 inherit', letterSpacing: '.08em', textTransform: 'uppercase', color: '#777', display: 'flex', justifyContent: 'space-between' },
-  coords: { color: '#6a8', fontVariantNumeric: 'tabular-nums', textTransform: 'none', letterSpacing: 0 },
-  canvas: { flex: 1, width: '100%', minHeight: 0, display: 'block' }
+  page: {
+    position: 'relative',
+    height: '100vh',
+    overflow: 'hidden',
+    color: INK,
+    font: '13px/1.5 Inter, -apple-system, system-ui, sans-serif'
+  },
+  previewCanvas: { position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' },
+
+  leftStack: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    bottom: 16,
+    width: 340,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 12
+  },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    minHeight: 0,
+    borderRadius: 4,
+    overflow: 'hidden',
+    background: FROST,
+    backdropFilter: 'blur(10px)',
+    border: '1px solid white',
+    boxShadow: SHADOW
+  },
+  cardHead: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: 8,
+    padding: '9px 12px',
+    font: "500 10px/1 'Tourney', Inter, sans-serif",
+    letterSpacing: '.1em',
+    textTransform: 'uppercase',
+    color: MUTED
+  },
+  editorCanvas: { flex: 1, width: '100%', minHeight: 0, display: 'block' },
+  plateImage: { flex: 1, minHeight: 0, width: '100%', objectFit: 'contain' },
+  coords: { color: INK, fontVariantNumeric: 'tabular-nums', textTransform: 'none', letterSpacing: 0 },
+
+  panel: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    width: 310,
+    maxHeight: 'calc(100vh - 32px)',
+    overflowY: 'auto',
+    boxSizing: 'border-box',
+    padding: 16,
+    borderRadius: 4,
+    background: FROST,
+    backdropFilter: 'blur(10px)',
+    border: '1px solid white',
+    boxShadow: SHADOW
+  },
+  wordmark: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    margin: 0,
+    font: "500 20px/1 'Tourney', Inter, sans-serif",
+    letterSpacing: 1,
+    color: INK
+  },
+  glyph: { flex: '0 0 auto' },
+  subtitle: {
+    margin: '4px 0 18px 32px',
+    font: '500 10px/1 Inter, sans-serif',
+    letterSpacing: '.18em',
+    textTransform: 'uppercase',
+    color: MUTED
+  },
+
+  section: { margin: '0 0 18px' },
+  label: {
+    display: 'block',
+    font: '500 10px/1 Inter, sans-serif',
+    letterSpacing: '.12em',
+    textTransform: 'uppercase',
+    color: MUTED,
+    margin: '0 0 8px'
+  },
+  row: { display: 'flex', gap: 7, alignItems: 'center', flexWrap: 'wrap' },
+  hint: { margin: '8px 0 0', fontSize: 11, lineHeight: 1.5, color: MUTED },
+  error: { margin: '8px 0 0', fontSize: 11, color: '#a3321f' },
+  ok: { margin: '8px 0 0', fontSize: 11, color: '#1f6b3a' },
+
+  select: {
+    width: '100%',
+    padding: '9px 8px',
+    borderRadius: 4,
+    border: `1px solid ${LINE}`,
+    background: 'rgba(255,255,255,.72)',
+    color: INK,
+    font: '13px Inter, sans-serif'
+  },
+  inlineSelect: {
+    flex: 1,
+    padding: '7px 8px',
+    borderRadius: 4,
+    border: `1px solid ${LINE}`,
+    background: 'rgba(255,255,255,.72)',
+    color: INK,
+    font: '12px Inter, sans-serif'
+  },
+  input: {
+    width: '100%',
+    boxSizing: 'border-box',
+    padding: '9px 8px',
+    borderRadius: 4,
+    border: `1px solid ${LINE}`,
+    background: 'rgba(255,255,255,.72)',
+    color: INK,
+    font: '12px ui-monospace, SFMono-Regular, Menlo, monospace'
+  },
+  textarea: {
+    width: '100%',
+    minHeight: 190,
+    boxSizing: 'border-box',
+    padding: 9,
+    borderRadius: 4,
+    border: `1px solid ${LINE}`,
+    background: 'rgba(255,255,255,.72)',
+    color: INK,
+    font: '12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace',
+    resize: 'vertical'
+  },
+
+  stepper: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 4,
+    padding: 3,
+    borderRadius: 4,
+    border: `1px solid ${LINE}`,
+    background: 'rgba(255,255,255,.72)'
+  },
+  stepButton: {
+    width: 24,
+    height: 24,
+    border: 0,
+    borderRadius: 3,
+    background: 'rgba(0,0,0,.06)',
+    color: INK,
+    cursor: 'pointer',
+    fontSize: 14,
+    lineHeight: 1
+  },
+  stepValue: { minWidth: 42, textAlign: 'center', fontVariantNumeric: 'tabular-nums' },
+  stepLabel: {
+    display: 'block',
+    fontSize: 9,
+    color: MUTED,
+    textTransform: 'uppercase',
+    letterSpacing: '.08em'
+  },
+
+  toggle: {
+    flex: 1,
+    padding: '8px 0',
+    borderRadius: 4,
+    border: `1px solid ${LINE}`,
+    background: 'rgba(255,255,255,.72)',
+    color: INK,
+    cursor: 'pointer',
+    textTransform: 'capitalize',
+    font: '13px Inter, sans-serif'
+  },
+  chip: {
+    padding: '6px 12px',
+    borderRadius: 4,
+    border: `1px solid ${LINE}`,
+    background: 'rgba(255,255,255,.72)',
+    color: INK,
+    cursor: 'pointer',
+    fontSize: 12
+  },
+  swatchRow: { display: 'flex', gap: 0, borderRadius: 4, overflow: 'hidden', border: `1px solid ${LINE}` },
+  swatch: { flex: 1, height: 30 },
+
+  presetGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 },
+  preset: {
+    padding: '8px 4px',
+    borderRadius: 4,
+    border: `1px solid ${LINE}`,
+    background: 'rgba(255,255,255,.72)',
+    color: INK,
+    cursor: 'pointer',
+    fontSize: 11
+  },
+
+  button: {
+    width: '100%',
+    marginTop: 9,
+    padding: '10px 0',
+    border: 0,
+    borderRadius: 4,
+    color: '#fff',
+    cursor: 'pointer',
+    font: "500 12px/1 Inter, sans-serif",
+    letterSpacing: '.04em',
+    textTransform: 'uppercase'
+  },
+  buttonGhost: {
+    width: '100%',
+    marginTop: 7,
+    padding: '10px 0',
+    borderRadius: 4,
+    border: `1px solid ${LINE}`,
+    background: 'rgba(255,255,255,.72)',
+    color: INK,
+    cursor: 'pointer',
+    font: "500 12px/1 Inter, sans-serif",
+    letterSpacing: '.04em',
+    textTransform: 'uppercase'
+  }
 };
 
 export default DesignBuilder;

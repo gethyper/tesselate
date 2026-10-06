@@ -2,6 +2,17 @@ import { useCallback, useRef } from 'react';
 import * as brush from 'p5.brush';
 
 import { getNumericValue, createAdjustmentFunction } from '../utils/tileAdjustments';
+import { borderEdges } from '../lib/hexLattice';
+
+/**
+ * Identifies an edge by its endpoints regardless of which way round they were
+ * given, so the same line reached from either of the two facets that share it
+ * produces one key.
+ */
+const edgeKey = ([x1, y1, x2, y2]) => [
+  `${Math.round(x1 * 2)},${Math.round(y1 * 2)}`,
+  `${Math.round(x2 * 2)},${Math.round(y2 * 2)}`
+].sort().join('|');
 
 /**
  * Experimental p5.brush tessellation renderer.
@@ -526,6 +537,32 @@ export const drawBrushHexatile = (p5, centerX, centerY, radius, tileComponents, 
         const [x2, y2] = vertices[(i + 1) % 6];
         strokeEdges.push([x1, y1, x2, y2]);
       }
+    }
+  }
+
+  // Borders authored into the design are drawn whatever the outline setting is:
+  // they are part of the pattern rather than a way of viewing it, so turning
+  // motif outlines off must not erase them. Edges are deduped by endpoint
+  // because a facet's inward spoke is its neighbour's outward one, and striking
+  // a line twice reads darker than the lines beside it.
+  if (options.textureMode !== 'none') {
+    const seen = new Set(strokeEdges.map((e) => edgeKey(e)));
+    for (let i = 0; i < 6; i++) {
+      const component = tileComponents[i % tileComponents.length] || {};
+      const [x1, y1] = vertices[i];
+      const [x2, y2] = vertices[(i + 1) % 6];
+      const segments = {
+        a: [centerX, centerY, x1, y1],
+        b: [x1, y1, x2, y2],
+        c: [x2, y2, centerX, centerY]
+      };
+      borderEdges(component.b).forEach((edge) => {
+        const segment = segments[edge];
+        const key = edgeKey(segment);
+        if (seen.has(key)) return;
+        seen.add(key);
+        strokeEdges.push(segment);
+      });
     }
   }
 
