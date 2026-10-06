@@ -42,8 +42,8 @@ const LOADABLE_DESIGNS = Object.keys(TileDesigns)
   });
 
 const PREVIEW_RADIUS = 26;
-// Designs are drawn in three tones; accent stays reachable through the swatches.
-const TONE_CYCLE = ['light', 'medium', 'dark'];
+// Clicking steps through every tone the themes define, accent included.
+const TONE_CYCLE = [...TONES];
 const SQRT3 = Math.sqrt(3);
 
 /**
@@ -431,7 +431,7 @@ const DesignBuilder = () => {
                 />
               ))}
             </div>
-            <p style={styles.hint}>Click a facet to step it light → medium → dark. Shift-click paints the selected tone.</p>
+            <p style={styles.hint}>Click a facet to step it light → medium → dark → accent. Shift-click paints the selected tone.</p>
           </section>
         ) : (
           <section style={styles.section}>
