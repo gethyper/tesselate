@@ -144,12 +144,13 @@ const TileDesigns= {
   // After "Seljuk Brick": tumbling blocks with their faces rotated tile by
   // tile, turning the stack into interlocking Y-shaped strapwork.
   // After "Turkish Sky": light rhombi and offset medium rhombi on a dark ground.
-  // After "Palermo Meander": three-diamond half-stars stepping across the field.
   // After "Egyptian Hexapod": light six-footed motifs punched out of dark.
   // After "Shimmering Diamonds": light and dark rhombi meeting at their
   // vertices on a medium ground.
   // After "Persian Basket": solid dark hexagons with light and medium rhombi
   // woven between them.
+  // Harlequin Chevrons, drawn from no plate: three-tone chevrons stepping
+  // across the field.
   // Concentric rings inside each repeat, sheared so they spiral into the centre.
   // A dithered tonal ramp, its dither offset across the row so the tone
   // boundaries break up instead of banding.
@@ -363,7 +364,7 @@ const TileDesigns= {
     ]
   },
 
-  'palermoMeander': {
+  'harlequinChevrons': {
     tileShape: "flatTopHexatile",
     tilePattern: [
       [

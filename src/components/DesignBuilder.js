@@ -26,6 +26,8 @@ const PLATE_BY_DESIGN = {
   sanMarcoLightning: '7101',
   sanMarcoSteppedBoxes: '7103',
   turkishSky: '7108',
+  // Plate 7109 is waiting for a Palermo Meander; the design drawn from it
+  // became Harlequin Chevrons instead, which owes the plate nothing.
   palermoMeander: '7109',
   egyptianHexapod: '7111',
   shimmeringDiamonds: '7112'
@@ -40,7 +42,8 @@ const LOADABLE_DESIGNS = Object.keys(TileDesigns)
   });
 
 const PREVIEW_RADIUS = 26;
-const TONE_CYCLE = [...TONES];
+// Designs are drawn in three tones; accent stays reachable through the swatches.
+const TONE_CYCLE = ['light', 'medium', 'dark'];
 const SQRT3 = Math.sqrt(3);
 
 /**
@@ -280,8 +283,8 @@ const DesignBuilder = () => {
     return null;
   }, [cols, rows]);
 
-  /** Cycles the clicked facet's tone, or sets it straight to the active tone. */
-  const paintAt = useCallback((event, cycle) => {
+  /** Steps the clicked facet to the next tone, or sets it straight to the active tone. */
+  const paintAt = useCallback((event, paintDirect) => {
     if (mode !== 'paint') return;
     const target = facetUnderCursor(event);
     if (!target) return;
@@ -291,9 +294,10 @@ const DesignBuilder = () => {
       if (undoStack.current.length > 80) undoStack.current.shift();
       const next = previous.map((column) => column.map((facets) => facets.map((facet) => ({ ...facet }))));
       const current = next[col][row][f].c;
-      next[col][row][f].c = cycle
-        ? TONE_CYCLE[(TONE_CYCLE.indexOf(current) + 1) % TONE_CYCLE.length]
-        : brushTone;
+      const step = TONE_CYCLE.indexOf(current);
+      next[col][row][f].c = paintDirect
+        ? brushTone
+        : TONE_CYCLE[(step + 1) % TONE_CYCLE.length];
       return next;
     });
   }, [mode, brushTone, facetUnderCursor]);
@@ -427,7 +431,7 @@ const DesignBuilder = () => {
                 />
               ))}
             </div>
-            <p style={styles.hint}>Click a facet to paint it. Shift-click cycles through every tone.</p>
+            <p style={styles.hint}>Click a facet to step it light → medium → dark. Shift-click paints the selected tone.</p>
           </section>
         ) : (
           <section style={styles.section}>
