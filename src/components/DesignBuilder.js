@@ -70,6 +70,13 @@ const PREVIEW_RADIUS = 26;
 const TONE_CYCLE = ['light', 'medium', 'dark'];
 const SQRT3 = Math.sqrt(3);
 
+/** Steps a value around a cycle in either direction, wrapping at both ends. */
+function stepCycle(cycle, value, direction) {
+  const at = cycle.indexOf(value);
+  if (at === -1) return cycle[0];
+  return cycle[(at + direction + cycle.length) % cycle.length];
+}
+
 /**
  * Sizes and centers the single-tile editor.
  *
@@ -165,6 +172,7 @@ const DesignBuilder = () => {
   const [showPlate, setShowPlate] = useState(true);
   const [previewScale, setPreviewScale] = useState(PREVIEW_RADIUS);
   const [borderTone, setBorderTone] = useState('bg');
+  const [paintTarget, setPaintTarget] = useState('tone');
   const undoStack = useRef([]);
 
   const previewRef = useRef(null);
@@ -392,30 +400,30 @@ const DesignBuilder = () => {
   }, [cols, rows]);
 
   /**
-   * Plain click steps the facet's tone; shift-click steps its border instead, so
-   * tone and edge are authored with the same gesture on the same target.
+   * The Tone/Border toggle decides what a click edits; shift reverses the step
+   * so a cycle overshot by one is a single click away from correct.
    */
-  const paintAt = useCallback((event, editBorder) => {
+  const paintAt = useCallback((event) => {
     if (mode !== 'paint') return;
     const target = facetUnderCursor(event);
     if (!target) return;
     const { col, row, f } = target;
+    const direction = event.shiftKey ? -1 : 1;
     setGrid((previous) => {
       undoStack.current.push(previous);
       if (undoStack.current.length > 80) undoStack.current.shift();
       const next = previous.map((column) => column.map((facets) => facets.map((facet) => ({ ...facet }))));
       const facet = next[col][row][f];
-      if (editBorder) {
-        const step = BORDER_CYCLE.indexOf(facet.b || null);
-        const border = BORDER_CYCLE[(step + 1) % BORDER_CYCLE.length];
+      if (paintTarget === 'border') {
+        const border = stepCycle(BORDER_CYCLE, facet.b || null, direction);
         if (border) facet.b = border;
         else delete facet.b;
       } else {
-        facet.c = TONE_CYCLE[(TONE_CYCLE.indexOf(facet.c) + 1) % TONE_CYCLE.length];
+        facet.c = stepCycle(TONE_CYCLE, facet.c, direction);
       }
       return next;
     });
-  }, [mode, facetUnderCursor]);
+  }, [mode, paintTarget, facetUnderCursor]);
 
   const literal = useMemo(() => (pattern ? formatDesignLiteral(designName || 'myDesign', pattern) : ''), [pattern, designName]);
   const fractions = useMemo(() => (pattern ? toneFractions(pattern) : {}), [pattern]);
@@ -483,7 +491,7 @@ const DesignBuilder = () => {
           <canvas
             ref={editorRef}
             style={{ ...styles.editorCanvas, cursor: mode === 'paint' ? 'pointer' : 'default' }}
-            onClick={(event) => paintAt(event, event.shiftKey)}
+            onClick={(event) => paintAt(event)}
             onMouseMove={(event) => setHover(facetUnderCursor(event))}
             onMouseLeave={() => setHover(null)}
           />
@@ -559,6 +567,21 @@ const DesignBuilder = () => {
             <select value={borderTone} onChange={(e) => setBorderTone(e.target.value)} style={styles.inlineSelect}>
               {['bg', ...TONES].map((tone) => <option key={tone} value={tone}>border: {tone}</option>)}
             </select>
+            <div style={styles.row}>
+              {['tone', 'border'].map((target) => (
+                <button
+                  key={target}
+                  onClick={() => setPaintTarget(target)}
+                  title={`Clicking a facet edits its ${target}`}
+                  style={{
+                    ...styles.toggle,
+                    ...(paintTarget === target ? { background: accent, borderColor: accent, color: '#fff' } : {})
+                  }}
+                >
+                  {target}
+                </button>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -593,9 +616,10 @@ const DesignBuilder = () => {
               ))}
             </div>
             <p style={styles.hint}>
-              Click a facet to step it light → medium → dark. Shift-click steps
-              its border: all → a → b → c → none, where a and c are the spokes
-              and b the outer edge.
+              {paintTarget === 'border'
+                ? 'Clicking a facet steps its border all → a → b → c → none, where a and c are the spokes and b the outer edge.'
+                : 'Clicking a facet steps it light → medium → dark.'}
+              {' '}Hold shift to step backwards.
             </p>
           </section>
         ) : (
