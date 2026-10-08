@@ -22,6 +22,8 @@ import { computeHexCenters, hexVertices } from '../hooks/useP5BrushTesselation';
  * against its source rather than from memory. Designs invented for this app have
  * no plate and simply show no reference.
  */
+const EDITOR_SURFACE = '#e9e9ec';
+
 const PLATE_BY_DESIGN = {
   ribbonedStars: '7099',
   venetianTriangles: '7100',
@@ -58,7 +60,7 @@ const SQRT3 = Math.sqrt(3);
  */
 const editorLayout = (width, height, cols, rows) => {
   const radius = Math.max(7, Math.min(
-    46,
+    96,
     width / ((cols + 1.5) * 1.5),
     height / ((rows + 1.5) * SQRT3)
   ));
@@ -135,7 +137,9 @@ const DesignBuilder = () => {
   const [themeName, setThemeName] = useState('Basic Bee');
   const [designName, setDesignName] = useState('myDesign');
   const [ruleSource, setRuleSource] = useState(RULE_PRESETS[0].source);
-  const [grid, setGrid] = useState(() => buildPattern(2, 2, () => 'light'));
+  // Opening on a rendered pattern rather than a sheet of light facets, which
+  // would be white on a white page and read as a broken screen.
+  const [grid, setGrid] = useState(() => buildPattern(2, 2, compileRule(RULE_PRESETS[0].source).rule));
   const [copied, setCopied] = useState(false);
   const [loadedFrom, setLoadedFrom] = useState('');
   const [showPlate, setShowPlate] = useState(true);
@@ -272,6 +276,10 @@ const DesignBuilder = () => {
     const ctx = canvas.getContext('2d');
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     ctx.clearRect(0, 0, width, height);
+    // Light facets are near-white, so the editor needs a surface of its own to
+    // read against — without one a pale tile vanishes into the card behind it.
+    ctx.fillStyle = EDITOR_SURFACE;
+    ctx.fillRect(0, 0, width, height);
 
     const { radius, offsetX, offsetY } = editorLayout(width, height, pattern.length, pattern[0].length);
     const centers = computeHexCenters(width, height, radius, false);
@@ -417,13 +425,13 @@ const DesignBuilder = () => {
   const accent = theme.dark || '#333';
 
   return (
-    <div style={styles.page}>
+    <div style={{ ...styles.page, background: theme.bg }}>
       {/* The tiling fills the window and the controls float over it, so the
           pattern is read at size rather than through a letterboxed panel. */}
       <canvas ref={previewRef} style={styles.previewCanvas} />
 
       <div style={styles.leftStack}>
-        <section style={styles.card}>
+        <section style={{ ...styles.card, ...styles.editorCard }}>
           <header style={styles.cardHead}>
             <span>Tile {cols} &times; {rows}</span>
             {hover && (
@@ -663,6 +671,9 @@ const styles = {
     border: '1px solid white',
     boxShadow: SHADOW
   },
+  // The tile card is capped so a lone editor does not stretch into a column of
+  // empty surface; with a plate beside it the two share the stack as before.
+  editorCard: { maxHeight: '60vh' },
   cardHead: {
     display: 'flex',
     justifyContent: 'space-between',
