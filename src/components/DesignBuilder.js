@@ -64,8 +64,10 @@ const LOADABLE_DESIGNS = Object.keys(TileDesigns)
   });
 
 const PREVIEW_RADIUS = 26;
-// Clicking steps through every tone the themes define, accent included.
-const TONE_CYCLE = [...TONES];
+// The plates are three-tone work, so clicking stays on the value ramp. Accent
+// is still rendered wherever a design already carries it — it just is not a
+// stop on the cycle, and a facet holding one steps off to light.
+const TONE_CYCLE = ['light', 'medium', 'dark'];
 const SQRT3 = Math.sqrt(3);
 
 /**
@@ -582,7 +584,7 @@ const DesignBuilder = () => {
           <section style={styles.section}>
             <label style={styles.label}>Tones</label>
             <div style={styles.swatchRow}>
-              {TONES.map((tone) => (
+              {TONE_CYCLE.map((tone) => (
                 <span key={tone} style={{ ...styles.swatch, background: EDITOR_PALETTE[tone] }} title={tone}>
                   <em style={{ ...styles.swatchLabel, color: tone === 'light' ? MUTED : 'rgba(255,255,255,0.9)' }}>
                     {tone.slice(0, 3)}
@@ -591,9 +593,9 @@ const DesignBuilder = () => {
               ))}
             </div>
             <p style={styles.hint}>
-              Click a facet to step it light → medium → dark → accent. Shift-click
-              steps its border: all → a → b → c → none, where a and c are the
-              spokes and b the outer edge.
+              Click a facet to step it light → medium → dark. Shift-click steps
+              its border: all → a → b → c → none, where a and c are the spokes
+              and b the outer edge.
             </p>
           </section>
         ) : (
