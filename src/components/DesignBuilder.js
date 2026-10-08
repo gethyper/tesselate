@@ -24,6 +24,24 @@ import { computeHexCenters, hexVertices } from '../hooks/useP5BrushTesselation';
  */
 const EDITOR_SURFACE = '#e9e9ec';
 
+/**
+ * The editor's working palette.
+ *
+ * Half the shipped themes put two tones within a few RGB units of each other —
+ * Basic Bee's accent is grey against a #777 medium — so painting in theme
+ * colours leaves a four-tone design looking like a three-tone one. The editor
+ * therefore authors in a fixed palette that keeps light/medium/dark as a true
+ * value ramp and gives accent a hue no tone can be confused with. The tiled
+ * preview still renders in the chosen theme, which is where colour matters.
+ */
+const EDITOR_PALETTE = {
+  light: '#ffffff',
+  medium: '#8b939c',
+  dark: '#23262b',
+  accent: '#e2663a',
+  bg: '#3f7fd0'
+};
+
 const PLATE_BY_DESIGN = {
   ribbonedStars: '7099',
   venetianTriangles: '7100',
@@ -283,32 +301,54 @@ const DesignBuilder = () => {
 
     const { radius, offsetX, offsetY } = editorLayout(width, height, pattern.length, pattern[0].length);
     const centers = computeHexCenters(width, height, radius, false);
+
+    // Every hexagon is painted at full strength, repeats included. Fading the
+    // repeats washed a dark facet toward the surface behind it, so the one view
+    // meant to tell you a facet's tone was the view you could not trust. The
+    // tile is marked by an outline instead, below.
+    const perimeter = new Map();
     centers.forEach(({ x: cx, y: cy, col, row }) => {
       const x = cx + offsetX;
       const y = cy + offsetY;
       const inTile = col >= 0 && col < pattern.length && row >= 0 && row < pattern[0].length;
       const facets = pattern[mod(col, pattern.length)][mod(row, pattern[0].length)];
       const vertices = hexVertices(x, y, radius, false);
-      ctx.globalAlpha = inTile ? 1 : 0.22;
       for (let f = 0; f < 6; f++) {
-        fillFacet(ctx, x, y, vertices, f, theme[facets[f].c] || '#888');
+        fillFacet(ctx, x, y, vertices, f, EDITOR_PALETTE[facets[f].c] || '#888');
       }
-      ctx.globalAlpha = 1;
-      if (inTile) {
-        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-        ctx.lineWidth = 1;
-        for (let f = 0; f < 6; f++) {
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(vertices[f][0], vertices[f][1]);
-          ctx.stroke();
-        }
+      ctx.strokeStyle = inTile ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.14)';
+      ctx.lineWidth = 1;
+      for (let f = 0; f < 6; f++) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(vertices[f][0], vertices[f][1]);
+        ctx.stroke();
       }
+      // An outer edge shared by two tile hexagons is interior and shows up
+      // twice; an edge seen once is on the tile's rim.
+      if (!inTile) return;
+      for (let f = 0; f < 6; f++) {
+        const a = vertices[f];
+        const b = vertices[(f + 1) % 6];
+        const key = [a, b].map((q) => `${Math.round(q[0] * 2)},${Math.round(q[1] * 2)}`).sort().join('|');
+        if (perimeter.has(key)) perimeter.delete(key);
+        else perimeter.set(key, [a, b]);
+      }
+    });
+
+    ctx.strokeStyle = 'rgba(0,0,0,0.85)';
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    perimeter.forEach(([a, b]) => {
+      ctx.beginPath();
+      ctx.moveTo(a[0], a[1]);
+      ctx.lineTo(b[0], b[1]);
+      ctx.stroke();
     });
 
     // Authored borders go over the faint facet guides, so an edge that carries a
     // border is told apart from the spokes that merely divide the hexagon.
-    ctx.strokeStyle = theme[borderTone] || '#222';
+    ctx.strokeStyle = EDITOR_PALETTE[borderTone] || '#222';
     ctx.lineWidth = Math.max(1.5, radius / 12);
     ctx.lineCap = 'round';
     const drawn = new Set();
@@ -317,13 +357,11 @@ const DesignBuilder = () => {
       const y = cy + offsetY;
       const facets = pattern[mod(col, pattern.length)][mod(row, pattern[0].length)];
       const vertices = hexVertices(x, y, radius, false);
-      ctx.globalAlpha = col >= 0 && col < pattern.length && row >= 0 && row < pattern[0].length ? 1 : 0.22;
       for (let f = 0; f < 6; f++) {
         if (facets[f].b) strokeBorder(ctx, x, y, vertices, f, facets[f].b, drawn);
       }
-      ctx.globalAlpha = 1;
     });
-  }, [pattern, theme, borderTone]);
+  }, [pattern, borderTone]);
 
   /**
    * Finds the facet under the pointer, or null when the pointer is outside the
@@ -545,7 +583,11 @@ const DesignBuilder = () => {
             <label style={styles.label}>Tones</label>
             <div style={styles.swatchRow}>
               {TONES.map((tone) => (
-                <span key={tone} style={{ ...styles.swatch, background: theme[tone] || '#888' }} title={tone} />
+                <span key={tone} style={{ ...styles.swatch, background: EDITOR_PALETTE[tone] }} title={tone}>
+                  <em style={{ ...styles.swatchLabel, color: tone === 'light' ? MUTED : 'rgba(255,255,255,0.9)' }}>
+                    {tone.slice(0, 3)}
+                  </em>
+                </span>
               ))}
             </div>
             <p style={styles.hint}>
@@ -826,7 +868,14 @@ const styles = {
     fontSize: 12
   },
   swatchRow: { display: 'flex', gap: 0, borderRadius: 4, overflow: 'hidden', border: `1px solid ${LINE}` },
-  swatch: { flex: 1, height: 30 },
+  swatch: { flex: 1, height: 30, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' },
+  swatchLabel: {
+    font: "500 9px/1 'Tourney', Inter, sans-serif",
+    letterSpacing: '.08em',
+    textTransform: 'uppercase',
+    fontStyle: 'normal',
+    paddingBottom: 4
+  },
 
   presetGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 },
   preset: {
