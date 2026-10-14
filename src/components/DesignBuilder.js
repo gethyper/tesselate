@@ -64,10 +64,11 @@ const LOADABLE_DESIGNS = Object.keys(TileDesigns)
   });
 
 const PREVIEW_RADIUS = 26;
-// The plates are three-tone work, so clicking stays on the value ramp. Accent
-// is still rendered wherever a design already carries it — it just is not a
-// stop on the cycle, and a facet holding one steps off to light.
+// Most plates are three-tone work, so the cycle stays on the value ramp by
+// default. Designs that genuinely carry a fourth colour flip the toggle and
+// pick accent up as a stop.
 const TONE_CYCLE = ['light', 'medium', 'dark'];
+const ACCENT_TONE = 'accent';
 const SQRT3 = Math.sqrt(3);
 
 /** Steps a value around a cycle in either direction, wrapping at both ends. */
@@ -173,6 +174,11 @@ const DesignBuilder = () => {
   const [previewScale, setPreviewScale] = useState(PREVIEW_RADIUS);
   const [borderTone, setBorderTone] = useState('bg');
   const [paintTarget, setPaintTarget] = useState('tone');
+  const [toneCount, setToneCount] = useState(3);
+  const toneCycle = useMemo(
+    () => (toneCount === 4 ? [...TONE_CYCLE, ACCENT_TONE] : TONE_CYCLE),
+    [toneCount]
+  );
   const undoStack = useRef([]);
 
   const previewRef = useRef(null);
@@ -419,11 +425,11 @@ const DesignBuilder = () => {
         if (border) facet.b = border;
         else delete facet.b;
       } else {
-        facet.c = stepCycle(TONE_CYCLE, facet.c, direction);
+        facet.c = stepCycle(toneCycle, facet.c, direction);
       }
       return next;
     });
-  }, [mode, paintTarget, facetUnderCursor]);
+  }, [mode, paintTarget, toneCycle, facetUnderCursor]);
 
   const literal = useMemo(() => (pattern ? formatDesignLiteral(designName || 'myDesign', pattern) : ''), [pattern, designName]);
   const fractions = useMemo(() => (pattern ? toneFractions(pattern) : {}), [pattern]);
@@ -606,19 +612,34 @@ const DesignBuilder = () => {
         {mode === 'paint' ? (
           <section style={styles.section}>
             <label style={styles.label}>Tones</label>
-            <div style={styles.swatchRow}>
-              {TONE_CYCLE.map((tone) => (
-                <span key={tone} style={{ ...styles.swatch, background: EDITOR_PALETTE[tone] }} title={tone}>
-                  <em style={{ ...styles.swatchLabel, color: tone === 'light' ? MUTED : 'rgba(255,255,255,0.9)' }}>
-                    {tone.slice(0, 3)}
-                  </em>
-                </span>
+            <div style={styles.row}>
+              <div style={styles.swatchRow}>
+                {toneCycle.map((tone) => (
+                  <span key={tone} style={{ ...styles.swatch, background: EDITOR_PALETTE[tone] }} title={tone}>
+                    <em style={{ ...styles.swatchLabel, color: tone === 'light' ? MUTED : 'rgba(255,255,255,0.9)' }}>
+                      {tone.slice(0, 3)}
+                    </em>
+                  </span>
+                ))}
+              </div>
+              {[3, 4].map((count) => (
+                <button
+                  key={count}
+                  onClick={() => setToneCount(count)}
+                  title={`Cycle through ${count} tones`}
+                  style={{
+                    ...styles.toggle,
+                    ...(toneCount === count ? { background: accent, borderColor: accent, color: '#fff' } : {})
+                  }}
+                >
+                  {count}
+                </button>
               ))}
             </div>
             <p style={styles.hint}>
               {paintTarget === 'border'
                 ? 'Clicking a facet steps its border all → a → b → c → none, where a and c are the spokes and b the outer edge.'
-                : 'Clicking a facet steps it light → medium → dark.'}
+                : `Clicking a facet steps it ${toneCycle.join(' → ')}.`}
               {' '}Hold shift to step backwards.
             </p>
           </section>
